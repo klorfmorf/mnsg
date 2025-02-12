@@ -1,0 +1,8 @@
+# Directories
+.vscode
+build
+
+# Files
+*.o
+*.a
+rommy

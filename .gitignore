@@ -1,0 +1,22 @@
+# Directories
+.venv/
+.vscode/
+assets/
+asm/
+build/
+expected/
+keep/
+__pycache__/
+
+# Files
+*.bin
+*.z64
+*.ld
+*auto.txt
+.splat_cache
+ctx.c*
+
+# Exceptions
+!asm/boot.s
+!asm/entry.s
+!asm/header.s
