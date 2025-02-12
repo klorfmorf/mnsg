@@ -4,12 +4,14 @@
 #### Step 1: Install Dependencies
 ##### Debian/Ubuntu
 Install the following dependencies using `apt`:
+
 ```bash
 sudo apt install build-essential python3 git binutils-mips-linux-gnu
 ```
 
 ##### Arch Linux
 Install the following depencies using `pacman`:
+
 ```bash
 sudo pacman -S base-devel python
 ```
@@ -19,6 +21,7 @@ and then install the following AUR package:
 
 #### Step 2: Create Python Virtual Environment
 Create a Python virtual environment and activate it:
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
@@ -26,6 +29,7 @@ source .venv/bin/activate
 
 #### Step 3: Install Python Dependencies
 Install the required Python dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -37,22 +41,23 @@ For each version of the game you want to build, copy a retail ROM of the version
 
 #### Step 5: Setup
 Run the following command to extract assets from the ROM:
+
 ```bash
-make setup
+make setup VERSION=us
 ```
+
+Replace `us` with the version you want to extract assets from.
 
 #### Step 6: Build
 Run the following command to build the game:
-```bash
-make
-```
 
-if you want to build a specific version, you can specify it like this:
 ```bash
 make VERSION=us
 ```
 
-or change the default version at the top of the `Makefile`.
+Replace `us` with the version you want to build.
+
+Make sure that you have extracted the assets from the ROM for the specified version before building.
 
 ### Windows
 Install Windows Subsystem for Linux (WSL) and follow the Linux instructions.
