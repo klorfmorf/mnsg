@@ -1,3 +1,5 @@
+find-command = $(shell which $(1) 2>/dev/null)
+
 BASENAME = mnsg
 VERSION ?= us
 
@@ -18,10 +20,14 @@ ASM_DIRS := $(shell find asm -type d -not -path "asm/$(VERSION)/nonmatchings*" 2
 SRC_DIRS := $(shell find src -type d 2>/dev/null)
 
 ##### Tools #####
-ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
+ifneq      ($(call find-command,mips-linux-gnu-ld),)
 	CROSS := mips-linux-gnu-
+else ifneq ($(call find-command,mips64-linux-gnu-ld),)
+	CROSS := mips64-linux-gnu-
+else ifneq ($(call find-command,mips64-elf-ld),)
+	CROSS := mips64-elf-
 else
-	$(error Please install or build mips-linux-gnu)
+  $(error Unable to detect a suitable MIPS toolchain installed.)
 endif
 
 VENV ?= .venv
@@ -38,12 +44,12 @@ CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-u
 CC_CHECK := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG $(CHECK_WARNINGS)
 
 ##### Flags #####
-INCLUDES := -Iinclude -Iinclude/libultra -Iinclude/libultra/PR -Isrc -I.
+INCLUDES := -I include -I include/libultra -I include/libultra/PR -I src -I .
 
 MIPSISA  := -mips2
 OPTFLAGS := -O2
 
-ASFLAGS := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -Iinclude -I.
+ASFLAGS := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include -I .
 CFLAGS  := -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INCLUDES) -Wab,-r4300_mul -woff 649,838,712 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG
 OBJCOPYFLAGS := --pad-to=0x2000000 --gap-fill=0x00
 
