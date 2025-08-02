@@ -51,6 +51,60 @@ segments:
     subalign: 16
     subsegments:
     - [0x1050, asm, main]
+    - [0x2410, asm] # IS64 Debugger
+    - [0x2800, asm] # Data Loading (.rodata: 80080180)
+    - [0x2C40, asm] # Game Loop (.rodata: 800801C0)
+    - [0x45C0, asm] # Math (.rodata: 80080290)
+    - [0x4D70, asm] # System Struct
+    - [0x4E40, asm] # Print Text
+    - [0x5510, asm] # Controller (.rodata: 800802D0)
+    - [0x5E20, asm] # LZKN64 Decompression
+    - [0x6500, asm] # File Requests
+    - [0x6790, asm] # Related to credits
+    - [0x6F50, asm] # Profiler (.rodata: 80080350)
+    - [0x79F0, asm] # Scheduler (.rodata: 80080390)
+    - [0x8570, asm] # (.rodata: 800803B0)
+    - [0x9250, asm] # ? (This is the only other translation unit using the file request system, loads the file containing the weird unused smiley face texture)
+    - [0x92F0, asm] # Draw List/Sprite Graphics (.rodata: 80080470)
+    - [0xB280, asm] # Draw List (.rodata: 800804C0)
+    - [0xBEA0, asm] # Stages (.rodata: 800804D0)
+    - [0xC1D0, asm] # Events (.rodata: 80080510)
+    - [0xC4F0, asm] # Dialog Box Graphics (.rodata: 80080550)
+    - [0xE000, asm] # (.rodata: 800805F0)
+    - [0xE7F0, asm] # (.rodata: 80080630)
+    - [0xFE40, asm]
+    - [0x10D80, asm] # Menu Graphics (.rodata: 80080670)
+    - [0x12760, asm] # dracam (.rodata: 800809F0)
+    - [0x14540, asm] # Memory Utilites [wave_uty.c] (.rodata: 80080B50)
+    - [0x15970, asm] # PIC Decompression (.rodata: 80080F90)
+    - [0x172E0, asm] # (.rodata: 800810D0)
+    - [0x17550, asm] # Object Graphics [anime.c] (.rodata: 80081100)
+    - [0x1D570, asm] # (.rodata: 80081280)
+    - [0x204B0, asm] # Overworld (.rodata: 80081320)
+    - [0x21330, asm] # Level Select (.rodata: 80081470)
+    - [0x221D0, asm] # Skybox (.rodata: 80081630)
+    - [0x23DE0, asm] # Memory Pak (.rodata: 80081650)
+    - [0x249F0, asm] # Save Data
+    - [0x24D60, asm] # Rippling Background/Water (.rodata: 80081A00)
+    - [0x27FE0, asm] # Object Collision Code (.rodata: 80081A70)
+    - [0x2B600, asm] # Common Collision Code? BSP Tree Handling (.rodata: 80081BE0)
+    - [0x2F710, asm] # Wall Collision? (.rodata: 80081E40)
+    - [0x31330, asm] # Floor Collision? (.rodata: 80081F40)
+    - [0x32F20, asm] # Dynamic Collision? (Hitboxes) [solid_atari.c] (.rodata: 80082040)
+    - [0x33450, asm] # Similar to above?
+    - [0x33720, asm] # Animation again? (.rodata: 800820A0)
+    - [0x35280, asm] # Task System (.rodata: 800820D0)
+    - [0x36750, asm] # Heap Allocation
+    - [0x37440, asm] # Screen Transition Effects (.rodata: 800821F0)
+    - [0x37C00, asm] # Warps
+    - [0x382B0, asm]
+    - [0x385D0, asm] # Rumble Pak (.rodata: 80082230)
+    - [0x389B0, asm]
+    - [0x389C0, asm] # Audio Thread Manager
+    - [0x392E0, asm] # Audio Interface
+    - [0x3AF70, asm] # Audio Sequencing
+    - [0x3C010, asm] # Audio Commands
+    - [0x3DBA0, asm] # Dialog Box Logic (.rodata: 80082270)
 
     # libultra
     - [0x40320, asm, libultra]

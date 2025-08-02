@@ -89,9 +89,9 @@ segments:
     - [0x2B280, c, main_2B280] # (.rodata: 80081BE0)
     - [0x2F390, c, main_2F390] # (.rodata: 80081E40)
     - [0x30FB0, c, main_30FB0] # (.rodata: 80081F40)
-    - [0x32BA0, c, main_32BA0]
+    - [0x32BA0, c, main_32BA0] # [solid_atari.c] (.rodata: 80082040)
     - [0x330D0, c, main_330D0]
-    - [0x333A0, c, main_333A0] # [solid_atari.c] (.rodata: 80082040)
+    - [0x333A0, c, main_333A0] # (.rodata: 800820A0)
     - [0x34EF0, c, main_34EF0] # Task System (.rodata: 800820D0)
     - [0x363C0, c, main_363C0] # Heap Allocation              
     - [0x370B0, c, main_370B0] # Screen Transition Effects (.rodata: 800821F0)
