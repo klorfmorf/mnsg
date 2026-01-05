@@ -24,11 +24,16 @@ sudo pacman -S base-devel
 ### Setup & Build
 
 #### Step 1: Clone
-Clone the repository:
+Clone the repository recursively to include necessary tools:
 ```bash
-git clone https://github.com/klorfmorf/mnsg.git
+git clone --recursive https://github.com/klorfmorf/mnsg.git
 cd mnsg
 ```
+
+> **Note:** If you forgot to use `--recursive` or if folders like `tools/m2c` appear empty, run the following command to fetch the submodules:
+> ```bash
+> git submodule update --init --recursive
+> ```
 
 #### Step 2: Place Baserom
 Place your retail US ROM in the configuration directory and name it `baserom.z64`:
