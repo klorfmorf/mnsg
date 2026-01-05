@@ -1,9 +1,0 @@
-# Directories
-.vscode
-build
-
-# Files
-*.o
-*.a
-lzkn64
-liblzkn64.a

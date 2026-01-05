@@ -1,21 +1,13 @@
 find-command = $(shell which $(1) 2>/dev/null)
 
 BASENAME = mnsg
-VERSION ?= us
-
-ifeq ($(VERSION), jp)
-	FILE_ADDRESS_TABLE_OFFSET = 0x58258
-else ifeq ($(VERSION), us)
-	FILE_ADDRESS_TABLE_OFFSET = 0x57FD8
-else ifeq ($(VERSION), eu)
-	FILE_ADDRESS_TABLE_OFFSET = 0x58AE8
-endif
+VERSION ?= usa
 
 ##### Directories #####
 BUILD_DIR = build/$(VERSION)
 CONFIG_DIR = config/$(VERSION)
 
-BIN_DIRS := $(shell find assets/$(VERSION) -type d 2>/dev/null)
+BIN_DIRS := $(shell find bin/$(VERSION) -type d 2>/dev/null)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/$(VERSION)/nonmatchings*" 2>/dev/null)
 SRC_DIRS := $(shell find src -type d 2>/dev/null)
 
@@ -30,10 +22,11 @@ else
   $(error Unable to detect a suitable MIPS toolchain installed.)
 endif
 
-VENV ?= .venv
-PYTHON ?= $(VENV)/bin/python3
+UV ?= uv
+PYTHON ?= $(UV) run python
+SPLAT ?= $(UV) run splat
 
-CC  := tools/ido-5.3/cc
+CC := tools/ido-5.3/cc
 
 AS := $(CROSS)as
 LD := $(CROSS)ld
@@ -44,12 +37,12 @@ CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-u
 CC_CHECK := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG $(CHECK_WARNINGS)
 
 ##### Flags #####
-INCLUDES := -I include -I include/libultra -I include/libultra/PR -I src -I .
+INCLUDES := -Iinclude -Ilibultra/include -Ilibultra/include/PR -Isrc -I.
 
 MIPSISA  := -mips2
 OPTFLAGS := -O2
 
-ASFLAGS := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -I include -I .
+ASFLAGS := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -Iinclude -I.
 CFLAGS  := -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INCLUDES) -Wab,-r4300_mul -woff 649,838,712 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG
 OBJCOPYFLAGS := --pad-to=0x2000000 --gap-fill=0x00
 
@@ -65,67 +58,78 @@ O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(file).o) \
 GLOBAL_ASM_C_FILES := $(shell grep -rl GLOBAL_ASM $(SRC_DIRS) | sort -u)
 GLOBAL_ASM_O_FILES := $(foreach file,$(GLOBAL_ASM_C_FILES),$(BUILD_DIR)/$(file).o)
 
-TARGET := $(BUILD_DIR)/$(BASENAME).$(VERSION)
-LD_SCRIPT := $(BASENAME).$(VERSION).ld
+TARGET := $(BUILD_DIR)/$(BASENAME)
+LD_SCRIPT := .splat/$(VERSION)/$(BASENAME).ld
 
-$(BUILD_DIR)/src/boot/is_debug.c.o: OPTFLAGS := -O2 -g3
-$(BUILD_DIR)/src/boot/audio/seq.c.o: OPTFLAGS := -O2 -g3 
+$(BUILD_DIR)/src/boot/is_debug.c.o:  OPTFLAGS := -O2 -g3
+$(BUILD_DIR)/src/boot/audio/seq.c.o: OPTFLAGS := -O2 -g3
+
+EUC_JP_SRCS := \
+    asm/usa/data/file_32.rodata.s \
+	asm/usa/data/file_44.rodata.s \
+	asm/usa/data/file_59.rodata.s \
+
+EUC_JP_OBJS := $(foreach file,$(EUC_JP_SRCS),$(BUILD_DIR)/$(file).o)
+
+FILE_ENCODING = Shift_JIS
+
+$(EUC_JP_OBJS): FILE_ENCODING = EUC-JP
 
 ##### Targets #####
 default: all
 
 all: $(TARGET).z64
 	@sha1sum $(TARGET).z64
-	@sha1sum -c $(CONFIG_DIR)/$(BASENAME).$(VERSION).sha1
+	@sha1sum -c $(CONFIG_DIR)/$(BASENAME).sha1
 
-$(TARGET).z64: $(TARGET).elf tools/rommy/rommy tools/n64crc/n64crc
+$(TARGET).z64: $(TARGET).elf
 	$(OBJCOPY) -O binary $(OBJCOPYFLAGS) $< $@
-	tools/rommy/rommy -i $@ -o $@ -r baserom.$(VERSION).z64 -c -a $(FILE_ADDRESS_TABLE_OFFSET) -p
-	tools/n64crc/n64crc $@
+	$(PYTHON) tools/rommy.py compress --input $@ --output $@ --manifest $(CONFIG_DIR)/rommy.yaml --pad --verify
 
-$(TARGET).elf: $(LD_SCRIPT) $(O_FILES)
-	$(LD) -T $(LD_SCRIPT) -Map $(TARGET).map -T undefined_syms.$(VERSION).txt -T undefined_syms_auto.txt -T undefined_funcs_auto.txt --no-check-sections -o $@
+$(TARGET).elf: $(O_FILES)
+	$(LD) -T $(LD_SCRIPT) -Map $(TARGET).map -T .splat/$(VERSION)/undefined_syms_auto.ld -T .splat/$(VERSION)/undefined_funcs_auto.ld --no-check-sections --emit-relocs -o $@
 
 nuke:
-	rm -rf build
-	rm -rf assets
 	rm -rf asm
+	rm -rf bin
+	rm -rf build
 	rm -f *auto.txt
 	rm -f *.ld
-	rm -f baserom.jp.decompressed.z64
-	rm -f baserom.us.decompressed.z64
-	make -C tools clean
+	rm -f config/japan_0/baserom.decompressed.z64
+	rm -f config/usa/baserom.decompressed.z64
 
 clean:
 	rm -rf build
 
 setup: baserom.$(VERSION).decompressed.z64
-	splat split $(CONFIG_DIR)/$(BASENAME).$(VERSION).yaml
+	$(SPLAT) split $(CONFIG_DIR)/splat.yaml
 
 baserom.$(VERSION).decompressed.z64:
-	make -C tools
-	tools/rommy/rommy -i baserom.$(VERSION).z64 -o baserom.$(VERSION).decompressed.z64 -d -a $(FILE_ADDRESS_TABLE_OFFSET) -p
-	tools/n64crc/n64crc baserom.$(VERSION).decompressed.z64
-
-tools/rommy/rommy:
-	make -C tools rommy
-
-tools/n64crc/n64crc:
-	make -C tools n64crc
+	$(PYTHON) tools/rommy.py decompress --input $(CONFIG_DIR)/baserom.z64 --output $(CONFIG_DIR)/baserom.decompressed.z64 --manifest $(CONFIG_DIR)/rommy.yaml --pad
 
 ##### Recipes #####
 ifndef PERMUTER
-$(GLOBAL_ASM_O_FILES): CC := $(PYTHON) tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+$(GLOBAL_ASM_O_FILES): CC := tools/asm-processor/asm-processor --input-enc=utf-8 --output-enc=$(FILE_ENCODING) $(CC) -- $(AS) $(ASFLAGS) --
 endif
 
 $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $$(dirname $@)
-#	@$(CC_CHECK) $(INCLUDES) $<
+	@$(CC_CHECK) $(INCLUDES) $<
+ifdef PERMUTER
 	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(MIPSISA) -o $@ $<
+else
+	iconv -f UTF-8 -t $(FILE_ENCODING) $< > $@.encoded.c
+	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(MIPSISA) -o $@ $@.encoded.c
+endif
 
 $(BUILD_DIR)/%.s.o: %.s
 	@mkdir -p $$(dirname $@)
+ifdef PERMUTER
 	$(AS) $(ASFLAGS) -o $@ $<
+else
+	iconv -f UTF-8 -t $(FILE_ENCODING) $< > $@.encoded.s
+	$(AS) $(ASFLAGS) -o $@ $@.encoded.s
+endif
 
 $(BUILD_DIR)/%.bin.o: %.bin
 	@mkdir -p $$(dirname $@)

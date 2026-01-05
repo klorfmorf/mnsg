@@ -278,6 +278,17 @@ alFxPull = 0x800521EC; // type:func
 alCopy = 0x80052530; // type:func
 
 func_801CBF30_65EDE0 = 0x801CBF30; // type:func size:0x9C segment:file_15
+
 func_801DF200_60A5E0 = 0x801DF200; // type:func size:0x1E8 segment:file_13
 
 func_8021A4DC_5D59AC = 0x8021A4DC; // type:func size:0x8 segment:file_12
+
+D_08003F30_716EA0 = 0x08003F30; // defined:true segment:file_56
+D_08002EBA_6F30CA = 0x08002EBA; // defined:true segment:file_42
+D_08002EBE_6F30CE = 0x08002EBE; // defined:true segment:file_42
+D_08002EC2_6F30D2 = 0x08002EC2; // defined:true segment:file_42 
+D_08002EC6_6F30D6 = 0x08002EC6; // defined:true segment:file_42
+D_080032D0_6F34E0 = 0x080032D0; // defined:true segment:file_42
+D_080032E0_6F34F0 = 0x080032E0; // defined:true segment:file_42
+D_080027B1_71FF81 = 0x080027B1; // defined:true segment:file_60
+D_08001C50_707A40 = 0x08001C50; // defined:true segment:file_47

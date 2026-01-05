@@ -1,0 +1,15 @@
+-xc
+-std=gnu90
+-m32
+-fno-builtin
+-fsigned-char
+-D_LANGUAGE_C
+-D_FINALROM
+-DF3DEX_GBI
+-D__sgi
+-DNDEBUG
+-Iinclude
+-Ilibultra/include
+-Ilibultra/include/PR
+-Isrc
+-I.

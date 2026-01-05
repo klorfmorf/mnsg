@@ -1,0 +1,809 @@
+// Fake relocations identified by review_relocs.py
+// These should be marked as MIPS_NONE to suppress incorrect symbolization
+
+
+// Function: func_08000590_71C010
+// Symbol: D_08001D40_71D7C0 = 0x08001D40
+rom:0x71C034 reloc:MIPS_NONE symbol:D_08001D40_71D7C0
+rom:0x71C048 reloc:MIPS_NONE symbol:D_08001D40_71D7C0
+
+// Function: func_08000590_71C010
+// Symbol: D_8002D40 = 0x08002D40
+rom:0x71C038 reloc:MIPS_NONE symbol:D_8002D40
+rom:0x71C044 reloc:MIPS_NONE symbol:D_8002D40
+
+// Function: func_08000590_71C010
+// Symbol: D_8003D40 = 0x08003D40
+rom:0x71C03C reloc:MIPS_NONE symbol:D_8003D40
+rom:0x71C040 reloc:MIPS_NONE symbol:D_8003D40
+
+// Function: func_08000034_6F0244
+// Fake symbol: func_08000000_6F0210 -> 0x08000000
+rom:0x6F0250 reloc:MIPS_NONE symbol:func_08000000_6F0210
+rom:0x6F0258 reloc:MIPS_NONE symbol:func_08000000_6F0210
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_08001000_6F1210 -> 0x08001000
+rom:0x6F0280 reloc:MIPS_NONE symbol:D_08001000_6F1210
+rom:0x6F0288 reloc:MIPS_NONE symbol:D_08001000_6F1210
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_A000000 -> 0x0A000000
+rom:0x6F02B0 reloc:MIPS_NONE symbol:D_A000000
+rom:0x6F02B8 reloc:MIPS_NONE symbol:D_A000000
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_A001000 -> 0x0A001000
+rom:0x6F02E0 reloc:MIPS_NONE symbol:D_A001000
+rom:0x6F02E8 reloc:MIPS_NONE symbol:D_A001000
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_A002000 -> 0x0A002000
+rom:0x6F0310 reloc:MIPS_NONE symbol:D_A002000
+rom:0x6F0318 reloc:MIPS_NONE symbol:D_A002000
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_A003000 -> 0x0A003000
+rom:0x6F0340 reloc:MIPS_NONE symbol:D_A003000
+rom:0x6F0348 reloc:MIPS_NONE symbol:D_A003000
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_A004000 -> 0x0A004000
+rom:0x6F0370 reloc:MIPS_NONE symbol:D_A004000
+rom:0x6F0378 reloc:MIPS_NONE symbol:D_A004000
+
+// Function: func_08000034_6F0244
+// Fake symbol: D_A005000 -> 0x0A005000
+rom:0x6F03A0 reloc:MIPS_NONE symbol:D_A005000
+rom:0x6F03A8 reloc:MIPS_NONE symbol:D_A005000
+
+// Function: func_0800008C_705E7C
+// Fake symbol: func_08000000_705DF0 -> 0x08000000
+rom:0x705E88 reloc:MIPS_NONE symbol:func_08000000_705DF0
+rom:0x705E90 reloc:MIPS_NONE symbol:func_08000000_705DF0
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_08001000_706DF0 -> 0x08001000
+rom:0x705EB8 reloc:MIPS_NONE symbol:D_08001000_706DF0
+rom:0x705EC0 reloc:MIPS_NONE symbol:D_08001000_706DF0
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_A000000 -> 0x0A000000
+rom:0x705EE8 reloc:MIPS_NONE symbol:D_A000000
+rom:0x705EF0 reloc:MIPS_NONE symbol:D_A000000
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_A001000 -> 0x0A001000
+rom:0x705F18 reloc:MIPS_NONE symbol:D_A001000
+rom:0x705F20 reloc:MIPS_NONE symbol:D_A001000
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_A002000 -> 0x0A002000
+rom:0x705F48 reloc:MIPS_NONE symbol:D_A002000
+rom:0x705F50 reloc:MIPS_NONE symbol:D_A002000
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_A003000 -> 0x0A003000
+rom:0x705F78 reloc:MIPS_NONE symbol:D_A003000
+rom:0x705F80 reloc:MIPS_NONE symbol:D_A003000
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_A004000 -> 0x0A004000
+rom:0x705FA8 reloc:MIPS_NONE symbol:D_A004000
+rom:0x705FB0 reloc:MIPS_NONE symbol:D_A004000
+
+// Function: func_0800008C_705E7C
+// Fake symbol: D_A005000 -> 0x0A005000
+rom:0x705FD8 reloc:MIPS_NONE symbol:D_A005000
+rom:0x705FE0 reloc:MIPS_NONE symbol:D_A005000
+
+// Function: func_0800008C_707ACC
+// Fake symbol: func_08000000_707A40 -> 0x08000000
+rom:0x707AD8 reloc:MIPS_NONE symbol:func_08000000_707A40
+rom:0x707AE0 reloc:MIPS_NONE symbol:func_08000000_707A40
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_08001000_708A40 -> 0x08001000
+rom:0x707B08 reloc:MIPS_NONE symbol:D_08001000_708A40
+rom:0x707B10 reloc:MIPS_NONE symbol:D_08001000_708A40
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_08002000_709A40 -> 0x08002000
+rom:0x707B38 reloc:MIPS_NONE symbol:D_08002000_709A40
+rom:0x707B40 reloc:MIPS_NONE symbol:D_08002000_709A40
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_A000000 -> 0x0A000000
+rom:0x707B68 reloc:MIPS_NONE symbol:D_A000000
+rom:0x707B70 reloc:MIPS_NONE symbol:D_A000000
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_A001000 -> 0x0A001000
+rom:0x707B98 reloc:MIPS_NONE symbol:D_A001000
+rom:0x707BA0 reloc:MIPS_NONE symbol:D_A001000
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_A002000 -> 0x0A002000
+rom:0x707BC8 reloc:MIPS_NONE symbol:D_A002000
+rom:0x707BD0 reloc:MIPS_NONE symbol:D_A002000
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_A003000 -> 0x0A003000
+rom:0x707BF8 reloc:MIPS_NONE symbol:D_A003000
+rom:0x707C00 reloc:MIPS_NONE symbol:D_A003000
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_A004000 -> 0x0A004000
+rom:0x707C28 reloc:MIPS_NONE symbol:D_A004000
+rom:0x707C30 reloc:MIPS_NONE symbol:D_A004000
+
+// Function: func_0800008C_707ACC
+// Fake symbol: D_A005000 -> 0x0A005000
+rom:0x707C58 reloc:MIPS_NONE symbol:D_A005000
+rom:0x707C60 reloc:MIPS_NONE symbol:D_A005000
+
+// Function: func_0800008C_70A0CC
+// Fake symbol: func_08000000_70A040 -> 0x08000000
+rom:0x70A0D0 reloc:MIPS_NONE symbol:func_08000000_70A040
+rom:0x70A0E0 reloc:MIPS_NONE symbol:func_08000000_70A040
+
+// Function: func_0800008C_70A0CC
+// Fake symbol: D_08001000_70B040 -> 0x08001000
+rom:0x70A114 reloc:MIPS_NONE symbol:D_08001000_70B040
+rom:0x70A11C reloc:MIPS_NONE symbol:D_08001000_70B040
+
+// Function: func_0800008C_70A0CC
+// Fake symbol: D_08002000_70C040 -> 0x08002000
+rom:0x70A140 reloc:MIPS_NONE symbol:D_08002000_70C040
+rom:0x70A148 reloc:MIPS_NONE symbol:D_08002000_70C040
+
+// Function: func_08001610_71EDE0
+// Fake symbol: D_A00A000 -> 0x0A00A000
+rom:0x71EDFC reloc:MIPS_NONE symbol:D_A00A000
+rom:0x71EE08 reloc:MIPS_NONE symbol:D_A00A000
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: func_08000000_72B850 -> 0x08000000
+rom:0x72B8E8 reloc:MIPS_NONE symbol:func_08000000_72B850
+rom:0x72B8F0 reloc:MIPS_NONE symbol:func_08000000_72B850
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_08001000_72C850 -> 0x08001000
+rom:0x72B918 reloc:MIPS_NONE symbol:D_08001000_72C850
+rom:0x72B920 reloc:MIPS_NONE symbol:D_08001000_72C850
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_A000000 -> 0x0A000000
+rom:0x72B948 reloc:MIPS_NONE symbol:D_A000000
+rom:0x72B950 reloc:MIPS_NONE symbol:D_A000000
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_A001000 -> 0x0A001000
+rom:0x72B978 reloc:MIPS_NONE symbol:D_A001000
+rom:0x72B980 reloc:MIPS_NONE symbol:D_A001000
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_A002000 -> 0x0A002000
+rom:0x72B9A8 reloc:MIPS_NONE symbol:D_A002000
+rom:0x72B9B0 reloc:MIPS_NONE symbol:D_A002000
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_A003000 -> 0x0A003000
+rom:0x72B9D8 reloc:MIPS_NONE symbol:D_A003000
+rom:0x72B9E0 reloc:MIPS_NONE symbol:D_A003000
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_A004000 -> 0x0A004000
+rom:0x72BA08 reloc:MIPS_NONE symbol:D_A004000
+rom:0x72BA10 reloc:MIPS_NONE symbol:D_A004000
+
+// Function: func_0800008C_72B8DC
+// Fake symbol: D_A005000 -> 0x0A005000
+rom:0x72BA38 reloc:MIPS_NONE symbol:D_A005000
+rom:0x72BA40 reloc:MIPS_NONE symbol:D_A005000
+
+// Function: func_08000668_6ADA28
+// Fake: D_9000000 -> 0x09000000
+rom:0x6ADA94 reloc:MIPS_NONE symbol:D_9000000
+rom:0x6ADA98 reloc:MIPS_NONE symbol:D_9000000
+
+// Function: func_08001228_6AE5E8
+// Fake: D_A00C980 -> 0x0A00C980
+rom:0x6AE5F8 reloc:MIPS_NONE symbol:D_A00C980
+rom:0x6AE5FC reloc:MIPS_NONE symbol:D_A00C980
+
+// Function: func_080026B8_71FE88
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x71FEB8 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+rom:0x71FEBC reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Function: func_8001198C_1258C
+// Fake: D_80026B8 -> func_080026B8_71FE88
+rom:0x0125B0 reloc:MIPS_HI16 symbol:func_080026B8_71FE88
+rom:0x0125B4 reloc:MIPS_LO16 symbol:func_080026B8_71FE88
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x71FF94 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x71FFB0 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x71FFCC reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x71FFE8 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x72003C reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x720058 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x720074 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x720090 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x7200AC reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_080027B1_71FF81
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x7200C8 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_08002938_720108
+// Fake: func_08000000_71D7D0 -> 0x08000000
+rom:0x720110 reloc:MIPS_NONE symbol:func_08000000_71D7D0
+
+// Data label: D_08007C30_6C7380
+// Fake: D_9001000 -> 0x09001000
+rom:0x6C73CC reloc:MIPS_NONE symbol:D_9001000
+
+// Data label: D_08002E98_6F30A8
+// Fake: D_800637C0_643C0 -> 0x800637C0
+rom:0x6F30AC reloc:MIPS_NONE symbol:D_800637C0_643C0
+
+// Function: func_08002604_7194A4
+// Fake: func_08000000_716EA0 -> 0x08000000
+rom:0x7194E8 reloc:MIPS_NONE symbol:func_08000000_716EA0
+rom:0x7194F8 reloc:MIPS_NONE symbol:func_08000000_716EA0
+
+// Function: func_080028B4_719754
+// Fake: func_08000000_716EA0 -> 0x08000000
+rom:0x7197B8 reloc:MIPS_NONE symbol:func_08000000_716EA0
+rom:0x7197C4 reloc:MIPS_NONE symbol:func_08000000_716EA0
+
+// Function: func_080028B4_719754
+// Fake: func_08000000_716EA0 -> 0x08000000
+rom:0x719880 reloc:MIPS_NONE symbol:func_08000000_716EA0
+rom:0x71988C reloc:MIPS_NONE symbol:func_08000000_716EA0
+
+// Function: func_080028B4_719754
+// Fake: func_08000000_716EA0 -> 0x08000000
+rom:0x7199F8 reloc:MIPS_NONE symbol:func_08000000_716EA0
+rom:0x719A04 reloc:MIPS_NONE symbol:func_08000000_716EA0
+
+// Function: func_0800087C_71771C
+// Fake: D_080034B8_71A358 -> 0x080034B8
+rom:0x717790 reloc:MIPS_NONE symbol:D_080034B8_71A358
+rom:0x717794 reloc:MIPS_NONE symbol:D_080034B8_71A358
+
+// Function: func_08003F84_6CC194
+// Fake: D_800F218 -> 0x0800F218
+rom:0x6CC3C4 reloc:MIPS_NONE symbol:D_800F218
+rom:0x6CC3C8 reloc:MIPS_NONE symbol:D_800F218
+
+// Function: func_08000B98_70ABD8
+// Fake: D_8004CE8 -> 0x08004CE8
+rom:0x70B388 reloc:MIPS_NONE symbol:D_8004CE8
+rom:0x70B390 reloc:MIPS_NONE symbol:D_8004CE8
+
+// Function: func_08000410_710A70
+// Fake: D_8002E68 -> 0x08002E68
+rom:0x710FAC reloc:MIPS_NONE symbol:D_8002E68
+rom:0x710FBC reloc:MIPS_NONE symbol:D_8002E68
+
+// Function: func_080002B0_731560
+// Fake: D_8004698 -> 0x08004698
+rom:0x73225C reloc:MIPS_NONE symbol:D_8004698
+rom:0x73226C reloc:MIPS_NONE symbol:D_8004698
+
+// Function: func_080036F8_737E88
+// Fake: D_08003B10_7382A0 -> 0x08003B10
+rom:0x737F54 reloc:MIPS_NONE symbol:D_08003B10_7382A0
+rom:0x737F60 reloc:MIPS_NONE symbol:D_08003B10_7382A0
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08000690_701790 -> 0x08000690
+rom:0x701EC8 reloc:MIPS_NONE symbol:D_08000690_701790
+rom:0x701ECC reloc:MIPS_NONE symbol:D_08000690_701790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08004690_705790 -> 0x08004690
+rom:0x701EE0 reloc:MIPS_NONE symbol:D_08004690_705790
+rom:0x701EE4 reloc:MIPS_NONE symbol:D_08004690_705790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08000690_701790 -> 0x08000690
+rom:0x701F24 reloc:MIPS_NONE symbol:D_08000690_701790
+rom:0x701F28 reloc:MIPS_NONE symbol:D_08000690_701790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08004690_705790 -> 0x08004690
+rom:0x701F3C reloc:MIPS_NONE symbol:D_08004690_705790
+rom:0x701F40 reloc:MIPS_NONE symbol:D_08004690_705790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08001690_702790 -> 0x08001690
+rom:0x701F80 reloc:MIPS_NONE symbol:D_08001690_702790
+rom:0x701F84 reloc:MIPS_NONE symbol:D_08001690_702790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8005690 -> 0x08005690
+rom:0x701F98 reloc:MIPS_NONE symbol:D_8005690
+rom:0x701F9C reloc:MIPS_NONE symbol:D_8005690
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08001690_702790 -> 0x08001690
+rom:0x701FDC reloc:MIPS_NONE symbol:D_08001690_702790
+rom:0x701FE0 reloc:MIPS_NONE symbol:D_08001690_702790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8005690 -> 0x08005690
+rom:0x701FF4 reloc:MIPS_NONE symbol:D_8005690
+rom:0x701FF8 reloc:MIPS_NONE symbol:D_8005690
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08002690_703790 -> 0x08002690
+rom:0x702038 reloc:MIPS_NONE symbol:D_08002690_703790
+rom:0x70203C reloc:MIPS_NONE symbol:D_08002690_703790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8006690 -> 0x08006690
+rom:0x702050 reloc:MIPS_NONE symbol:D_8006690
+rom:0x702054 reloc:MIPS_NONE symbol:D_8006690
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08002690_703790 -> 0x08002690
+rom:0x702094 reloc:MIPS_NONE symbol:D_08002690_703790
+rom:0x702098 reloc:MIPS_NONE symbol:D_08002690_703790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8006690 -> 0x08006690
+rom:0x7020AC reloc:MIPS_NONE symbol:D_8006690
+rom:0x7020B0 reloc:MIPS_NONE symbol:D_8006690
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08003690_704790 -> 0x08003690
+rom:0x7020F0 reloc:MIPS_NONE symbol:D_08003690_704790
+rom:0x7020F4 reloc:MIPS_NONE symbol:D_08003690_704790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8007690 -> 0x08007690
+rom:0x702108 reloc:MIPS_NONE symbol:D_8007690
+rom:0x70210C reloc:MIPS_NONE symbol:D_8007690
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08003690_704790 -> 0x08003690
+rom:0x70214C reloc:MIPS_NONE symbol:D_08003690_704790
+rom:0x702150 reloc:MIPS_NONE symbol:D_08003690_704790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8007690 -> 0x08007690
+rom:0x702164 reloc:MIPS_NONE symbol:D_8007690
+rom:0x702168 reloc:MIPS_NONE symbol:D_8007690
+
+// Function: func_08000CCC_701DCC
+// Fake: D_08003690_704790 -> 0x08003690
+rom:0x7021A4 reloc:MIPS_NONE symbol:D_08003690_704790
+rom:0x7021A8 reloc:MIPS_NONE symbol:D_08003690_704790
+
+// Function: func_08000CCC_701DCC
+// Fake: D_8007690 -> 0x08007690
+rom:0x7021BC reloc:MIPS_NONE symbol:D_8007690
+rom:0x7021C0 reloc:MIPS_NONE symbol:D_8007690
+
+// Function: func_08000808_6E7B18
+// Fake: .L08001B50_6E8E60 -> 0x08001B50
+rom:0x6E7BF8 reloc:MIPS_NONE symbol:.L08001B50_6E8E60
+rom:0x6E7BFC reloc:MIPS_NONE symbol:.L08001B50_6E8E60
+
+// Function: func_08000DB8_6D6D08
+// Fake: D_08001810_6D7760 -> 0x08001810
+rom:0x6D6E24 reloc:MIPS_NONE symbol:D_08001810_6D7760
+rom:0x6D6E28 reloc:MIPS_NONE symbol:D_08001810_6D7760
+
+// Function: func_08001EE4_6C1634
+// Fake: D_08002360_6C1AB0 -> 0x08002360
+rom:0x6C1678 reloc:MIPS_NONE symbol:D_08002360_6C1AB0
+rom:0x6C167C reloc:MIPS_NONE symbol:D_08002360_6C1AB0
+
+// Function: func_080005B8_6CF698
+// Fake: D_080034A0_6D2580 -> 0x080034A0
+rom:0x6CF78C reloc:MIPS_NONE symbol:D_080034A0_6D2580
+rom:0x6CF790 reloc:MIPS_NONE symbol:D_080034A0_6D2580
+
+// Function: func_080010D0_6D01B0
+// Fake: D_080034A0_6D2580 -> 0x080034A0
+rom:0x6D0270 reloc:MIPS_NONE symbol:D_080034A0_6D2580
+rom:0x6D0274 reloc:MIPS_NONE symbol:D_080034A0_6D2580
+
+// Function: func_08001720_6D0800
+// Fake: D_08003B10_6D2BF0 -> 0x08003B10
+rom:0x6D08C8 reloc:MIPS_NONE symbol:D_08003B10_6D2BF0
+rom:0x6D08D4 reloc:MIPS_NONE symbol:D_08003B10_6D2BF0
+
+// Function: func_08001EA4_6D0F84
+// Fake: D_08003B10_6D2BF0 -> 0x08003B10
+rom:0x6D106C reloc:MIPS_NONE symbol:D_08003B10_6D2BF0
+rom:0x6D1078 reloc:MIPS_NONE symbol:D_08003B10_6D2BF0
+
+// Function: func_08002034_6D1114
+// Fake: D_8005520 -> 0x08005520
+rom:0x6D1214 reloc:MIPS_NONE symbol:D_8005520
+rom:0x6D1220 reloc:MIPS_NONE symbol:D_8005520
+
+// Function: func_08002734_6D1814
+// Fake: D_8005520 -> 0x08005520
+rom:0x6D192C reloc:MIPS_NONE symbol:D_8005520
+rom:0x6D1938 reloc:MIPS_NONE symbol:D_8005520
+
+// Function: func_08002C58_6D1D38
+// Fake: D_08003D10_6D2DF0 -> 0x08003D10
+rom:0x6D1DE0 reloc:MIPS_NONE symbol:D_08003D10_6D2DF0
+rom:0x6D1DEC reloc:MIPS_NONE symbol:D_08003D10_6D2DF0
+
+// Function: func_08003254_6D2334
+// Fake: D_08003B10_6D2BF0 -> 0x08003B10
+rom:0x6D23F0 reloc:MIPS_NONE symbol:D_08003B10_6D2BF0
+rom:0x6D23FC reloc:MIPS_NONE symbol:D_08003B10_6D2BF0
+
+// Function: func_08004668_6D3748
+// Fake: func_080029C8_6D1AA8 -> 0x080029F0
+rom:0x6D37C0 reloc:MIPS_NONE symbol:func_080029C8_6D1AA8 addend:40
+rom:0x6D37C4 reloc:MIPS_NONE symbol:func_080029C8_6D1AA8 addend:40
+
+// Function: func_08001E00_6C1550
+// Fake: D_08002360_6C1AB0 -> 0x08002360
+rom:0x6C159C reloc:MIPS_NONE symbol:D_08002360_6C1AB0
+rom:0x6C15A0 reloc:MIPS_NONE symbol:D_08002360_6C1AB0
+
+// Function: func_08000000_712F70
+// Fake: D_08000060_712FD0 -> 0x08000060
+rom:0x713028 reloc:MIPS_NONE symbol:D_08000060_712FD0
+rom:0x71302C reloc:MIPS_NONE symbol:D_08000060_712FD0
+
+// Function: func_08000000_712F70
+// Fake: D_9000000 -> 0x09000000
+rom:0x713048 reloc:MIPS_NONE symbol:D_9000000
+rom:0x71304C reloc:MIPS_NONE symbol:D_9000000
+
+// Function: func_080003FC_71BE7C
+// Fake: D_08001710_71D190 -> 0x08001710
+rom:0x71BEA0 reloc:MIPS_NONE symbol:D_08001710_71D190
+rom:0x71BEB4 reloc:MIPS_NONE symbol:D_08001710_71D190
+
+// Function: func_080003FC_71BE7C
+// Fake: D_8002710 -> 0x08002710
+rom:0x71BEA4 reloc:MIPS_NONE symbol:D_8002710
+rom:0x71BEB0 reloc:MIPS_NONE symbol:D_8002710
+
+// Function: func_080003FC_71BE7C
+// Fake: D_8003710 -> 0x08003710
+rom:0x71BEA8 reloc:MIPS_NONE symbol:D_8003710
+rom:0x71BEAC reloc:MIPS_NONE symbol:D_8003710
+
+// Function: func_080014DC_71CF5C
+// Fake: D_80028B0 -> 0x080028B0
+rom:0x71CFA8 reloc:MIPS_NONE symbol:D_80028B0
+rom:0x71CFC4 reloc:MIPS_NONE symbol:D_80028B0
+
+// Function: func_080014DC_71CF5C
+// Fake: D_080018B0_71D330 -> 0x080018B0
+rom:0x71CFAC reloc:MIPS_NONE symbol:D_080018B0_71D330
+rom:0x71CFBC reloc:MIPS_NONE symbol:D_080018B0_71D330
+
+// Function: func_080014DC_71CF5C
+// Fake: D_80038B0 -> 0x080038B0
+rom:0x71CFB0 reloc:MIPS_NONE symbol:D_80038B0
+rom:0x71CFB8 reloc:MIPS_NONE symbol:D_80038B0
+
+// Function: func_0800184C_71D2CC
+// Fake: D_080019A0_71D420 -> 0x080019A0
+rom:0x71D2F0 reloc:MIPS_NONE symbol:D_080019A0_71D420
+rom:0x71D304 reloc:MIPS_NONE symbol:D_080019A0_71D420
+
+// Function: func_0800184C_71D2CC
+// Fake: D_80039A0 -> 0x080039A0
+rom:0x71D2F4 reloc:MIPS_NONE symbol:D_80039A0
+rom:0x71D300 reloc:MIPS_NONE symbol:D_80039A0
+
+// Function: func_0800184C_71D2CC
+// Fake: D_80029A0 -> 0x080029A0
+rom:0x71D2F8 reloc:MIPS_NONE symbol:D_80029A0
+rom:0x71D2FC reloc:MIPS_NONE symbol:D_80029A0
+
+// Function: func_08000340_71BDC0
+// Fake: D_8003B10 -> 0x08003B10
+rom:0x71BDE4 reloc:MIPS_NONE symbol:D_8003B10
+rom:0x71BDF8 reloc:MIPS_NONE symbol:D_8003B10
+
+// Function: func_08000340_71BDC0
+// Fake: D_8002B10 -> 0x08002B10
+rom:0x71BDE8 reloc:MIPS_NONE symbol:D_8002B10
+rom:0x71BDF4 reloc:MIPS_NONE symbol:D_8002B10
+
+// Function: func_08000340_71BDC0
+// Fake: D_08001B10_71D590 -> 0x08001B10
+rom:0x71BDEC reloc:MIPS_NONE symbol:D_08001B10_71D590
+rom:0x71BDF0 reloc:MIPS_NONE symbol:D_08001B10_71D590
+
+// Function: func_080027AC_723DCC
+// Fake: D_08000514_721B34 -> 0x08000514
+rom:0x723DE0 reloc:MIPS_NONE symbol:D_08000514_721B34
+rom:0x723DEC reloc:MIPS_NONE symbol:D_08000514_721B34
+
+// Function: func_801D2C24_5FE004
+// Fake: .L08000C78_6AD1C8 -> 0x08000C78
+rom:0x5FE024 reloc:MIPS_NONE symbol:.L08000C78_6AD1C8
+rom:0x5FE02C reloc:MIPS_NONE symbol:.L08000C78_6AD1C8
+
+// Function: func_801EB800_616BE0
+// Fake: .L08000BEC_6AD13C -> 0x08000BEC
+rom:0x616C0C reloc:MIPS_NONE symbol:.L08000BEC_6AD13C
+rom:0x616C10 reloc:MIPS_NONE symbol:.L08000BEC_6AD13C
+
+// Function: func_802050E4_6304C4
+// Fake: .L08000170_6AC6C0 -> 0x08000170
+rom:0x6304EC reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+rom:0x6304F0 reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+
+// Function: func_80205DEC_6311CC
+// Fake: .L08000170_6AC6C0 -> 0x08000170
+rom:0x6311E4 reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+rom:0x6311EC reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+
+// Function: func_80206BEC_631FCC
+// Fake: .L08000170_6AC6C0 -> 0x08000170
+rom:0x631FF4 reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+rom:0x631FF8 reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+
+// Function: func_801FAEB0_626290
+// Fake: .L08000E9C_6AE25C -> 0x08000E9C
+rom:0x626318 reloc:MIPS_NONE symbol:.L08000E9C_6AE25C
+rom:0x62631C reloc:MIPS_NONE symbol:.L08000E9C_6AE25C
+
+// Function: func_80206894_631C74
+// Fake: .L08000E9C_6AE25C -> 0x08000E9C
+rom:0x631C80 reloc:MIPS_NONE symbol:.L08000E9C_6AE25C
+rom:0x631C84 reloc:MIPS_NONE symbol:.L08000E9C_6AE25C
+
+// Function: func_80206990_631D70
+// Fake: .L080008B0_6ACE00 -> 0x080008B0
+rom:0x631D70 reloc:MIPS_NONE symbol:.L080008B0_6ACE00
+rom:0x631D78 reloc:MIPS_NONE symbol:.L080008B0_6ACE00
+
+// Function: func_80206ED8_6322B8
+// Fake: .L080005C0_6ACB10 -> 0x080005C0
+rom:0x63234C reloc:MIPS_NONE symbol:.L080005C0_6ACB10
+rom:0x632350 reloc:MIPS_NONE symbol:.L080005C0_6ACB10
+
+// Function: func_80207838_632C18
+// Fake: .L080005C0_6ACB10 -> 0x080005C0
+rom:0x632C30 reloc:MIPS_NONE symbol:.L080005C0_6ACB10
+rom:0x632C38 reloc:MIPS_NONE symbol:.L080005C0_6ACB10
+
+// Function: func_801D97E0_648630
+// Fake: .L08001260_6AE620 -> 0x08001260
+rom:0x648634 reloc:MIPS_NONE symbol:.L08001260_6AE620
+rom:0x648640 reloc:MIPS_NONE symbol:.L08001260_6AE620
+
+// Function: func_801D9EF0_648D40
+// Fake: .L08000AA0_6ACFF0 -> 0x08000AA0
+rom:0x648D50 reloc:MIPS_NONE symbol:.L08000AA0_6ACFF0
+rom:0x648D54 reloc:MIPS_NONE symbol:.L08000AA0_6ACFF0
+
+// Function: func_801E8410_657260
+// Fake: .L08000220_6AD5E0 -> 0x08000220
+rom:0x6572B0 reloc:MIPS_NONE symbol:.L08000220_6AD5E0
+rom:0x6572B4 reloc:MIPS_NONE symbol:.L08000220_6AD5E0
+
+// Function: func_80207838_632C18
+// Fake: .L08000B50_6ADF10 -> 0x08000B50
+rom:0x65F1A8 reloc:MIPS_NONE symbol:.L08000B50_6ADF10
+rom:0x65F1AC reloc:MIPS_NONE symbol:.L08000B50_6ADF10
+
+// Function: func_80211870_670820
+// Fake: .L08007000_6BA2A0 -> 0x08007000
+rom:0x6709AC reloc:MIPS_NONE symbol:.L08007000_6BA2A0
+rom:0x6709B4 reloc:MIPS_NONE symbol:.L08007000_6BA2A0
+
+// Function: func_80211870_670820
+// Fake: .L0800B000_6BE2A0 -> 0x0800B000
+rom:0x670A6C reloc:MIPS_NONE symbol:.L0800B000_6BE2A0
+rom:0x670A74 reloc:MIPS_NONE symbol:.L0800B000_6BE2A0
+
+// Function: func_80217D8C_68176C
+// Fake: func_08000224_6AC774 -> 0x08000270
+rom:0x681794 reloc:MIPS_NONE symbol:func_08000224_6AC774 addend:76
+rom:0x681798 reloc:MIPS_NONE symbol:func_08000224_6AC774 addend:76
+
+// Function: func_80217D8C_68176C
+// Fake: .L08000550_6AED30 -> 0x08000550
+rom:0x6817C0 reloc:MIPS_NONE symbol:.L08000550_6AED30
+rom:0x6817C4 reloc:MIPS_NONE symbol:.L08000550_6AED30
+
+// Function: func_8021DF94_687974
+// Fake: .L080032C4_6CB4D4 -> 0x080032C4
+rom:0x6879BC reloc:MIPS_NONE symbol:.L080032C4_6CB4D4
+rom:0x6879C0 reloc:MIPS_NONE symbol:.L080032C4_6CB4D4
+
+// Function: func_8021DF94_687974
+// Fake: func_08003638_6B2A48 -> 0x08003654
+rom:0x687A24 reloc:MIPS_NONE symbol:func_08003638_6B2A48 addend:28
+rom:0x687A28 reloc:MIPS_NONE symbol:func_08003638_6B2A48 addend:28
+
+// Function: func_8021DF94_687974
+// Fake: func_080036B0_6B2AC0 -> 0x080036B0
+rom:0x687A90 reloc:MIPS_NONE symbol:func_080036B0_6B2AC0
+rom:0x687A94 reloc:MIPS_NONE symbol:func_080036B0_6B2AC0
+
+// Function: func_8021E8A0_688280
+// Fake: .L080043B4_6B7654 -> 0x080043B4
+rom:0x68869C reloc:MIPS_NONE symbol:.L080043B4_6B7654
+rom:0x6886A0 reloc:MIPS_NONE symbol:.L080043B4_6B7654
+
+// Function: func_8021F3BC_688D9C
+// Fake: D_C2D90 -> 0x000C2D90
+rom:0x688E38 reloc:MIPS_NONE symbol:D_C2D90
+rom:0x688E44 reloc:MIPS_NONE symbol:D_C2D90
+
+// Function: func_8021F3BC_688D9C
+// Fake: func_08005F2C_6C567C -> 0x08005F50
+rom:0x688E4C reloc:MIPS_NONE symbol:func_08005F2C_6C567C addend:36
+rom:0x688E58 reloc:MIPS_NONE symbol:func_08005F2C_6C567C addend:36
+
+// Function: func_8021F3BC_688D9C
+// Fake: D_C2D90 -> 0x000C2D90
+rom:0x688EBC reloc:MIPS_NONE symbol:D_C2D90
+rom:0x688EC8 reloc:MIPS_NONE symbol:D_C2D90
+
+// Function: func_8021F3BC_688D9C
+// Fake: func_08002BF8_6C2348 -> 0x08002BF8
+rom:0x688ED0 reloc:MIPS_NONE symbol:func_08002BF8_6C2348
+rom:0x688EDC reloc:MIPS_NONE symbol:func_08002BF8_6C2348
+
+// Function: func_8021F3BC_688D9C
+// Fake: D_C2D90 -> 0x000C2D90
+rom:0x688F40 reloc:MIPS_NONE symbol:D_C2D90
+rom:0x688F4C reloc:MIPS_NONE symbol:D_C2D90
+
+// Function: func_8021F3BC_688D9C
+// Fake: func_08001FFC_6B140C -> 0x08002080
+rom:0x688F5C reloc:MIPS_NONE symbol:func_08001FFC_6B140C addend:132
+rom:0x688F60 reloc:MIPS_NONE symbol:func_08001FFC_6B140C addend:132
+
+// Function: func_8021F3BC_688D9C
+// Fake: .L08000D68_6B4008 -> 0x08000D68
+rom:0x688FD4 reloc:MIPS_NONE symbol:.L08000D68_6B4008
+rom:0x688FD8 reloc:MIPS_NONE symbol:.L08000D68_6B4008
+
+// Function: func_8021F3BC_688D9C
+// Fake: func_08000224_6AC774 -> 0x08000280
+rom:0x689030 reloc:MIPS_NONE symbol:func_08000224_6AC774 addend:92
+rom:0x689034 reloc:MIPS_NONE symbol:func_08000224_6AC774 addend:92
+
+// Function: func_8021F3BC_688D9C
+// Fake: func_08000000_6AC550 -> 0x08000000
+rom:0x689130 reloc:MIPS_NONE symbol:func_08000000_6AC550
+rom:0x689140 reloc:MIPS_NONE symbol:func_08000000_6AC550
+
+// Function: func_8021F3BC_688D9C
+// Fake: D_8025800 -> 0x08025800
+rom:0x6891A8 reloc:MIPS_NONE symbol:D_8025800
+rom:0x6891AC reloc:MIPS_NONE symbol:D_8025800
+
+// Function: func_8021F3BC_688D9C
+// Fake: func_08000000_6AC550 -> 0x08000000
+rom:0x6891D4 reloc:MIPS_NONE symbol:func_08000000_6AC550
+rom:0x6891DC reloc:MIPS_NONE symbol:func_08000000_6AC550
+
+// Function: func_8021F3BC_688D9C
+// Fake: D_8025800 -> 0x08025800
+rom:0x6891E4 reloc:MIPS_NONE symbol:D_8025800
+rom:0x6891E8 reloc:MIPS_NONE symbol:D_8025800
+
+// Function: func_80227FA8_691988
+// Fake: .L08000B84_6AD0D4 -> 0x08000B84
+rom:0x691A1C reloc:MIPS_NONE symbol:.L08000B84_6AD0D4
+rom:0x691A24 reloc:MIPS_NONE symbol:.L08000B84_6AD0D4
+
+// Function: func_80227FA8_691988
+// Fake: .L08000B84_6AD0D4 -> 0x08000B84
+rom:0x691A4C reloc:MIPS_NONE symbol:.L08000B84_6AD0D4
+rom:0x691A50 reloc:MIPS_NONE symbol:.L08000B84_6AD0D4
+
+// Function: func_801DAE40_649C90
+// Fake: .L080032D0_6B6570 -> 0x080032D0
+rom:0x649C94 reloc:MIPS_NONE symbol:.L080032D0_6B6570
+rom:0x649CA0 reloc:MIPS_NONE symbol:.L080032D0_6B6570
+
+// Function: func_802289CC_6923AC
+// Fake: .L080032D0_6B6570 -> 0x080032D0
+rom:0x6923F0 reloc:MIPS_NONE symbol:.L080032D0_6B6570
+rom:0x6923F4 reloc:MIPS_NONE symbol:.L080032D0_6B6570
+
+// Function: func_8020FEA0_6978A0
+// Fake: .L08004178_6C38C8 -> 0x08004178
+rom:0x6979B8 reloc:MIPS_NONE symbol:.L08004178_6C38C8
+rom:0x6979C0 reloc:MIPS_NONE symbol:.L08004178_6C38C8
+
+// Function: func_8021084C_69824C
+// Fake: func_08001228_6AE5E8 -> 0x0800123C
+rom:0x698274 reloc:MIPS_NONE symbol:func_08001228_6AE5E8 addend:20
+rom:0x698278 reloc:MIPS_NONE symbol:func_08001228_6AE5E8 addend:20
+
+// Function: func_8021084C_69824C
+// Fake: .L08001288_6B4528 -> 0x08001288
+rom:0x698298 reloc:MIPS_NONE symbol:.L08001288_6B4528
+rom:0x69829C reloc:MIPS_NONE symbol:.L08001288_6B4528
+
+// Function: func_801CB460_69CBD0
+// Fake: .L08003CD0_6B6F70 -> 0x08003CD0
+rom:0x69CCEC reloc:MIPS_NONE symbol:.L08003CD0_6B6F70
+rom:0x69CCF4 reloc:MIPS_NONE symbol:.L08003CD0_6B6F70
+
+// Function: func_801CBA30_69D1A0
+// Fake: .L08003CD0_6B6F70 -> 0x08003CD0
+rom:0x69D20C reloc:MIPS_NONE symbol:.L08003CD0_6B6F70
+rom:0x69D218 reloc:MIPS_NONE symbol:.L08003CD0_6B6F70
+
+// Function: func_801CBA30_69D1A0
+// Fake: .L08007238_6BA4D8 -> 0x08007238
+rom:0x697D54 reloc:MIPS_NONE symbol:.L08007238_6BA4D8
+rom:0x697D58 reloc:MIPS_NONE symbol:.L08007238_6BA4D8
+
+// Function: func_801D2C90_5FE070
+// Fake: func_080005F0_6ACB40 -> 0x08000610
+rom:0x5FE08C reloc:MIPS_NONE symbol:func_080005F0_6ACB40 addend:32
+rom:0x5FE094 reloc:MIPS_NONE symbol:func_080005F0_6ACB40 addend:32
+
+// Function: func_801D2C90_5FE070
+// Fake: .L08000C78_6AD1C8 -> 0x08000C78
+rom:0x5FE090 reloc:MIPS_NONE symbol:.L08000C78_6AD1C8
+rom:0x5FE098 reloc:MIPS_NONE symbol:.L08000C78_6AD1C8
+
+// Function: func_801D8CA0_647AF0
+// Fake: .L08000360_6AC8B0 -> 0x08000360
+rom:0x647AF4 reloc:MIPS_NONE symbol:.L08000360_6AC8B0
+rom:0x647B00 reloc:MIPS_NONE symbol:.L08000360_6AC8B0
+
+// Function: func_80225434_68EE14
+// Fake: func_08000000_6AC550 -> 0x08000048
+rom:0x68EE6C reloc:MIPS_NONE symbol:func_08000000_6AC550 addend:72
+rom:0x68EE74 reloc:MIPS_NONE symbol:func_08000000_6AC550 addend:72
+
+// Function: func_80225434_68EE14
+// Fake: .L08000170_6AC6C0 -> 0x08000170
+rom:0x68EEFC reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+rom:0x68EF24 reloc:MIPS_NONE symbol:.L08000170_6AC6C0
+
+// Data label: D_80068364_68F64
+// Fake: D_080032D0 -> 0x080032D0
+rom:0x068F68 reloc:MIPS_NONE symbol:D_080032D0
+
+// Data label: D_80069044_69C44
+// Fake: D_08003F30 -> 0x08003F30
+rom:0x069C60 reloc:MIPS_NONE symbol:D_08003F30
+

@@ -1,0 +1,15 @@
+[project]
+name = "mnsg"
+version = "0.1.0"
+description = "A work-in-progress decompilation of Mystical Ninja Starring Goemon for the Nintendo 64."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "lzkn64>=0.2.0",
+    "ninja-syntax>=1.7.2",
+    "pyyaml>=6.0.3",
+    "splat64[mips]>=0.32.3,<1.0.0",
+]
+
+[tool.uv]
+package = false

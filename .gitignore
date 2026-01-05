@@ -1,12 +1,13 @@
 # Directories
+__pycache__/
+.splat/
 .venv/
 .vscode/
-assets/
 asm/
+bin/
 build/
-expected/
+nonmatchings/
 keep/
-__pycache__/
 
 # Files
 *.bin
@@ -14,9 +15,7 @@ __pycache__/
 *.ld
 *auto.txt
 .splat_cache
-ctx.c*
+context.c
 
-# Exceptions
-!asm/boot.s
-!asm/entry.s
-!asm/header.s
+# Manifest files
+rommy.yaml 

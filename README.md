@@ -1,65 +1,57 @@
 # Mystical Ninja Starring Goemon Decompilation
+
 ## Building
-### Linux
-#### Step 1: Install Dependencies
-##### Debian/Ubuntu
-Install the following dependencies using `apt`:
 
+### Prerequisites
+
+#### 1. Install `uv`
+This project uses `uv` to manage Python tools and dependencies automatically. No manual Python setup is required.
+*   **Windows:** `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
+*   **macOS / Linux:** `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+#### 2. Install System Build Tools
+**Debian/Ubuntu:**
 ```bash
-sudo apt install build-essential python3 git binutils-mips-linux-gnu
+sudo apt install build-essential git binutils-mips-linux-gnu
 ```
 
-##### Arch Linux
-Install the following depencies using `pacman`:
-
+**Arch Linux:**
 ```bash
-sudo pacman -S base-devel python
+sudo pacman -S base-devel
+# Install AUR package: mips64-elf-binutils
 ```
 
-and then install the following AUR package: 
-* [mips64-elf-binutils](https://aur.archlinux.org/packages/mips64-elf-binutils)
+### Setup & Build
 
-#### Step 2: Create Python Virtual Environment
-Create a Python virtual environment and activate it:
-
+#### Step 1: Clone
+Clone the repository:
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+git clone https://github.com/klorfmorf/mnsg.git
+cd mnsg
 ```
 
-#### Step 3: Install Python Dependencies
-Install the required Python dependencies:
+#### Step 2: Place Baserom
+Place your retail US ROM in the configuration directory and name it `baserom.z64`:
 
+`config/usa/baserom.z64`
+
+*(If you are building a different version, place the ROM in `config/<version>/baserom.z64`)*
+
+#### Step 3: Setup
+Run the setup command. `uv` will automatically download the correct Python version and install dependencies defined in the lockfile before extracting assets.
 ```bash
-pip install -r requirements.txt
+make setup
 ```
 
-#### Step 4: Copy `baserom` Files
-For each version of the game you want to build, copy a retail ROM of the version into the root directory of the repository and name it `baserom.<version>.z64`. For example, for the US version, copy the US retail ROM and name it `baserom.us.z64`.
-
-**This is required for asset extraction.**
-
-#### Step 5: Setup
-Run the following command to extract assets from the ROM:
-
+#### Step 4: Build
+Build the ROM:
 ```bash
-make setup VERSION=us
+make
 ```
 
-Replace `us` with the version you want to extract assets from.
-
-#### Step 6: Build
-Run the following command to build the game:
-
+### Development (Optional)
+If you are editing Python scripts and want your editor (Visual Studio Code, PyCharm, etc.) to recognize libraries, run:
 ```bash
-make VERSION=us
+uv sync
 ```
-
-Replace `us` with the version you want to build.
-
-Make sure that you have extracted the assets from the ROM for the specified version before building.
-
-### Windows
-Install Windows Subsystem for Linux (WSL) and follow the Linux instructions.
-
-Here is a guide on how to install WSL: [How to install Linux on Windows with WSL](https://docs.microsoft.com/en-us/windows/wsl/install)
+This creates a standard `.venv` folder that your editor can use for autocomplete and linting.
