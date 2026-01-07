@@ -5,11 +5,15 @@ description = "A work-in-progress decompilation of Mystical Ninja Starring Goemo
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "colorama>=0.4.6",
+    "cxxfilt>=0.3.0",
+    "levenshtein>=0.27.3",
     "lzkn64>=0.2.0",
     "ninja-syntax>=1.7.2",
     "pycparser>=2.23",
     "pyyaml>=6.0.3",
     "splat64[mips]>=0.32.3,<1.0.0",
+    "watchdog>=6.0.0",
 ]
 
 [tool.uv]
