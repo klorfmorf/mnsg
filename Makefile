@@ -1,7 +1,8 @@
 find-command = $(shell which $(1) 2>/dev/null)
 
-BASENAME = mnsg
-VERSION ?= usa
+BASENAME    = mnsg
+VERSION    ?= usa
+COMPRESSED  = no
 
 ##### Directories #####
 BUILD_DIR = build/$(VERSION)
@@ -80,11 +81,17 @@ default: all
 
 all: $(TARGET).z64
 	@sha1sum $(TARGET).z64
+ifeq ($(COMPRESSED),yes)
 	@sha1sum -c $(CONFIG_DIR)/$(BASENAME).sha1
+else
+	@sha1sum -c $(CONFIG_DIR)/$(BASENAME).uncompressed.sha1
+endif
 
 $(TARGET).z64: $(TARGET).elf
 	$(OBJCOPY) -O binary $(OBJCOPYFLAGS) $< $@
+ifeq ($(COMPRESSED),yes)
 	$(PYTHON) tools/rommy.py compress --input $@ --output $@ --manifest $(CONFIG_DIR)/rommy.yaml --pad --verify
+endif
 
 $(TARGET).elf: $(O_FILES)
 	$(LD) -T $(LD_SCRIPT) -Map $(TARGET).map -T .splat/$(VERSION)/undefined_syms_auto.ld -T .splat/$(VERSION)/undefined_funcs_auto.ld --no-check-sections --emit-relocs -o $@
