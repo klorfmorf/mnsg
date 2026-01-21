@@ -30,7 +30,7 @@ options:
   symbol_name_format: $VRAM_$ROM
 
   find_file_boundaries: True
-  migrate_rodata_to_functions: False
+  migrate_rodata_to_functions: True
   rodata_string_guesser_level: 2
   gfx_ucode: f3dex
 
@@ -73,7 +73,7 @@ segments:
     - [0x79F0, asm] # Scheduler (.rodata: 80080390)
     - [0x8570, asm] # (.rodata: 800803B0)
     - [0x9250, asm] # ? (This is the only other translation unit using the file request system, loads the file containing the weird unused smiley face texture)
-    - [0x92F0, asm] # Draw List/Sprite Graphics (.rodata: 80080470)
+    - [0x92F0, c] # Draw List/Sprite Graphics (.rodata: 80080470)
     - [0xB280, asm] # Draw List (.rodata: 800804C0)
     - [0xBEA0, asm] # Stages (.rodata: 800804D0)
     - [0xC1D0, asm] # Events (.rodata: 80080510)
@@ -130,6 +130,8 @@ segments:
 
     # main .rodata section
     - [0x7B320, rodata, main]
+    - [0x7B6A0, .rodata, 92F0]
+    - [0x7B6F0, rodata, main_continued]
 
     # libultra .rodata section
     - [0x7DD10, rodata, libultra]
