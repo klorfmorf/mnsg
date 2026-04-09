@@ -27,6 +27,9 @@ options:
   asset_path: bin/usa
   # extensions_path: tools/splat_ext
 
+  # Uncomment the line below when creating an ELF file for dumping N64Recomp symbols or analyzing in Ghidra
+  # asm_nonmatching_label_macro: ""
+
   symbol_name_format: $VRAM_$ROM
 
   find_file_boundaries: True
@@ -94,7 +97,7 @@ segments:
     - [0x23DE0, asm] # Memory Pak (.rodata: 80081650)
     - [0x249F0, asm] # Save Data
     - [0x24D60, asm] # Rippling Background/Water (.rodata: 80081A00)
-    - [0x27FE0, asm] # Object Collision Code (.rodata: 80081A70)
+    - [0x27FE0, c] # Object Collision Code (.rodata: 80081A70)
     - [0x2B600, asm] # Common Collision Code? BSP Tree Handling (.rodata: 80081BE0)
     - [0x2F710, asm] # Wall Collision? (.rodata: 80081E40)
     - [0x31330, asm] # Floor Collision? (.rodata: 80081F40)

@@ -16,10 +16,10 @@ typedef struct AMEM_W {
 } AMEM_W;
 
 typedef struct CLS_W {
-    struct CLS_W*      next;
-    unsigned char      kind;
-    unsigned char      pri;
-    unsigned short     s_pri;
+    struct CLS_W*  next;
+    unsigned char  kind;
+    unsigned char  pri;
+    unsigned short s_pri;
 } CLS_W;
 
 typedef struct CLS_2D_W {
@@ -1027,5 +1027,8 @@ typedef struct SYS_W {
     unsigned int    unk_cf900;
     unsigned int    unk_cf904;
 } SYS_W;
+
+extern SYS_W  D_8008CCC0_8D8C0;
+extern SYS_W* D_8015C5C8_15D1C8;
 
 #endif // COMMON_H

@@ -13,6 +13,7 @@ dependencies = [
     "pycparser>=2.23",
     "pyyaml>=6.0.3",
     "splat64[mips]>=0.32.3,<1.0.0",
+    "toml>=0.10.2",
     "watchdog>=6.0.0",
 ]
 
