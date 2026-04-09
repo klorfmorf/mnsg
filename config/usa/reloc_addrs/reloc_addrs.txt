@@ -807,3 +807,13 @@ rom:0x068F68 reloc:MIPS_NONE symbol:D_080032D0
 // Fake: D_08003F30 -> 0x08003F30
 rom:0x069C60 reloc:MIPS_NONE symbol:D_08003F30
 
+// Function: func_080005C0_72BE10
+// Fake: func_080002B4_72BB04 -> 0x080002E0
+rom:0x72BFEC reloc:MIPS_NONE symbol:func_080002B4_72BB04 addend:44
+rom:0x72BFF8 reloc:MIPS_NONE symbol:func_080002B4_72BB04 addend:44
+
+// Function: func_08006164_6C58B4
+// Fake: func_08001388_6C0AD8 -> 0x08001390
+rom:0x6C5900 reloc:MIPS_NONE symbol:func_08001388_6C0AD8 addend:8
+rom:0x6C5904 reloc:MIPS_NONE symbol:func_08001388_6C0AD8 addend:8
+
