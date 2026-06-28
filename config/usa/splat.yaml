@@ -211,6 +211,8 @@ segments:
     exclusive_ram_id: static_overlay_1
     subsegments:
     - [0x587370, asm]
+    - [0x58E2D0, c, overlay_11/camera]
+    - [0x5957F0, asm]
     - [0x5B8500, data]
 
   - name: file_12
