@@ -56,8 +56,8 @@ osSpTaskLoad = 0x800428FC; // type:func
 osSpTaskStartGo = 0x80042A8C; // type:func
 osDpSetNextBuffer = 0x80042AD0; // type:func
 osSpTaskYield = 0x80042B80; // type:func
-guFrustumF = 0x80042BA0; // type:func
-guFrustum = 0x80042CF4; // type:func
+guOrthoF = 0x80042BA0; // type:func
+guOrtho = 0x80042CF4; // type:func
 __ull_rshift = 0x80042D60; // type:func
 __ull_rem = 0x80042D8C; // type:func
 __ull_div = 0x80042DC8; // type:func
@@ -292,3 +292,159 @@ D_080032D0_6F34E0 = 0x080032D0; // defined:true segment:file_42
 D_080032E0_6F34F0 = 0x080032E0; // defined:true segment:file_42
 D_080027B1_71FF81 = 0x080027B1; // defined:true segment:file_60
 D_08001C50_707A40 = 0x08001C50; // defined:true segment:file_47
+
+g_sys = 0x8015C5C8;
+g_sys_real = 0x8008CCC0; // size:0xCF908
+
+// bit.c
+bitInit = 0x80014C20; // type:func
+bitRead1 = 0x80014C54; // type:func
+bitRead = 0x80014CC4; // type:func
+
+// wave_uty.c
+amemAlloc = 0x800148F0; // type:func
+amemFree = 0x80014B74; // type:func
+
+// pic.c
+picOpen = 0x80014D70; // type:func
+picDecode = 0x80014DD8; // type:func
+picDecode8 = 0x80014F1C; // type:func
+picDecode4 = 0x80015118; // type:func
+picReadPalette = 0x800153B0; // type:func
+picReadHeader = 0x800154B0; // type:func
+picExpand16 = 0x8001570C; // type:func
+picExpandChain16 = 0x80015870; // type:func
+picExpand8 = 0x800159B0; // type:func
+picExpand4 = 0x80015AB0; // type:func
+picReadLenIndexed = 0x80015BB0; // type:func
+picExpandChain8 = 0x80015C24; // type:func
+picExpandChain4 = 0x80015D90; // type:func
+picReadLen = 0x80015EFC; // type:func
+picReadColor = 0x80015F58; // type:func
+picColorCacheInit = 0x80015FDC; // type:func
+picNewColor = 0x8001605C; // type:func
+picGetColor = 0x80016120; // type:func
+picPoint = 0x800161F0; // type:func
+picPset = 0x80016254; // type:func
+picReset = 0x800162F4; // type:func
+picUnused = 0x80016350; // type:func
+picPset8 = 0x80016358; // type:func
+picPoint4 = 0x800163F8; // type:func
+picPset4 = 0x80016480; // type:func
+picParseHex = 0x8001654C; // type:func
+picClearTransparent = 0x800165C4; // type:func
+picFlagSet = 0x80016660; // type:func
+picFlagClear = 0x80016684; // type:func
+picFlagTest = 0x800166AC; // type:func
+s_pic_bit_len = 0x80168170;
+s_pic_width = 0x80168174;
+s_pic_height = 0x80168178;
+s_pic_transparent = 0x8016817C;
+s_pic_buff_ptr = 0x80168180;
+s_pic_bit_buff = 0x80168184;
+s_pic_color_cache = 0x80168188; // size:0x300
+s_pic_color_cache_top = 0x80168488;
+s_pic_image16 = 0x8016848C;
+s_pic_image_indexed = 0x80168490;
+s_pic_chain_flags = 0x80168494;
+g_frame_buffers = 0x80261000; // size:0x70800
+
+// data_load.c
+D_80054910 = 0x80054910; // size:0x1BC
+D_80054ACC = 0x80054ACC; // size:0x28F8
+D_800573C8 = 0x800573C8; // size:0x1490
+
+// anime.c
+anime_draw = 0x80016C44; // type:func
+anime_camera = 0x80017D8C; // type:func
+anime_ambient = 0x800184B4; // type:func
+anime_light = 0x800185C8; // type:func
+anime_model = 0x800196F0; // type:func
+anime_jchar = 0x80018B28; // type:func
+g_anime_solid = 0x801684A0;
+s_anime_mtx = 0x801684B0; // size:0x40
+s_anime_ref = 0x801684F0;
+anime_init_frame = 0x80016950; // type:func
+anime_commit_lights = 0x80016AA4; // type:func
+anime_camera_keys = 0x800176F0; // type:func
+anime_light_keys = 0x800182DC; // type:func
+anime_draw_root = 0x80018718; // type:func
+anime_draw_joint = 0x80018908; // type:func
+anime_draw_jchar_joint = 0x80018CA0; // type:func
+anime_child_node = 0x80018F3C; // type:func
+anime_sibling_node = 0x8001904C; // type:func
+anime_delete_model_node = 0x80019160; // type:func
+anime_delete_model_in = 0x800191CC; // type:func
+anime_push_joint = 0x800192D0; // type:func
+anime_mtx_set_scale = 0x8001965C; // type:func
+anime_pop_joint = 0x800196A4; // type:func
+anime_push_solid = 0x80019D40; // type:func
+anime_joint_mtx = 0x80019ED8; // type:func
+anime_key_u16 = 0x8001A8E4; // type:func
+anime_key_s16 = 0x8001AABC; // type:func
+anime_key_angle = 0x8001AC28; // type:func
+anime_key_rot = 0x8001ADBC; // type:func
+anime_key_decode = 0x8001B2C8; // type:func
+anime_frame_count = 0x8001B5AC; // type:func
+anime_set_default_ambient = 0x8001B6A4; // type:func
+anime_set_view = 0x8001B6D4; // type:func
+anime_spawn_parts = 0x8001B740; // type:func
+anime_locate_joint = 0x8001B918; // type:func
+anime_locate_joint_at = 0x8001B950; // type:func
+anime_find_joint_path = 0x8001C228; // type:func
+anime_swap_models = 0x8001C3E0; // type:func
+anime_swap_joint_models = 0x8001C688; // type:func
+anime_view_to_local = 0x8001C7E4; // type:func
+g_anime_default_vp = 0x8006B630; // size:0x10
+s_anime_default_camera = 0x8006B640; // size:0x60
+s_anime_proxy_dlists = 0x8006B6A0; // size:0x8
+s_anime_default_lights = 0x8006B6A8; // size:0x78
+s_anime_gfx_end = 0x8006B720; // size:0x8
+s_anime_gfx_branch = 0x8006B728; // size:0x8
+s_anime_camera = 0x801684A4;
+s_anime_lights = 0x801684A8;
+s_anime_vp_count = 0x801684F4;
+s_anime_light_next = 0x801684F8;
+s_anime_light_count = 0x801684FC;
+s_anime_vp_pool = 0x80168500;
+s_anime_mtx_pool = 0x80168504;
+s_anime_lookat_pool = 0x80168508;
+s_anime_hilite_pool = 0x8016850C;
+s_anime_frame = 0x80168510;
+s_anime_blend = 0x80168514;
+s_anime_frame_total = 0x80168518;
+s_anime_local = 0x8016851C;
+s_anime_keys = 0x80168520;
+s_anime_solid_ready = 0x80168524;
+s_anime_init_glist = 0x80168528;
+s_anime_proxy = 0x8016852C;
+s_anime_rsp_mtx = 0x8016852D;
+s_anime_mtx_top = 0x80168530;
+s_anime_mtx_stack = 0x80168538; // size:0x400
+s_anime_world_mtx = 0x80168938; // size:0x40
+s_anime_proxy_mtx = 0x80168978;
+s_anime_found_solid = 0x8016897C;
+s_anime_view_x = 0x80168980;
+s_anime_view_y = 0x80168984;
+s_anime_view_z = 0x80168988;
+s_anime_view_roll = 0x8016898C;
+s_anime_path_joint = 0x80168990; // size:0x28
+s_anime_path_solid = 0x801689B8; // size:0x28
+s_anime_root_countdown = 0x801689E0;
+s_anime_joint_countdown = 0x801689E4;
+
+// impact_battle.c
+D_8020CF54_638334 = 0x8020CF54; // type:f32 rom:0x638334
+D_8020CF58_638338 = 0x8020CF58; // type:f32 rom:0x638338
+
+// main.c
+osTvType = 0x80000300; // type:s32 size:0x4
+
+// lzkn64.c
+s_lzkn64_rom = 0x801673A0;
+s_lzkn64_pos = 0x801673A4;
+s_lzkn64_rom_left = 0x801673A8;
+s_lzkn64_left = 0x801673AC;
+s_lzkn64_buf_left = 0x801673B0;
+s_lzkn64_plane = 0x801673B4;
+s_lzkn64_planes = 0x801673B6;

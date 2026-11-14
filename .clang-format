@@ -1,0 +1,31 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+UseTab: Never
+ColumnLimit: 0
+BreakBeforeBraces: Linux
+SpaceAfterCStyleCast: true
+PointerAlignment: Right
+ReflowComments: false
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+AllowAllArgumentsOnNextLine: true
+BinPackArguments: true
+BinPackParameters: true
+AlignAfterOpenBracket: DontAlign
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossComments: true
+AlignConsecutiveMacros: Consecutive
+AlignEscapedNewlines: Left
+BracedInitializerIndentWidth: 4
+AlignTrailingComments: true
+KeepEmptyLinesAtTheStartOfBlocks: true
+MaxEmptyLinesToKeep: 1
+SortIncludes: Never
+IndentCaseLabels: true
+InsertBraces: false
+Cpp11BracedListStyle: false

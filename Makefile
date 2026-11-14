@@ -4,12 +4,11 @@ BASENAME    = mnsg
 VERSION    ?= usa
 COMPRESSED  = no
 
-##### Directories #####
 BUILD_DIR = build/$(VERSION)
 CONFIG_DIR = config/$(VERSION)
 
 BIN_DIRS := $(shell find bin/$(VERSION) -type d 2>/dev/null)
-ASM_DIRS := $(shell find asm -type d -not -path "asm/$(VERSION)/nonmatchings*" 2>/dev/null)
+ASM_DIRS := $(shell find asm -type d -not -path "asm/$(VERSION)/nonmatchings*" -not -path "asm/$(VERSION)/matchings*" 2>/dev/null)
 SRC_DIRS := $(shell find src -type d 2>/dev/null)
 
 ##### Tools #####
@@ -37,7 +36,6 @@ OBJDUMP := $(CROSS)objdump
 CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
 CC_CHECK := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG $(CHECK_WARNINGS)
 
-##### Flags #####
 INCLUDES := -Iinclude -Ilibultra/include -Ilibultra/include/PR -Isrc -I.
 
 MIPSISA  := -mips2
@@ -47,7 +45,11 @@ ASFLAGS := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -Iinclude -I.
 CFLAGS  := -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INCLUDES) -Wab,-r4300_mul -woff 649,838,712 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG
 OBJCOPYFLAGS := --pad-to=0x2000000 --gap-fill=0x00
 
-##### Files #####
+LDFLAGS :=
+ifneq ($(findstring mips64-linux-gnu-ld,$(realpath $(call find-command,$(CROSS)ld))),)
+  LDFLAGS += -m elf32btsmip
+endif
+
 BIN_FILES := $(foreach dir,$(BIN_DIRS),$(wildcard $(dir)/*.bin))
 S_FILES   := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 C_FILES   := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
@@ -55,6 +57,8 @@ C_FILES   := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 O_FILES := $(foreach file,$(S_FILES),$(BUILD_DIR)/$(file).o) \
            $(foreach file,$(C_FILES),$(BUILD_DIR)/$(file).o) \
            $(foreach file,$(BIN_FILES),$(BUILD_DIR)/$(file).o)
+
+DEP_FILES := $(foreach file,$(C_FILES),$(BUILD_DIR)/$(file).d $(BUILD_DIR)/$(file).asmproc.d)
 
 GLOBAL_ASM_C_FILES := $(shell grep -rl GLOBAL_ASM $(SRC_DIRS) | sort -u)
 GLOBAL_ASM_O_FILES := $(foreach file,$(GLOBAL_ASM_C_FILES),$(BUILD_DIR)/$(file).o)
@@ -64,6 +68,8 @@ LD_SCRIPT := .splat/$(VERSION)/$(BASENAME).ld
 
 $(BUILD_DIR)/src/boot/is_debug.c.o:  OPTFLAGS := -O2 -g3
 $(BUILD_DIR)/src/boot/audio/seq.c.o: OPTFLAGS := -O2 -g3
+$(BUILD_DIR)/src/system/bit.c.o:     OPTFLAGS := -O2 -g3
+$(BUILD_DIR)/src/system/is64.c.o:    OPTFLAGS := -O2 -g3
 
 EUC_JP_SRCS := \
     asm/usa/data/file_32.rodata.s \
@@ -76,7 +82,6 @@ FILE_ENCODING = Shift_JIS
 
 $(EUC_JP_OBJS): FILE_ENCODING = EUC-JP
 
-##### Targets #####
 default: all
 
 all: $(TARGET).z64
@@ -93,20 +98,20 @@ ifeq ($(COMPRESSED),yes)
 	$(PYTHON) tools/rommy.py compress --input $@ --output $@ --manifest $(CONFIG_DIR)/rommy.yaml --pad --verify
 endif
 
-$(TARGET).elf: $(O_FILES)
-	$(LD) -T $(LD_SCRIPT) -Map $(TARGET).map -T .splat/$(VERSION)/undefined_syms_auto.ld -T .splat/$(VERSION)/undefined_funcs_auto.ld --no-check-sections --emit-relocs -o $@
-
-nuke:
-	rm -rf asm
-	rm -rf bin
-	rm -rf build
-	rm -f *auto.txt
-	rm -f *.ld
-	rm -f config/japan_0/baserom.decompressed.z64
-	rm -f config/usa/baserom.decompressed.z64
+$(TARGET).elf: $(O_FILES) $(LD_SCRIPT) .splat/$(VERSION)/undefined_syms_auto.ld .splat/$(VERSION)/undefined_funcs_auto.ld
+	$(LD) $(LDFLAGS) -T $(LD_SCRIPT) -Map $(TARGET).map -T .splat/$(VERSION)/undefined_syms_auto.ld -T .splat/$(VERSION)/undefined_funcs_auto.ld --no-check-sections --emit-relocs -o $@
 
 clean:
 	rm -rf build
+
+nuke: clean
+	rm -rf asm bin .splat expected
+	rm -f .splat_cache context.c
+	rm -f config/*/baserom.decompressed.z64
+	rm -rf .ruff_cache
+	find . -name __pycache__ -type d -not -path "./.venv/*" -not -path "./.git/*" -prune -exec rm -rf {} +
+
+.PHONY: default all clean nuke setup
 
 setup: baserom.$(VERSION).decompressed.z64
 	$(SPLAT) split $(CONFIG_DIR)/splat.yaml
@@ -114,14 +119,14 @@ setup: baserom.$(VERSION).decompressed.z64
 baserom.$(VERSION).decompressed.z64:
 	$(PYTHON) tools/rommy.py decompress --input $(CONFIG_DIR)/baserom.z64 --output $(CONFIG_DIR)/baserom.decompressed.z64 --manifest $(CONFIG_DIR)/rommy.yaml --pad
 
-##### Recipes #####
 ifndef PERMUTER
 $(GLOBAL_ASM_O_FILES): CC := tools/asm-processor/asm-processor --input-enc=utf-8 --output-enc=$(FILE_ENCODING) $(CC) -- $(AS) $(ASFLAGS) --
 endif
 
 $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $$(dirname $@)
-	@$(CC_CHECK) $(INCLUDES) $<
+	@rm -f $(@:.o=.asmproc.d)
+	@$(CC_CHECK) $(INCLUDES) -MMD -MP -MT $@ -MF $(@:.o=.d) $<
 ifdef PERMUTER
 	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(MIPSISA) -o $@ $<
 else
@@ -140,4 +145,6 @@ endif
 
 $(BUILD_DIR)/%.bin.o: %.bin
 	@mkdir -p $$(dirname $@)
-	$(LD) -r -b binary -o $@ $<
+	$(LD) $(LDFLAGS) -r -b binary -o $@ $<
+
+-include $(DEP_FILES)

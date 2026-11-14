@@ -28,12 +28,13 @@ options:
   # extensions_path: tools/splat_ext
 
   # Uncomment the line below when creating an ELF file for dumping N64Recomp symbols or analyzing in Ghidra
-  # asm_nonmatching_label_macro: ""
+  asm_nonmatching_label_macro: ""
 
   symbol_name_format: $VRAM_$ROM
 
   find_file_boundaries: True
   migrate_rodata_to_functions: True
+  disassemble_all: True
   rodata_string_guesser_level: 2
   gfx_ucode: f3dex
 
@@ -50,99 +51,404 @@ segments:
     type: code
     start: 0x1000
     vram: 0x80000400
+    symbol_name_format: $VRAM
     subalign: 16
     subsegments:
     - [0x1000, hasm, entry]
 
   - name: main
+    dir: system
     type: code
     start: 0x1050
     vram: 0x80000450
+    symbol_name_format: $VRAM
     bss_size: 0x14D380
     subalign: 16
     subsegments:
-    - [0x1050, asm, main]
-    - [0x2410, asm] # IS64 Debugger
-    - [0x2800, asm] # Data Loading (.rodata: 80080180)
-    - [0x2C40, asm] # Game Loop (.rodata: 800801C0)
-    - [0x45C0, asm] # Math (.rodata: 80080290)
-    - [0x4D70, asm] # System Struct
-    - [0x4E40, asm] # Print Text
-    - [0x5510, asm] # Controller (.rodata: 800802D0)
-    - [0x5E20, asm] # LZKN64 Decompression
-    - [0x6500, asm] # File Requests
-    - [0x6790, asm] # Related to credits
-    - [0x6F50, asm] # Profiler (.rodata: 80080350)
-    - [0x79F0, asm] # Scheduler (.rodata: 80080390)
-    - [0x8570, asm] # (.rodata: 800803B0)
-    - [0x9250, asm] # ? (This is the only other translation unit using the file request system, loads the file containing the weird unused smiley face texture)
-    - [0x92F0, c] # Draw List/Sprite Graphics (.rodata: 80080470)
-    - [0xB280, asm] # Draw List (.rodata: 800804C0)
-    - [0xBEA0, asm] # Stages (.rodata: 800804D0)
-    - [0xC1D0, asm] # Events (.rodata: 80080510)
-    - [0xC4F0, asm] # Dialog Box Graphics (.rodata: 80080550)
-    - [0xE000, asm] # (.rodata: 800805F0)
-    - [0xE7F0, asm] # (.rodata: 80080630)
-    - [0xFE40, asm]
-    - [0x10D80, asm] # Menu Graphics (.rodata: 80080670)
-    - [0x12760, asm] # dracam (.rodata: 800809F0)
-    - [0x14540, c, wave_uty] # Memory Utilites [wave_uty.c] (.rodata: 80080B50)
-    - [0x15970, asm] # PIC Decompression (.rodata: 80080F90)
-    - [0x172E0, asm] # (.rodata: 800810D0)
-    - [0x17550, asm] # Object Graphics [anime.c] (.rodata: 80081100)
-    - [0x1D570, asm] # (.rodata: 80081280)
-    - [0x204B0, asm] # Overworld (.rodata: 80081320)
-    - [0x21330, asm] # Level Select (.rodata: 80081470)
-    - [0x221D0, asm] # Skybox (.rodata: 80081630)
-    - [0x23DE0, asm] # Memory Pak (.rodata: 80081650)
-    - [0x249F0, asm] # Save Data
-    - [0x24D60, asm] # Rippling Background/Water (.rodata: 80081A00)
-    - [0x27FE0, c] # Object Collision Code (.rodata: 80081A70)
-    - [0x2B600, asm] # Common Collision Code? BSP Tree Handling (.rodata: 80081BE0)
-    - [0x2F710, asm] # Wall Collision? (.rodata: 80081E40)
-    - [0x31330, asm] # Floor Collision? (.rodata: 80081F40)
-    - [0x32F20, asm] # Dynamic Collision? (Hitboxes) [solid_atari.c] (.rodata: 80082040)
-    - [0x33450, asm] # Similar to above?
-    - [0x33720, asm] # Animation again? (.rodata: 800820A0)
-    - [0x35280, asm] # Task System (.rodata: 800820D0)
-    - [0x36750, asm] # Heap Allocation
-    - [0x37440, asm] # Screen Transition Effects (.rodata: 800821F0)
-    - [0x37C00, asm] # Warps
-    - [0x382B0, asm]
-    - [0x385D0, asm] # Rumble Pak (.rodata: 80082230)
-    - [0x389B0, asm]
-    - [0x389C0, asm] # Audio Thread Manager
-    - [0x392E0, asm] # Audio Interface
-    - [0x3AF70, asm] # Audio Sequencing
-    - [0x3C010, asm] # Audio Commands
-    - [0x3DBA0, asm] # Dialog Box Logic (.rodata: 80082270)
+    - [0x1050, c, main]
+    - [0x2410, c, is64] # IS64 Debugger
+    - [0x2800, c, data_load] # Data Loading
+    - [0x2C40, c, game_loop] # Game Loop
+    - [0x45C0, asm, math] # Math
+    - [0x4D70, asm, sys] # System Struct
+    - [0x4E40, c, print_text] # Print Text
+    - [0x5510, asm, controller] # Controller
+    - [0x5E20, c, lzkn64] # LZKN64 Decompression
+    - [0x6620, c, file_request] # File Requests
+    - [0x6790, asm, demo] # Demo
+    - [0x6F50, c, profiler] # Profiler
+    - [0x79F0, asm, scheduler] # Scheduler
+    - [0x8570, asm, palette] # Palette Manager
+    - [0x9250, asm, sprite_helper] # Sprite Object Helpers
+    - [0x92F0, c, object] # Object Initialization and Drawing
+    - [0xB280, asm, object_order] # Object Ordering
+    - [0xBEA0, asm, stage] # Stages
+    - [0xC1D0, asm, save_file] # Save File
+    - [0xC480, asm, dialog_gfx] # Dialog Box Graphics
+    - [0xE000, asm, dialog] # Dialog Box Logic
+    - [0xE7F0, asm, okutani] # Okutani helpers
+    - [0xFE40, asm, spatial_sound] # Spatial Sound
+    - [0x10D80, asm, yamamoto] # Yamamoto helpers
+    - [0x12760, asm, dracam] # dracam
+    - [0x14540, c, wave_uty] # Memory Utilities [wave_uty.c]
+    - [0x15820, c, bit] # Bit Reader (compiled with -g3)
+    - [0x15970, c, pic] # PIC Decompression
+    - [0x172E0, asm, atan2] # atan2
+    - [0x17550, c, anime] # Solid Object Drawing [anime.c]
+    - [0x1D570, asm, gfx_util] # Math/Graphics Utilities and Helpers
+    - [0x204B0, asm, overworld] # Overworld
+    - [0x21330, asm, level_select] # Level Select
+    - [0x221D0, asm, sky] # Background Sky Object
+    - [0x23DE0, asm, memory_pak] # Memory Pak
+    - [0x249F0, asm, save_flags] # Save Flags
+    - [0x24D60, asm, ripple] # Rippling Background/Water
+    - [0x27FE0, c, collision] # Object Collision Core
+    - [0x2B600, asm, static_collision] # Static Collision Core
+    - [0x2F710, asm, static_wall] # Static Wall Collision
+    - [0x31330, asm, object_wall] # Object Wall Collision
+    - [0x32F20, asm, collision_interface] # Object Collision Interface
+    - [0x33450, asm, floor_collision] # Floor Height Collision Interface
+    - [0x33720, asm, solid_atari] # Animated Collision [solid_atari.c]
+    - [0x35280, asm, task] # Task System
+    - [0x36750, asm, heap] # Heap Allocation
+    - [0x37440, asm, fade] # Fade
+    - [0x37C00, asm, warp] # Warps
+    - [0x382B0, asm, camera_path] # Camera Paths
+    - [0x385D0, asm, rumble] # Rumble Pak
+    - [0x389B0, asm, gfx_data] # Empty
+    - [0x389C0, asm, audio_thread] # Audio Thread Manager
+    - [0x392E0, asm, audio_interface] # Audio Interface
+    - [0x3AF70, asm, audio_seq] # Audio Sequencing
+    - [0x3C010, asm, audio_cmd] # Audio Commands
+    - [0x3DBA0, asm, scenario] # Scenario Interpreter
 
     # libultra
-    - [0x40320, asm, libultra]
+    - [0x40320, asm, libultra/os/initialize]
+    - [0x405B0, asm, libultra/os/createthread]
+    - [0x40700, asm, libultra/os/startthread]
+    - [0x40850, asm, libultra/io/pimgr]
+    - [0x409E0, asm, libultra/os/setthreadpri]
+    - [0x40AC0, asm, libultra/os/createmesgqueue]
+    - [0x40B50, asm, libultra/io/visetspecial]
+    - [0x40D10, asm, libultra/os/recvmesg]
+    - [0x40E50, asm, libultra/os/sendmesg]
+    - [0x40FA0, asm, libultra/io/contreaddata]
+    - [0x411C0, asm, libultra/io/visetyscale]
+    - [0x41220, asm, libultra/os/writebackdcache]
+    - [0x412A0, asm, libultra/os/invaldcache]
+    - [0x41350, asm, libultra/os/invalicache]
+    - [0x413D0, asm, libultra/io/pidma]
+    - [0x414E0, asm, libultra/libc/syncprintf]
+    - [0x41520, asm, libultra/io/piwrite]
+    - [0x41560, asm, libultra/libc/xprintf]
+    - [0x42220, asm, libultra/io/piread]
+    - [0x42260, asm, libultra/os/maptlb]
+    - [0x42320, asm, libultra/os/unmaptlball]
+    - [0x42370, asm, libultra/io/viblack]
+    - [0x423E0, asm, libultra/gu/sqrtf]
+    - [0x423F0, asm, libultra/gu/sinf]
+    - [0x425B0, asm, libultra/gu/cosf]
+    - [0x42720, asm, libultra/os/seteventmesg]
+    - [0x42790, asm, libultra/io/controller]
+    - [0x42AD0, asm, libultra/os/getcount]
+    - [0x42AE0, asm, libultra/os/gettime]
+    - [0x42B70, asm, libultra/libc/llcvt]
+    - [0x42D80, asm, libultra/io/vimgr]
+    - [0x430E0, asm, libultra/io/visetmode]
+    - [0x43150, asm, libultra/io/visetevent]
+    - [0x431C0, asm, libultra/os/setintmask]
+    - [0x43260, asm, libultra/io/sptaskyielded]
+    - [0x432E0, asm, libultra/io/vigetcurrframebuf]
+    - [0x43320, asm, libultra/io/vigetnextframebuf]
+    - [0x43360, asm, libultra/io/viswapbuf]
+    - [0x433B0, asm, libultra/os/writebackdcacheall]
+    - [0x433E0, asm, libultra/io/sptask]
+    - [0x436D0, asm, libultra/io/dpsetnextbuf]
+    - [0x43780, asm, libultra/io/sptaskyield]
+    - [0x437A0, asm, libultra/gu/ortho]
+    - [0x43960, asm, libultra/libc/ll]
+    - [0x43C20, asm, libultra/gu/perspective]
+    - [0x43EB0, asm, libultra/gu/lookathil]
+    - [0x446A0, asm, libultra/gu/mtxutil]
+    - [0x44910, asm, libultra/gu/align]
+    - [0x44B20, asm, libultra/io/pfsinitpak]
+    - [0x44DC0, asm, libultra/io/pfsisplug]
+    - [0x45100, asm, libultra/io/pfsallocatefile]
+    - [0x458B0, asm, libultra/io/pfssearchfile]
+    - [0x45A70, asm, libultra/io/pfsfilestate]
+    - [0x45D60, asm, libultra/io/pfsreadwritefile]
+    - [0x46280, asm, libultra/io/pfsfreeblocks]
+    - [0x463D0, asm, libultra/io/pfsnumfiles]
+    - [0x46520, asm, libultra/io/pfsrepairid]
+    - [0x46780, asm, libultra/io/pfsdeletefile]
+    - [0x46DA0, asm, libultra/io/motor]
+    - [0x47540, asm, libultra/gu/position]
+    - [0x47760, asm, libultra/gu/lookat]
+    - [0x47A90, asm, libultra/gu/lookatref]
+    - [0x47F20, asm, libultra/io/contquery]
+    - [0x47FD0, asm, libultra/io/pfsinit]
+    - [0x48090, asm, libultra/io/aisetfreq]
+    - [0x481F0, asm, libultra/audio/sl]
+    - [0x482B0, asm, libultra/audio/heapalloc]
+    - [0x48310, asm, libultra/os/virtualtophysical]
+    - [0x48390, asm, libultra/io/aisetnextbuf]
+    - [0x48440, asm, libultra/io/aigetlen]
+    - [0x48450, asm, libultra/audio/synthesizer]
+    - [0x48B30, asm, libultra/audio/heapinit]
+    - [0x48B70, asm, libultra/audio/bnkf]
+    - [0x48DC0, asm, libultra/audio/synaddplayer]
+    - [0x48E10, asm, libultra/audio/synallocvoice]
+    - [0x49040, asm, libultra/audio/synstartvoiceparam]
+    - [0x49130, asm, libultra/audio/syngetfxref]
+    - [0x491B0, asm, libultra/audio/synsetpan]
+    - [0x49240, asm, libultra/audio/synsetfxmix]
+    - [0x492E0, asm, libultra/audio/synsetvol]
+    - [0x49380, asm, libultra/audio/synstopvoice]
+    - [0x49400, asm, libultra/audio/synstartvoice]
+    - [0x49490, asm, libultra/audio/synsetpitch]
+    - [0x49520, asm, libultra/audio/synsetfxparam]
+    - [0x49560, asm, libultra/libc/sprintf]
+    - [0x495E0, asm, libultra/os/setsr]
+    - [0x495F0, asm, libultra/os/getsr]
+    - [0x49600, asm, libultra/os/setfpccsr]
+    - [0x49610, asm, libultra/io/sprawread]
+    - [0x49660, asm, libultra/io/sprawwrite]
+    - [0x496B0, asm, libultra/os/exceptasm]
+    - [0x49FC0, asm, libultra/os/maptlbrdb]
+    - [0x4A020, asm, libultra/io/pirawread]
+    - [0x4A080, asm, libultra/libc/bzero]
+    - [0x4A120, asm, libultra/os/interrupt]
+    - [0x4A160, asm, libultra/os/thread]
+    - [0x4A1A0, asm, libultra/io/cartrominit]
+    - [0x4A2A0, asm, libultra/io/leodiskinit]
+    - [0x4A3A0, asm, libultra/io/piacs]
+    - [0x4A460, asm, libultra/os/getthreadpri]
+    - [0x4A480, asm, libultra/io/pirawdma]
+    - [0x4A560, asm, libultra/io/epirawdma]
+    - [0x4A790, asm, libultra/io/devmgr]
+    - [0x4AC20, asm, libultra/io/vi]
+    - [0x4AD60, asm, libultra/io/siacs]
+    - [0x4AE20, asm, libultra/io/sirawdma]
+    - [0x4AED0, asm, libultra/os/jammesg]
+    - [0x4B020, asm, libultra/io/pigetcmdq]
+    - [0x4B050, asm, libultra/io/pirawwrite]
+    - [0x4B0A0, asm, libultra/libc/string]
+    - [0x4B140, asm, libultra/libc/xlitob]
+    - [0x4B3E0, asm, libultra/libc/xldtob]
+    - [0x4BEA0, asm, libultra/os/settimer]
+    - [0x4BF80, asm, libultra/os/timerintr]
+    - [0x4C380, asm, libultra/os/getactivequeue]
+    - [0x4C390, asm, libultra/io/viswapcontext]
+    - [0x4C6F0, asm, libultra/io/spgetstat]
+    - [0x4C700, asm, libultra/libc/bcopy]
+    - [0x4CA10, asm, libultra/io/spsetstat]
+    - [0x4CA20, asm, libultra/io/spsetpc]
+    - [0x4CA60, asm, libultra/io/sprawdma]
+    - [0x4CAF0, asm, libultra/io/sp]
+    - [0x4CB20, asm, libultra/io/dp]
+    - [0x4CB50, asm, libultra/gu/normalize]
+    - [0x4CBE0, asm, libultra/io/pfsgetstatus]
+    - [0x4CE20, asm, libultra/io/contpfs]
+    - [0x4DB80, asm, libultra/io/contramread]
+    - [0x4DEE0, asm, libultra/io/pfschecker]
+    - [0x4E940, asm, libultra/io/contramwrite]
+    - [0x4ECA0, asm, libultra/io/crc]
+    - [0x4EE20, asm, libultra/audio/syndelete]
+    - [0x4EE30, asm, libultra/os/probetlb]
+    - [0x4EEF0, asm, libultra/io/ai]
+    - [0x4EF20, asm, libultra/audio/drvrNew]
+    - [0x4F6C0, asm, libultra/audio/synallocfx]
+    - [0x4F760, asm, libultra/audio/mainbus]
+    - [0x4F8B0, asm, libultra/audio/load]
+    - [0x50400, asm, libultra/audio/resample]
+    - [0x50700, asm, libultra/audio/env]
+    - [0x51360, asm, libultra/audio/auxbus]
+    - [0x51470, asm, libultra/audio/save]
+    - [0x51530, asm, libultra/io/si]
+    - [0x51560, asm, libultra/io/leointerrupt]
+    - [0x51DE0, asm, libultra/os/destroythread]
+    - [0x51EF0, asm, libultra/os/resetglobalintmask]
+    - [0x51F50, asm, libultra/io/epirawwrite]
+    - [0x520E0, asm, libultra/io/epirawread]
+    - [0x52280, asm, libultra/os/setglobalintmask]
+    - [0x522D0, asm, libultra/os/yieldthread]
+    - [0x52320, asm, libultra/libc/ldiv]
+    - [0x524B0, asm, libultra/os/setcompare]
+    - [0x524C0, asm, libultra/audio/filter]
+    - [0x524E0, asm, libultra/audio/reverb]
+    - [0x53130, asm, libultra/audio/copy]
 
     # Not textbin for now because N64Recomp doesn't like these. (They need symbol names.)
     - [0x531B0, bin, rspboot]
     - [0x53280, bin, f3dex]
     - [0x546B0, bin, aspMain]
-    
+
     # main .data section
     - [0x554D0, data, main]
+    - [0x55510, .data, data_load]
+    - [0x59460, data, game_loop]
+    - [0x59550, data, math]
+    - [0x5BDE0, data, demo]
+    - [0x5BE30, data, profiler]
+    - [0x5BFF0, data, palette]
+    - [0x5C2E0, data, sprite_helper]
+    - [0x5C550, data, object]
+    - [0x5C610, data, stage]
+    - [0x5C630, data, save_file]
+    - [0x5C710, data, dialog_gfx]
+    - [0x642D0, data, okutani]
+    - [0x64340, data, yamamoto]
+    - [0x64540, data, wave_uty]
+    - [0x6B9C0, .data, bit]
+    - [0x6B9D0, data, pic]
+    - [0x6B9E0, data, atan2]
+    - [0x6C230, .data, anime]
+    - [0x6C330, data, overworld]
+    - [0x6C380, data, level_select]
+    - [0x6DCF0, data, sky]
+    - [0x6DD70, data, memory_pak]
+    - [0x6DD80, data, ripple]
+    - [0x6DF10, data, solid_atari]
+    - [0x6DF20, data, task]
+    - [0x6DF50, data, heap]
+    - [0x6DFE0, data, fade]
+    - [0x6E010, data, warp]
+    - [0x6E0D0, data, gfx_data]
+    - [0x6EE30, data, audio_thread]
+    - [0x6EE40, data, audio_interface]
+    - [0x6F2D0, data, audio_seq]
+    - [0x6F400, data, audio_cmd]
+    - [0x6FED0, data, scenario]
 
     # libultra .data section
-    - [0x7A030, data, libultra]
+    - [0x7A030, data, libultra/os/initialize]
+    - [0x7A050, data, libultra/io/pimgr]
+    - [0x7A080, data, libultra/libc/xprintf]
+    - [0x7A0D0, data, libultra/io/controller]
+    - [0x7A0E0, data, libultra/io/vimgr]
+    - [0x7A100, data, libultra/io/vitbl]
+    - [0x7AE20, data, libultra/io/motor]
+    - [0x7AE30, data, libultra/audio/sl]
+    - [0x7AE40, data, libultra/io/aisetnextbuf]
+    - [0x7AE50, data, libultra/os/exceptasm]
+    - [0x7AE70, data, libultra/os/thread]
+    - [0x7AE90, data, libultra/io/piacs]
+    - [0x7AEA0, data, libultra/io/vi]
+    - [0x7AF10, data, libultra/io/siacs]
+    - [0x7AF20, data, libultra/libc/xlitob]
+    - [0x7AF50, data, libultra/os/timerintr]
+    - [0x7AF60, data, libultra/audio/drvrNew]
+    - [0x7B0F0, data, libultra/audio/env]
+    - [0x7B230, data, libultra/vimodes/vimodepallpn1]
+    - [0x7B280, data, libultra/vimodes/vimodempallpn1]
+    - [0x7B2D0, data, libultra/vimodes/vimodentsclan1]
 
     # main .rodata section
-    - [0x7B320, rodata, main]
-    - [0x7B6A0, .rodata, 92F0]
-    - [0x7B6F0, rodata, main_continued]
+    - [0x7B320, rodata, unmigrated/main]
+    - [0x7B360, .rodata, data_load]
+    - [0x7B3A0, .rodata, game_loop]
+    - [0x7B4A0, rodata, math]
+    - [0x7B4E0, rodata, controller]
+    - [0x7B580, .rodata, profiler]
+    - [0x7B5C0, rodata, scheduler]
+    - [0x7B5E0, rodata, palette]
+    - [0x7B6A0, .rodata, object]
+    - [0x7B6F0, rodata, object_order]
+    - [0x7B700, rodata, stage]
+    - [0x7B740, rodata, save_file]
+    - [0x7B780, rodata, dialog_gfx]
+    - [0x7B820, rodata, dialog]
+    - [0x7B860, rodata, okutani]
+    - [0x7B890, rodata, spatial_sound]
+    - [0x7B8A0, rodata, yamamoto]
+    - [0x7BC40, rodata, dracam]
+    - [0x7BDA0, rodata, unmigrated/wave_uty]
+    - [0x7C1E0, .rodata, pic]
+    - [0x7C320, rodata, atan2]
+    - [0x7C350, .rodata, anime]
+    - [0x7C4D0, rodata, gfx_util]
+    - [0x7C570, rodata, overworld]
+    - [0x7C6C0, rodata, level_select]
+    - [0x7C880, rodata, sky]
+    - [0x7C8A0, rodata, memory_pak]
+    - [0x7CC50, rodata, ripple]
+    - [0x7CCC0, rodata, unmigrated/collision]
+    - [0x7CE30, rodata, static_collision]
+    - [0x7D090, rodata, static_wall]
+    - [0x7D190, rodata, object_wall]
+    - [0x7D290, rodata, solid_atari]
+    - [0x7D320, rodata, task]
+    - [0x7D440, rodata, fade]
+    - [0x7D480, rodata, rumble]
+    - [0x7D4C0, rodata, scenario]
 
     # libultra .rodata section
-    - [0x7DD10, rodata, libultra]
+    - [0x7DD10, rodata, libultra/libc/xprintf]
+    - [0x7DE10, rodata, libultra/gu/sinf]
+    - [0x7DE60, rodata, libultra/gu/cosf]
+    - [0x7DEB0, rodata, libultra/libc/llcvt]
+    - [0x7DEC0, rodata, libultra/os/setintmask]
+    - [0x7DF40, rodata, libultra/gu/perspective]
+    - [0x7DF50, rodata, libultra/gu/lookathil]
+    - [0x7DF60, rodata, libultra/gu/align]
+    - [0x7DF70, rodata, libultra/gu/position]
+    - [0x7DF80, rodata, libultra/audio/synthesizer]
+    - [0x7DF90, rodata, libultra/os/exceptasm]
+    - [0x7DFE0, rodata, libultra/io/devmgr]
+    - [0x7E000, rodata, libultra/libc/xldtob]
+    - [0x7E060, rodata, libultra/gu/libm_vals]
+    - [0x7E070, rodata, libultra/audio/drvrNew]
+    - [0x7E090, rodata, libultra/audio/resample]
+    - [0x7E0D0, rodata, libultra/audio/env]
+    - [0x7E130, rodata, libultra/audio/reverb]
 
     - [0x7E160, rodatabin, f3dex_data]
     - [0x7E960, rodatabin, aspMain_data]
 
-    
+    # main .bss section
+    - { start: 0x7EC20, type: bss, vram: 0x8007E020, name: main }
+    - { start: 0x7EC20, type: bss, vram: 0x8008CCC0, name: sys }
+    - { start: 0x7EC20, type: bss, vram: 0x80167170, name: controller }
+    - { start: 0x7EC20, type: .bss, vram: 0x801673A0, name: lzkn64 }
+    - { start: 0x7EC20, type: bss, vram: 0x801673C0, name: profiler }
+    - { start: 0x7EC20, type: bss, vram: 0x80167850, name: scheduler }
+    - { start: 0x7EC20, type: bss, vram: 0x80167A60, name: object }
+    - { start: 0x7EC20, type: bss, vram: 0x80167A80, name: object_order }
+    - { start: 0x7EC20, type: bss, vram: 0x80167C40, name: dialog_gfx }
+    - { start: 0x7EC20, type: bss, vram: 0x80167C60, name: okutani }
+    - { start: 0x7EC20, type: bss, vram: 0x80167C70, name: yamamoto }
+    - { start: 0x7EC20, type: bss, vram: 0x80167FC0, name: wave_uty }
+    - { start: 0x7EC20, type: .bss, vram: 0x80168160, name: bit }
+    - { start: 0x7EC20, type: .bss, vram: 0x80168170, name: pic }
+    - { start: 0x7EC20, type: .bss, vram: 0x801684A0, name: anime }
+    - { start: 0x7EC20, type: bss, vram: 0x801689F0, name: gfx_util }
+    - { start: 0x7EC20, type: bss, vram: 0x80168A00, name: memory_pak }
+    - { start: 0x7EC20, type: bss, vram: 0x80168E90, name: save_flags }
+    - { start: 0x7EC20, type: bss, vram: 0x80168F60, name: collision }
+    - { start: 0x7EC20, type: bss, vram: 0x80168F70, name: solid_atari }
+    - { start: 0x7EC20, type: bss, vram: 0x80168FB0, name: task }
+    - { start: 0x7EC20, type: bss, vram: 0x8016DAC0, name: heap }
+    - { start: 0x7EC20, type: bss, vram: 0x8016DAF0, name: rumble }
+    - { start: 0x7EC20, type: bss, vram: 0x8016DB70, name: audio_thread }
+    - { start: 0x7EC20, type: bss, vram: 0x80172970, name: audio_interface }
+    - { start: 0x7EC20, type: bss, vram: 0x801C7740, name: scenario }
+    - { start: 0x7EC20, type: bss, vram: 0x801C7940, name: libultra/os/initialize }
+    - { start: 0x7EC20, type: bss, vram: 0x801C7950, name: libultra/io/pimgr }
+    - { start: 0x7EC20, type: bss, vram: 0x801C8B20, name: libultra/os/seteventmesg }
+    - { start: 0x7EC20, type: bss, vram: 0x801C8BA0, name: libultra/io/controller }
+    - { start: 0x7EC20, type: bss, vram: 0x801C8C30, name: libultra/io/vimgr }
+    - { start: 0x7EC20, type: bss, vram: 0x801C9E50, name: libultra/io/sptask }
+    - { start: 0x7EC20, type: bss, vram: 0x801C9E90, name: libultra/gu/align }
+    - { start: 0x7EC20, type: bss, vram: 0x801C9EA0, name: libultra/io/pfsisplug }
+    - { start: 0x7EC20, type: bss, vram: 0x801C9EE0, name: libultra/io/motor }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA120, name: libultra/gu/position }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA130, name: libultra/io/cartrominit }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA1B0, name: libultra/io/leodiskinit }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA230, name: libultra/io/piacs }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA250, name: libultra/io/siacs }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA270, name: libultra/os/timerintr }
+    - { start: 0x7EC20, type: bss, vram: 0x801CA2B0, name: libultra/os/exceptasm }
+
   - name: audio_banks
     type: databin
     start: 0x7EC20
@@ -210,8 +516,46 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x587370, asm]
-    - [0x5B8500, data]
+    - [0x587370, asm, file_11]
+    - [0x587B50, asm, 587B50]
+    - [0x58B870, asm, 58B870]
+    - [0x5907F0, asm, 5907F0]
+    - [0x5913D0, asm, 5913D0]
+    - [0x5944C0, asm, 5944C0]
+    - [0x598540, asm, 598540]
+    - [0x5995F0, asm, 5995F0]
+    - [0x5997A0, asm, 5997A0]
+    - [0x59D4E0, asm, 59D4E0]
+    - [0x5A12F0, asm, 5A12F0]
+    - [0x5A4730, asm, 5A4730]
+    - [0x5A6F30, asm, 5A6F30]
+    - [0x5AA6B0, asm, 5AA6B0]
+    - [0x5AE300, asm, 5AE300]
+    - [0x5AEBE0, asm, 5AEBE0]
+    - [0x5AFA40, asm, 5AFA40]
+    - [0x5B03F0, asm, 5B03F0]
+    - [0x5B13D0, asm, 5B13D0]
+    - [0x5B20B0, asm, 5B20B0]
+    - [0x5B71E0, asm, 5B71E0]
+    - [0x5B8500, data, file_11]
+    - [0x5C65D0, rodata, file_11]
+    - [0x5C6AB0, rodata, 58B870]
+    - [0x5C6B60, rodata, 5907F0]
+    - [0x5C6B90, rodata, 5913D0]
+    - [0x5C6C00, rodata, 5944C0]
+    - [0x5C6E70, rodata, 5997A0]
+    - [0x5C7100, rodata, 59D4E0]
+    - [0x5C72F0, rodata, 5A12F0]
+    - [0x5C74F0, rodata, 5A4730]
+    - [0x5C77B0, rodata, 5A6F30]
+    - [0x5C79A0, rodata, 5AA6B0]
+    - [0x5C7E60, rodata, 5AE300]
+    - [0x5C7E90, rodata, 5AEBE0]
+    - [0x5C8060, rodata, 5AFA40]
+    - [0x5C8110, rodata, 5B03F0]
+    - [0x5C81D0, rodata, 5B13D0]
+    - [0x5C81E0, rodata, 5B20B0]
+    - [0x5C85B0, rodata, 5B71E0]
 
   - name: file_12
     type: code
@@ -222,10 +566,35 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_2
     subsegments:
-    - [0x5C8770, asm]
-    - [0x5E3C90, data]
+    - [0x5C8770, asm, file_12]
+    - [0x5C9310, asm, 5C9310]
+    - [0x5CC7B0, asm, 5CC7B0]
+    - [0x5D0060, asm, 5D0060]
+    - [0x5D0490, asm, 5D0490]
+    - [0x5D04A0, asm, 5D04A0]
+    - [0x5D06B0, asm, 5D06B0]
+    - [0x5D1B10, asm, 5D1B10]
+    - [0x5D62A0, asm, 5D62A0]
+    - [0x5DC440, asm, 5DC440]
+    - [0x5DEE80, asm, 5DEE80]
+    - [0x5DF1B0, asm, 5DF1B0]
+    - [0x5E02F0, asm, 5E02F0]
+    - [0x5E1330, asm, 5E1330]
+    - [0x5E1D10, asm, 5E1D10]
+    - [0x5E3C90, data, file_12]
+    - [0x5F4F60, rodata, file_12]
+    - [0x5F4FD0, rodata, 5CC7B0]
+    - [0x5F55F0, rodata, 5D04A0]
+    - [0x5F5600, rodata, 5D06B0]
+    - [0x5F5950, rodata, 5D1B10]
+    - [0x5F5B70, rodata, 5D62A0]
+    - [0x5F5E80, rodata, 5DC440]
+    - [0x5F5F90, rodata, 5DF1B0]
+    - [0x5F6060, rodata, 5E02F0]
+    - [0x5F6510, rodata, 5E1D10]
 
   - name: file_13
+    dir: 3dboss
     type: code
     start: 0x5F6840
     vram: 0x801CB460
@@ -234,8 +603,27 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x5F6840, asm]
-    - [0x634E30, data]
+    - [0x5F6840, asm, file_13]
+    - [0x5F6A00, c, impact_battle]
+    - [0x5FE1E0, asm, 5FE1E0]
+    - [0x602A50, asm, 602A50]
+    - [0x60E410, asm, 60E410]
+    - [0x60F5D0, asm, 60F5D0]
+    - [0x61A6C0, asm, 61A6C0]
+    - [0x622EB0, asm, 622EB0]
+    - [0x62B5E0, asm, 62B5E0]
+    - [0x62FAD0, asm, 62FAD0]
+    - [0x634E30, data, file_13]
+    - [0x638190, rodata, file_13]
+    - [0x638250, .rodata, impact_battle]
+    - [0x638720, rodata, 5FE1E0]
+    - [0x638A40, rodata, 602A50]
+    - [0x639060, rodata, 60E410]
+    - [0x6390D0, rodata, 60F5D0]
+    - [0x6397C0, rodata, 61A6C0]
+    - [0x639BC0, rodata, 622EB0]
+    - [0x639FD0, rodata, 62B5E0]
+    - [0x63A1A0, rodata, 62FAD0]
 
   - name: file_14
     type: code
@@ -245,8 +633,83 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x63A2B0, asm]
-    - [0x6576E0, data]
+    - [0x63A2B0, asm, file_14]
+    - [0x63A3F0, asm, 63A3F0]
+    - [0x63A890, asm, 63A890]
+    - [0x63CF20, asm, 63CF20]
+    - [0x640E90, asm, 640E90]
+    - [0x640FB0, asm, 640FB0]
+    - [0x641A90, asm, 641A90]
+    - [0x6426C0, asm, 6426C0]
+    - [0x642C70, asm, 642C70]
+    - [0x643820, asm, 643820]
+    - [0x643C20, asm, 643C20]
+    - [0x644380, asm, 644380]
+    - [0x644880, asm, 644880]
+    - [0x645C40, asm, 645C40]
+    - [0x6460C0, asm, 6460C0]
+    - [0x646E20, asm, 646E20]
+    - [0x647240, asm, 647240]
+    - [0x647360, asm, 647360]
+    - [0x647790, asm, 647790]
+    - [0x647AF0, asm, 647AF0]
+    - [0x648630, asm, 648630]
+    - [0x648D40, asm, 648D40]
+    - [0x649100, asm, 649100]
+    - [0x649C90, asm, 649C90]
+    - [0x649FD0, asm, 649FD0]
+    - [0x64AA50, asm, 64AA50]
+    - [0x64ADB0, asm, 64ADB0]
+    - [0x64BDB0, asm, 64BDB0]
+    - [0x64C4D0, asm, 64C4D0]
+    - [0x64CBC0, asm, 64CBC0]
+    - [0x64D420, asm, 64D420]
+    - [0x64E450, asm, 64E450]
+    - [0x64ECE0, asm, 64ECE0]
+    - [0x64F5B0, asm, 64F5B0]
+    - [0x650030, asm, 650030]
+    - [0x650B20, asm, 650B20]
+    - [0x651260, asm, 651260]
+    - [0x651560, asm, 651560]
+    - [0x651B00, asm, 651B00]
+    - [0x651D20, asm, 651D20]
+    - [0x652110, asm, 652110]
+    - [0x657260, asm, 657260]
+    - [0x6576E0, data, file_14]
+    - [0x65DBC0, rodata, file_14]
+    - [0x65DBF0, rodata, 63A3F0]
+    - [0x65DC00, rodata, 63A890]
+    - [0x65DC80, rodata, 63CF20]
+    - [0x65DE40, rodata, 640FB0]
+    - [0x65DE70, rodata, 641A90]
+    - [0x65DEE0, rodata, 6426C0]
+    - [0x65DF00, rodata, 642C70]
+    - [0x65DF40, rodata, 643820]
+    - [0x65DF50, rodata, 643C20]
+    - [0x65DF80, rodata, 644380]
+    - [0x65DF90, rodata, 644880]
+    - [0x65DFF0, rodata, 645C40]
+    - [0x65E000, rodata, 6460C0]
+    - [0x65E070, rodata, 647360]
+    - [0x65E080, rodata, 647790]
+    - [0x65E090, rodata, 647AF0]
+    - [0x65E0B0, rodata, 649100]
+    - [0x65E0D0, rodata, 64AA50]
+    - [0x65E0E0, rodata, 64ADB0]
+    - [0x65E120, rodata, 64BDB0]
+    - [0x65E140, rodata, 64C4D0]
+    - [0x65E160, rodata, 64CBC0]
+    - [0x65E190, rodata, 64D420]
+    - [0x65E1C0, rodata, 64E450]
+    - [0x65E1E0, rodata, 64ECE0]
+    - [0x65E200, rodata, 64F5B0]
+    - [0x65E230, rodata, 650030]
+    - [0x65E260, rodata, 650B20]
+    - [0x65E280, rodata, 651260]
+    - [0x65E290, rodata, 651560]
+    - [0x65E2A0, rodata, 651B00]
+    - [0x65E2B0, rodata, 651D20]
+    - [0x65E2D0, rodata, 652110]
 
   - name: file_15
     type: code
@@ -257,8 +720,23 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x65E310, asm]
-    - [0x666140, data]
+    - [0x65E310, asm, file_15]
+    - [0x65FB30, asm, 65FB30]
+    - [0x6622A0, asm, 6622A0]
+    - [0x662AE0, asm, 662AE0]
+    - [0x664330, asm, 664330]
+    - [0x664430, asm, 664430]
+    - [0x664880, asm, 664880]
+    - [0x666140, data, file_15]
+    - [0x6661A0, data, 65FB30]
+    - [0x666250, data, 662AE0]
+    - [0x6662F0, data, 664330]
+    - [0x6663A0, data, 664430]
+    - [0x6663C0, data, 664880]
+    - [0x666DA0, rodata, file_15]
+    - [0x6671B0, rodata, 65FB30]
+    - [0x667690, rodata, 664430]
+    - [0x6679A0, rodata, 664880]
 
   - name: file_16
     type: code
@@ -269,8 +747,9 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x667B90, asm]
-    - [0x66BD60, data]
+    - [0x667B90, asm, file_16]
+    - [0x66BD60, data, file_16]
+    - [0x66BF90, rodata, file_16]
 
   - name: file_17
     type: code
@@ -281,8 +760,23 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_2
     subsegments:
-    - [0x66C250, asm]
-    - [0x6759D0, data]
+    - [0x66C250, asm, file_17]
+    - [0x66CBE0, asm, 66CBE0]
+    - [0x66E5A0, asm, 66E5A0]
+    - [0x66EA40, asm, 66EA40]
+    - [0x673490, asm, 673490]
+    - [0x6755A0, asm, 6755A0]
+    - [0x6759D0, data, file_17]
+    - [0x675BA0, data, 66E5A0]
+    - [0x675E70, data, 66EA40]
+    - [0x675EA0, data, 673490]
+    - [0x675FD0, data, 6755A0]
+    - [0x676180, rodata, file_17]
+    - [0x6761F0, rodata, 66CBE0]
+    - [0x676380, rodata, 66E5A0]
+    - [0x6766C0, rodata, 66EA40]
+    - [0x676A10, rodata, 673490]
+    - [0x676B80, rodata, 6755A0]
 
   - name: file_18
     type: code
@@ -293,8 +787,22 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_2
     subsegments:
-    - [0x676C80, asm]
-    - [0x693770, data]
+    - [0x676C80, asm, file_18]
+    - [0x67B940, asm, 67B940]
+    - [0x67D810, asm, 67D810]
+    - [0x680F40, asm, 680F40]
+    - [0x681C80, asm, 681C80]
+    - [0x689280, asm, 689280]
+    - [0x68D6F0, asm, 68D6F0]
+    - [0x690820, asm, 690820]
+    - [0x693770, data, file_18]
+    - [0x693F60, rodata, file_18]
+    - [0x694340, rodata, 67D810]
+    - [0x6943A0, rodata, 680F40]
+    - [0x6944A0, rodata, 681C80]
+    - [0x694850, rodata, 689280]
+    - [0x6949A0, rodata, 68D6F0]
+    - [0x694B10, rodata, 690820]
 
   - name: file_19
     type: code
@@ -305,8 +813,9 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_2
     subsegments:
-    - [0x694CA0, asm]
-    - [0x69C000, data]
+    - [0x694CA0, asm, file_19]
+    - [0x69C000, data, file_19]
+    - [0x69C5A0, rodata, file_19]
 
   - name: file_20
     type: code
@@ -317,8 +826,8 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x69CBD0, asm]
-    - [0x69D420, data]
+    - [0x69CBD0, asm, file_20]
+    - [0x69D420, rodata, file_20]
 
   - name: file_21
     type: code
@@ -328,10 +837,12 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_2
     subsegments:
-    - [0x69D4E0, asm]
-    - [0x69DA50, data]
+    - [0x69D4E0, asm, file_21]
+    - [0x69DA20, asm, 69DA20]
+    - [0x69DA50, data, file_21]
 
   - name: file_22
+    dir: konami
     type: code
     start: 0x69E080
     vram: 0x801CB460
@@ -340,8 +851,9 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x69E080, asm]
-    - [0x69F400, data]
+    - [0x69E080, c, konami]
+    - [0x69F400, data, konami]
+    - [0x6A9900, .rodata, konami]
 
   - name: file_23
     type: code
@@ -352,8 +864,9 @@ segments:
     overlay: yes
     exclusive_ram_id: static_overlay_1
     subsegments:
-    - [0x6A9920, asm]
-    - [0x6AC460, data]
+    - [0x6A9920, asm, file_23]
+    - [0x6AC460, data, file_23]
+    - [0x6AC520, rodata, file_23]
 
   - name: file_24
     type: code
@@ -640,7 +1153,7 @@ segments:
     subsegments:
     - [0x705DF0, asm, file_47]
     - [0x707880, data, file_47]
-    - [0x7078C0, rodata, file_47]
+    - [0x7078A0, rodata, file_47]
     - { start: 0x707A40, name: file_47, type: bss, vram: 0x8001C50 }
 
   - name: file_48
