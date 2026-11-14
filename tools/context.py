@@ -7,7 +7,7 @@ from pathlib import Path
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = os.path.abspath(os.path.join(script_dir, ".."))
-src_dir = root_dir + "src/"
+src_dir = os.path.join(root_dir, "src")
 
 def get_c_dir(dirname):
     for root, dirs, files in os.walk(src_dir):
@@ -25,14 +25,15 @@ def get_c_file(directory):
 
 def import_c_file(in_file):
     in_file = os.path.relpath(in_file, root_dir)
-    cpp_command = ["gcc", "-E", "-P", "-Iinclude", "-Ilibultra/include", "-Ilibultra/include/PR", "-Isrc", "-I.", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", in_file]
+    # -dD keeps the #define lines in the output (-E alone drops them), so macros such as the PR/gbi.h ones are visible.
+    cpp_command = ["gcc", "-E", "-dD", "-P", "-Iinclude", "-Ilibultra/include", "-Ilibultra/include/PR", "-Isrc", "-I.", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", in_file]
     try:
         print(root_dir)
         return subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
     except subprocess.CalledProcessError:
         print(
             "Failed to preprocess input file, when running command:\n"
-            + cpp_command,
+            + " ".join(cpp_command),
             file=sys.stderr,
         )
         sys.exit(1)
