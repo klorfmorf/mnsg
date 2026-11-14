@@ -1,0 +1,143 @@
+{
+  "$schema": "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json",
+  "custom_make": "make",
+  "custom_args": [
+    "COMPRESSED=no"
+  ],
+  "build_target": false,
+  "build_base": true,
+  "watch_patterns": [
+    "src/**/*.c",
+    "include/**/*.h"
+  ],
+  "units": [
+    {
+      "name": "3dboss/impact_battle",
+      "target_path": "expected/targets/3dboss/impact_battle.o",
+      "base_path": "build/usa/src/3dboss/impact_battle.c.o",
+      "metadata": {
+        "source_path": "src/3dboss/impact_battle.c"
+      }
+    },
+    {
+      "name": "konami/konami",
+      "target_path": "expected/targets/konami/konami.o",
+      "base_path": "build/usa/src/konami/konami.c.o",
+      "metadata": {
+        "source_path": "src/konami/konami.c"
+      }
+    },
+    {
+      "name": "system/anime",
+      "target_path": "expected/targets/system/anime.o",
+      "base_path": "build/usa/src/system/anime.c.o",
+      "metadata": {
+        "source_path": "src/system/anime.c"
+      }
+    },
+    {
+      "name": "system/bit",
+      "target_path": "expected/targets/system/bit.o",
+      "base_path": "build/usa/src/system/bit.c.o",
+      "metadata": {
+        "source_path": "src/system/bit.c"
+      }
+    },
+    {
+      "name": "system/collision",
+      "target_path": "expected/targets/system/collision.o",
+      "base_path": "build/usa/src/system/collision.c.o",
+      "metadata": {
+        "source_path": "src/system/collision.c"
+      }
+    },
+    {
+      "name": "system/data_load",
+      "target_path": "expected/targets/system/data_load.o",
+      "base_path": "build/usa/src/system/data_load.c.o",
+      "metadata": {
+        "source_path": "src/system/data_load.c"
+      }
+    },
+    {
+      "name": "system/file_request",
+      "target_path": "expected/targets/system/file_request.o",
+      "base_path": "build/usa/src/system/file_request.c.o",
+      "metadata": {
+        "source_path": "src/system/file_request.c"
+      }
+    },
+    {
+      "name": "system/game_loop",
+      "target_path": "expected/targets/system/game_loop.o",
+      "base_path": "build/usa/src/system/game_loop.c.o",
+      "metadata": {
+        "source_path": "src/system/game_loop.c"
+      }
+    },
+    {
+      "name": "system/is64",
+      "target_path": "expected/targets/system/is64.o",
+      "base_path": "build/usa/src/system/is64.c.o",
+      "metadata": {
+        "source_path": "src/system/is64.c"
+      }
+    },
+    {
+      "name": "system/lzkn64",
+      "target_path": "expected/targets/system/lzkn64.o",
+      "base_path": "build/usa/src/system/lzkn64.c.o",
+      "metadata": {
+        "source_path": "src/system/lzkn64.c"
+      }
+    },
+    {
+      "name": "system/main",
+      "target_path": "expected/targets/system/main.o",
+      "base_path": "build/usa/src/system/main.c.o",
+      "metadata": {
+        "source_path": "src/system/main.c"
+      }
+    },
+    {
+      "name": "system/object",
+      "target_path": "expected/targets/system/object.o",
+      "base_path": "build/usa/src/system/object.c.o",
+      "metadata": {
+        "source_path": "src/system/object.c"
+      }
+    },
+    {
+      "name": "system/pic",
+      "target_path": "expected/targets/system/pic.o",
+      "base_path": "build/usa/src/system/pic.c.o",
+      "metadata": {
+        "source_path": "src/system/pic.c"
+      }
+    },
+    {
+      "name": "system/print_text",
+      "target_path": "expected/targets/system/print_text.o",
+      "base_path": "build/usa/src/system/print_text.c.o",
+      "metadata": {
+        "source_path": "src/system/print_text.c"
+      }
+    },
+    {
+      "name": "system/profiler",
+      "target_path": "expected/targets/system/profiler.o",
+      "base_path": "build/usa/src/system/profiler.c.o",
+      "metadata": {
+        "source_path": "src/system/profiler.c"
+      }
+    },
+    {
+      "name": "system/wave_uty",
+      "target_path": "expected/targets/system/wave_uty.o",
+      "base_path": "build/usa/src/system/wave_uty.c.o",
+      "metadata": {
+        "source_path": "src/system/wave_uty.c"
+      }
+    }
+  ]
+}
