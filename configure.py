@@ -60,8 +60,8 @@ CFLAGS = [
 OPTFLAGS = ["-O2"]
 MIPSISA = ["-mips2"]
 OPTFLAGS_OVERRIDES = {
-    "src/system/bit.c": ["-O2", "-g3"],
-    "src/system/is_debug.c": ["-O2", "-g3"],
+    "src/sys/bit.c": ["-O2", "-g3"],
+    "src/sys/is_debug.c": ["-O2", "-g3"],
 }
 CHECK_FLAGS = [
     "-m32",

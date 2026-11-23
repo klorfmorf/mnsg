@@ -10,427 +10,427 @@
   ],
   "units": [
     {
-      "name": "system/anime",
-      "target_path": "expected/targets/system/anime.o",
-      "base_path": "build/usa/src/system/anime.c.o",
+      "name": "sys/anime",
+      "target_path": "expected/targets/sys/anime.o",
+      "base_path": "build/usa/src/sys/anime.c.o",
       "metadata": {
-        "source_path": "src/system/anime.c"
+        "source_path": "src/sys/anime.c"
       }
     },
     {
-      "name": "system/atan2",
-      "target_path": "expected/targets/system/atan2.o",
-      "base_path": "build/usa/src/system/atan2.c.o",
+      "name": "sys/atan2",
+      "target_path": "expected/targets/sys/atan2.o",
+      "base_path": "build/usa/src/sys/atan2.c.o",
       "metadata": {
-        "source_path": "src/system/atan2.c"
+        "source_path": "src/sys/atan2.c"
       }
     },
     {
-      "name": "system/audiomgr",
-      "target_path": "expected/targets/system/audiomgr.o",
-      "base_path": "build/usa/src/system/audiomgr.c.o",
+      "name": "sys/audiomgr",
+      "target_path": "expected/targets/sys/audiomgr.o",
+      "base_path": "build/usa/src/sys/audiomgr.c.o",
       "metadata": {
-        "source_path": "src/system/audiomgr.c"
+        "source_path": "src/sys/audiomgr.c"
       }
     },
     {
-      "name": "system/bgm_tbl",
-      "target_path": "expected/targets/system/bgm_tbl.o",
-      "base_path": "build/usa/src/system/bgm_tbl.c.o",
+      "name": "sys/bgm_tbl",
+      "target_path": "expected/targets/sys/bgm_tbl.o",
+      "base_path": "build/usa/src/sys/bgm_tbl.c.o",
       "metadata": {
-        "source_path": "src/system/bgm_tbl.c"
+        "source_path": "src/sys/bgm_tbl.c"
       }
     },
     {
-      "name": "system/bit",
-      "target_path": "expected/targets/system/bit.o",
-      "base_path": "build/usa/src/system/bit.c.o",
+      "name": "sys/bit",
+      "target_path": "expected/targets/sys/bit.o",
+      "base_path": "build/usa/src/sys/bit.c.o",
       "metadata": {
-        "source_path": "src/system/bit.c"
+        "source_path": "src/sys/bit.c"
       }
     },
     {
-      "name": "system/controller_pak",
-      "target_path": "expected/targets/system/controller_pak.o",
-      "base_path": "build/usa/src/system/controller_pak.c.o",
+      "name": "sys/controller_pak",
+      "target_path": "expected/targets/sys/controller_pak.o",
+      "base_path": "build/usa/src/sys/controller_pak.c.o",
       "metadata": {
-        "source_path": "src/system/controller_pak.c"
+        "source_path": "src/sys/controller_pak.c"
       }
     },
     {
-      "name": "system/demo",
-      "target_path": "expected/targets/system/demo.o",
-      "base_path": "build/usa/src/system/demo.c.o",
+      "name": "sys/demo",
+      "target_path": "expected/targets/sys/demo.o",
+      "base_path": "build/usa/src/sys/demo.c.o",
       "metadata": {
-        "source_path": "src/system/demo.c"
+        "source_path": "src/sys/demo.c"
       }
     },
     {
-      "name": "system/douchu",
-      "target_path": "expected/targets/system/douchu.o",
-      "base_path": "build/usa/src/system/douchu.c.o",
+      "name": "sys/douchu",
+      "target_path": "expected/targets/sys/douchu.o",
+      "base_path": "build/usa/src/sys/douchu.c.o",
       "metadata": {
-        "source_path": "src/system/douchu.c"
+        "source_path": "src/sys/douchu.c"
       }
     },
     {
-      "name": "system/fade",
-      "target_path": "expected/targets/system/fade.o",
-      "base_path": "build/usa/src/system/fade.c.o",
+      "name": "sys/fade",
+      "target_path": "expected/targets/sys/fade.o",
+      "base_path": "build/usa/src/sys/fade.c.o",
       "metadata": {
-        "source_path": "src/system/fade.c"
+        "source_path": "src/sys/fade.c"
       }
     },
     {
-      "name": "system/gbg",
-      "target_path": "expected/targets/system/gbg.o",
-      "base_path": "build/usa/src/system/gbg.c.o",
+      "name": "sys/gbg",
+      "target_path": "expected/targets/sys/gbg.o",
+      "base_path": "build/usa/src/sys/gbg.c.o",
       "metadata": {
-        "source_path": "src/system/gbg.c"
+        "source_path": "src/sys/gbg.c"
       }
     },
     {
-      "name": "system/gfx_data",
-      "target_path": "expected/targets/system/gfx_data.o",
-      "base_path": "build/usa/src/system/gfx_data.c.o",
+      "name": "sys/gfx_data",
+      "target_path": "expected/targets/sys/gfx_data.o",
+      "base_path": "build/usa/src/sys/gfx_data.c.o",
       "metadata": {
-        "source_path": "src/system/gfx_data.c"
+        "source_path": "src/sys/gfx_data.c"
       }
     },
     {
-      "name": "system/gfx_util",
-      "target_path": "expected/targets/system/gfx_util.o",
-      "base_path": "build/usa/src/system/gfx_util.c.o",
+      "name": "sys/gfx_util",
+      "target_path": "expected/targets/sys/gfx_util.o",
+      "base_path": "build/usa/src/sys/gfx_util.c.o",
       "metadata": {
-        "source_path": "src/system/gfx_util.c"
+        "source_path": "src/sys/gfx_util.c"
       }
     },
     {
-      "name": "system/is_debug",
-      "target_path": "expected/targets/system/is_debug.o",
-      "base_path": "build/usa/src/system/is_debug.c.o",
+      "name": "sys/is_debug",
+      "target_path": "expected/targets/sys/is_debug.o",
+      "base_path": "build/usa/src/sys/is_debug.c.o",
       "metadata": {
-        "source_path": "src/system/is_debug.c"
+        "source_path": "src/sys/is_debug.c"
       }
     },
     {
-      "name": "system/joypad",
-      "target_path": "expected/targets/system/joypad.o",
-      "base_path": "build/usa/src/system/joypad.c.o",
+      "name": "sys/joypad",
+      "target_path": "expected/targets/sys/joypad.o",
+      "base_path": "build/usa/src/sys/joypad.c.o",
       "metadata": {
-        "source_path": "src/system/joypad.c"
+        "source_path": "src/sys/joypad.c"
       }
     },
     {
-      "name": "system/main",
-      "target_path": "expected/targets/system/main.o",
-      "base_path": "build/usa/src/system/main.c.o",
+      "name": "sys/main",
+      "target_path": "expected/targets/sys/main.o",
+      "base_path": "build/usa/src/sys/main.c.o",
       "metadata": {
-        "source_path": "src/system/main.c"
+        "source_path": "src/sys/main.c"
       }
     },
     {
-      "name": "system/math",
-      "target_path": "expected/targets/system/math.o",
-      "base_path": "build/usa/src/system/math.c.o",
+      "name": "sys/math",
+      "target_path": "expected/targets/sys/math.o",
+      "base_path": "build/usa/src/sys/math.c.o",
       "metadata": {
-        "source_path": "src/system/math.c"
+        "source_path": "src/sys/math.c"
       }
     },
     {
-      "name": "system/obj",
-      "target_path": "expected/targets/system/obj.o",
-      "base_path": "build/usa/src/system/obj.c.o",
+      "name": "sys/obj",
+      "target_path": "expected/targets/sys/obj.o",
+      "base_path": "build/usa/src/sys/obj.c.o",
       "metadata": {
-        "source_path": "src/system/obj.c"
+        "source_path": "src/sys/obj.c"
       }
     },
     {
-      "name": "system/obj_alloc",
-      "target_path": "expected/targets/system/obj_alloc.o",
-      "base_path": "build/usa/src/system/obj_alloc.c.o",
+      "name": "sys/obj_alloc",
+      "target_path": "expected/targets/sys/obj_alloc.o",
+      "base_path": "build/usa/src/sys/obj_alloc.c.o",
       "metadata": {
-        "source_path": "src/system/obj_alloc.c"
+        "source_path": "src/sys/obj_alloc.c"
       }
     },
     {
-      "name": "system/obj_sort",
-      "target_path": "expected/targets/system/obj_sort.o",
-      "base_path": "build/usa/src/system/obj_sort.c.o",
+      "name": "sys/obj_sort",
+      "target_path": "expected/targets/sys/obj_sort.o",
+      "base_path": "build/usa/src/sys/obj_sort.c.o",
       "metadata": {
-        "source_path": "src/system/obj_sort.c"
+        "source_path": "src/sys/obj_sort.c"
       }
     },
     {
-      "name": "system/okutani",
-      "target_path": "expected/targets/system/okutani.o",
-      "base_path": "build/usa/src/system/okutani.c.o",
+      "name": "sys/okutani",
+      "target_path": "expected/targets/sys/okutani.o",
+      "base_path": "build/usa/src/sys/okutani.c.o",
       "metadata": {
-        "source_path": "src/system/okutani.c"
+        "source_path": "src/sys/okutani.c"
       }
     },
     {
-      "name": "system/pal",
-      "target_path": "expected/targets/system/pal.o",
-      "base_path": "build/usa/src/system/pal.c.o",
+      "name": "sys/pal",
+      "target_path": "expected/targets/sys/pal.o",
+      "base_path": "build/usa/src/sys/pal.c.o",
       "metadata": {
-        "source_path": "src/system/pal.c"
+        "source_path": "src/sys/pal.c"
       }
     },
     {
-      "name": "system/pic",
-      "target_path": "expected/targets/system/pic.o",
-      "base_path": "build/usa/src/system/pic.c.o",
+      "name": "sys/pic",
+      "target_path": "expected/targets/sys/pic.o",
+      "base_path": "build/usa/src/sys/pic.c.o",
       "metadata": {
-        "source_path": "src/system/pic.c"
+        "source_path": "src/sys/pic.c"
       }
     },
     {
-      "name": "system/profiler",
-      "target_path": "expected/targets/system/profiler.o",
-      "base_path": "build/usa/src/system/profiler.c.o",
+      "name": "sys/profiler",
+      "target_path": "expected/targets/sys/profiler.o",
+      "base_path": "build/usa/src/sys/profiler.c.o",
       "metadata": {
-        "source_path": "src/system/profiler.c"
+        "source_path": "src/sys/profiler.c"
       }
     },
     {
-      "name": "system/ripple",
-      "target_path": "expected/targets/system/ripple.o",
-      "base_path": "build/usa/src/system/ripple.c.o",
+      "name": "sys/ripple",
+      "target_path": "expected/targets/sys/ripple.o",
+      "base_path": "build/usa/src/sys/ripple.c.o",
       "metadata": {
-        "source_path": "src/system/ripple.c"
+        "source_path": "src/sys/ripple.c"
       }
     },
     {
-      "name": "system/rom_decode",
-      "target_path": "expected/targets/system/rom_decode.o",
-      "base_path": "build/usa/src/system/rom_decode.c.o",
+      "name": "sys/rom_decode",
+      "target_path": "expected/targets/sys/rom_decode.o",
+      "base_path": "build/usa/src/sys/rom_decode.c.o",
       "metadata": {
-        "source_path": "src/system/rom_decode.c"
+        "source_path": "src/sys/rom_decode.c"
       }
     },
     {
-      "name": "system/rom_queue",
-      "target_path": "expected/targets/system/rom_queue.o",
-      "base_path": "build/usa/src/system/rom_queue.c.o",
+      "name": "sys/rom_queue",
+      "target_path": "expected/targets/sys/rom_queue.o",
+      "base_path": "build/usa/src/sys/rom_queue.c.o",
       "metadata": {
-        "source_path": "src/system/rom_queue.c"
+        "source_path": "src/sys/rom_queue.c"
       }
     },
     {
-      "name": "system/rom_trans",
-      "target_path": "expected/targets/system/rom_trans.o",
-      "base_path": "build/usa/src/system/rom_trans.c.o",
+      "name": "sys/rom_trans",
+      "target_path": "expected/targets/sys/rom_trans.o",
+      "base_path": "build/usa/src/sys/rom_trans.c.o",
       "metadata": {
-        "source_path": "src/system/rom_trans.c"
+        "source_path": "src/sys/rom_trans.c"
       }
     },
     {
-      "name": "system/save_file",
-      "target_path": "expected/targets/system/save_file.o",
-      "base_path": "build/usa/src/system/save_file.c.o",
+      "name": "sys/save_file",
+      "target_path": "expected/targets/sys/save_file.o",
+      "base_path": "build/usa/src/sys/save_file.c.o",
       "metadata": {
-        "source_path": "src/system/save_file.c"
+        "source_path": "src/sys/save_file.c"
       }
     },
     {
-      "name": "system/save_flags",
-      "target_path": "expected/targets/system/save_flags.o",
-      "base_path": "build/usa/src/system/save_flags.c.o",
+      "name": "sys/save_flags",
+      "target_path": "expected/targets/sys/save_flags.o",
+      "base_path": "build/usa/src/sys/save_flags.c.o",
       "metadata": {
-        "source_path": "src/system/save_flags.c"
+        "source_path": "src/sys/save_flags.c"
       }
     },
     {
-      "name": "system/scenario",
-      "target_path": "expected/targets/system/scenario.o",
-      "base_path": "build/usa/src/system/scenario.c.o",
+      "name": "sys/scenario",
+      "target_path": "expected/targets/sys/scenario.o",
+      "base_path": "build/usa/src/sys/scenario.c.o",
       "metadata": {
-        "source_path": "src/system/scenario.c"
+        "source_path": "src/sys/scenario.c"
       }
     },
     {
-      "name": "system/sched",
-      "target_path": "expected/targets/system/sched.o",
-      "base_path": "build/usa/src/system/sched.c.o",
+      "name": "sys/sched",
+      "target_path": "expected/targets/sys/sched.o",
+      "base_path": "build/usa/src/sys/sched.c.o",
       "metadata": {
-        "source_path": "src/system/sched.c"
+        "source_path": "src/sys/sched.c"
       }
     },
     {
-      "name": "system/sd_main",
-      "target_path": "expected/targets/system/sd_main.o",
-      "base_path": "build/usa/src/system/sd_main.c.o",
+      "name": "sys/sd_main",
+      "target_path": "expected/targets/sys/sd_main.o",
+      "base_path": "build/usa/src/sys/sd_main.c.o",
       "metadata": {
-        "source_path": "src/system/sd_main.c"
+        "source_path": "src/sys/sd_main.c"
       }
     },
     {
-      "name": "system/sd_sub1",
-      "target_path": "expected/targets/system/sd_sub1.o",
-      "base_path": "build/usa/src/system/sd_sub1.c.o",
+      "name": "sys/sd_sub1",
+      "target_path": "expected/targets/sys/sd_sub1.o",
+      "base_path": "build/usa/src/sys/sd_sub1.c.o",
       "metadata": {
-        "source_path": "src/system/sd_sub1.c"
+        "source_path": "src/sys/sd_sub1.c"
       }
     },
     {
-      "name": "system/sd_sub2",
-      "target_path": "expected/targets/system/sd_sub2.o",
-      "base_path": "build/usa/src/system/sd_sub2.c.o",
+      "name": "sys/sd_sub2",
+      "target_path": "expected/targets/sys/sd_sub2.o",
+      "base_path": "build/usa/src/sys/sd_sub2.c.o",
       "metadata": {
-        "source_path": "src/system/sd_sub2.c"
+        "source_path": "src/sys/sd_sub2.c"
       }
     },
     {
-      "name": "system/se_tbl1",
-      "target_path": "expected/targets/system/se_tbl1.o",
-      "base_path": "build/usa/src/system/se_tbl1.c.o",
+      "name": "sys/se_tbl1",
+      "target_path": "expected/targets/sys/se_tbl1.o",
+      "base_path": "build/usa/src/sys/se_tbl1.c.o",
       "metadata": {
-        "source_path": "src/system/se_tbl1.c"
+        "source_path": "src/sys/se_tbl1.c"
       }
     },
     {
-      "name": "system/se_tbl2",
-      "target_path": "expected/targets/system/se_tbl2.o",
-      "base_path": "build/usa/src/system/se_tbl2.c.o",
+      "name": "sys/se_tbl2",
+      "target_path": "expected/targets/sys/se_tbl2.o",
+      "base_path": "build/usa/src/sys/se_tbl2.c.o",
       "metadata": {
-        "source_path": "src/system/se_tbl2.c"
+        "source_path": "src/sys/se_tbl2.c"
       }
     },
     {
-      "name": "system/se_tbl3",
-      "target_path": "expected/targets/system/se_tbl3.o",
-      "base_path": "build/usa/src/system/se_tbl3.c.o",
+      "name": "sys/se_tbl3",
+      "target_path": "expected/targets/sys/se_tbl3.o",
+      "base_path": "build/usa/src/sys/se_tbl3.c.o",
       "metadata": {
-        "source_path": "src/system/se_tbl3.c"
+        "source_path": "src/sys/se_tbl3.c"
       }
     },
     {
-      "name": "system/solid_atari",
-      "target_path": "expected/targets/system/solid_atari.o",
-      "base_path": "build/usa/src/system/solid_atari.c.o",
+      "name": "sys/solid_atari",
+      "target_path": "expected/targets/sys/solid_atari.o",
+      "base_path": "build/usa/src/sys/solid_atari.c.o",
       "metadata": {
-        "source_path": "src/system/solid_atari.c"
+        "source_path": "src/sys/solid_atari.c"
       }
     },
     {
-      "name": "system/sprite",
-      "target_path": "expected/targets/system/sprite.o",
-      "base_path": "build/usa/src/system/sprite.c.o",
+      "name": "sys/sprite",
+      "target_path": "expected/targets/sys/sprite.o",
+      "base_path": "build/usa/src/sys/sprite.c.o",
       "metadata": {
-        "source_path": "src/system/sprite.c"
+        "source_path": "src/sys/sprite.c"
       }
     },
     {
-      "name": "system/stage",
-      "target_path": "expected/targets/system/stage.o",
-      "base_path": "build/usa/src/system/stage.c.o",
+      "name": "sys/stage",
+      "target_path": "expected/targets/sys/stage.o",
+      "base_path": "build/usa/src/sys/stage.c.o",
       "metadata": {
-        "source_path": "src/system/stage.c"
+        "source_path": "src/sys/stage.c"
       }
     },
     {
-      "name": "system/stage_select",
-      "target_path": "expected/targets/system/stage_select.o",
-      "base_path": "build/usa/src/system/stage_select.c.o",
+      "name": "sys/stage_select",
+      "target_path": "expected/targets/sys/stage_select.o",
+      "base_path": "build/usa/src/sys/stage_select.c.o",
       "metadata": {
-        "source_path": "src/system/stage_select.c"
+        "source_path": "src/sys/stage_select.c"
       }
     },
     {
-      "name": "system/step",
-      "target_path": "expected/targets/system/step.o",
-      "base_path": "build/usa/src/system/step.c.o",
+      "name": "sys/step",
+      "target_path": "expected/targets/sys/step.o",
+      "base_path": "build/usa/src/sys/step.c.o",
       "metadata": {
-        "source_path": "src/system/step.c"
+        "source_path": "src/sys/step.c"
       }
     },
     {
-      "name": "system/string",
-      "target_path": "expected/targets/system/string.o",
-      "base_path": "build/usa/src/system/string.c.o",
+      "name": "sys/string",
+      "target_path": "expected/targets/sys/string.o",
+      "base_path": "build/usa/src/sys/string.c.o",
       "metadata": {
-        "source_path": "src/system/string.c"
+        "source_path": "src/sys/string.c"
       }
     },
     {
-      "name": "system/string_data",
-      "target_path": "expected/targets/system/string_data.o",
-      "base_path": "build/usa/src/system/string_data.c.o",
+      "name": "sys/string_data",
+      "target_path": "expected/targets/sys/string_data.o",
+      "base_path": "build/usa/src/sys/string_data.c.o",
       "metadata": {
-        "source_path": "src/system/string_data.c"
+        "source_path": "src/sys/string_data.c"
       }
     },
     {
-      "name": "system/sys",
-      "target_path": "expected/targets/system/sys.o",
-      "base_path": "build/usa/src/system/sys.c.o",
+      "name": "sys/sys",
+      "target_path": "expected/targets/sys/sys.o",
+      "base_path": "build/usa/src/sys/sys.c.o",
       "metadata": {
-        "source_path": "src/system/sys.c"
+        "source_path": "src/sys/sys.c"
       }
     },
     {
-      "name": "system/task",
-      "target_path": "expected/targets/system/task.o",
-      "base_path": "build/usa/src/system/task.c.o",
+      "name": "sys/task",
+      "target_path": "expected/targets/sys/task.o",
+      "base_path": "build/usa/src/sys/task.c.o",
       "metadata": {
-        "source_path": "src/system/task.c"
+        "source_path": "src/sys/task.c"
       }
     },
     {
-      "name": "system/unk_data",
-      "target_path": "expected/targets/system/unk_data.o",
-      "base_path": "build/usa/src/system/unk_data.c.o",
+      "name": "sys/unk_data",
+      "target_path": "expected/targets/sys/unk_data.o",
+      "base_path": "build/usa/src/sys/unk_data.c.o",
       "metadata": {
-        "source_path": "src/system/unk_data.c"
+        "source_path": "src/sys/unk_data.c"
       }
     },
     {
-      "name": "system/vibration_pak",
-      "target_path": "expected/targets/system/vibration_pak.o",
-      "base_path": "build/usa/src/system/vibration_pak.c.o",
+      "name": "sys/vibration_pak",
+      "target_path": "expected/targets/sys/vibration_pak.o",
+      "base_path": "build/usa/src/sys/vibration_pak.c.o",
       "metadata": {
-        "source_path": "src/system/vibration_pak.c"
+        "source_path": "src/sys/vibration_pak.c"
       }
     },
     {
-      "name": "system/vram",
-      "target_path": "expected/targets/system/vram.o",
-      "base_path": "build/usa/src/system/vram.c.o",
+      "name": "sys/vram",
+      "target_path": "expected/targets/sys/vram.o",
+      "base_path": "build/usa/src/sys/vram.c.o",
       "metadata": {
-        "source_path": "src/system/vram.c"
+        "source_path": "src/sys/vram.c"
       }
     },
     {
-      "name": "system/warp",
-      "target_path": "expected/targets/system/warp.o",
-      "base_path": "build/usa/src/system/warp.c.o",
+      "name": "sys/warp",
+      "target_path": "expected/targets/sys/warp.o",
+      "base_path": "build/usa/src/sys/warp.c.o",
       "metadata": {
-        "source_path": "src/system/warp.c"
+        "source_path": "src/sys/warp.c"
       }
     },
     {
-      "name": "system/wave_uty",
-      "target_path": "expected/targets/system/wave_uty.o",
-      "base_path": "build/usa/src/system/wave_uty.c.o",
+      "name": "sys/wave_uty",
+      "target_path": "expected/targets/sys/wave_uty.o",
+      "base_path": "build/usa/src/sys/wave_uty.c.o",
       "metadata": {
-        "source_path": "src/system/wave_uty.c"
+        "source_path": "src/sys/wave_uty.c"
       }
     },
     {
-      "name": "system/window",
-      "target_path": "expected/targets/system/window.o",
-      "base_path": "build/usa/src/system/window.c.o",
+      "name": "sys/window",
+      "target_path": "expected/targets/sys/window.o",
+      "base_path": "build/usa/src/sys/window.c.o",
       "metadata": {
-        "source_path": "src/system/window.c"
+        "source_path": "src/sys/window.c"
       }
     },
     {
-      "name": "system/yamamoto",
-      "target_path": "expected/targets/system/yamamoto.o",
-      "base_path": "build/usa/src/system/yamamoto.c.o",
+      "name": "sys/yamamoto",
+      "target_path": "expected/targets/sys/yamamoto.o",
+      "base_path": "build/usa/src/sys/yamamoto.c.o",
       "metadata": {
-        "source_path": "src/system/yamamoto.c"
+        "source_path": "src/sys/yamamoto.c"
       }
     }
   ]

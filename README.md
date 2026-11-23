@@ -58,7 +58,7 @@ You can also use the following `ninja` commands for common build tasks:
 | Command | Description |
 | --- | --- |
 | `uv run ninja` | Build the ROM and verify its SHA-1 checksum. |
-| `uv run ninja build/usa/src/system/anime.c.o` | Build a single object file. |
+| `uv run ninja build/usa/src/sys/anime.c.o` | Build a single object file. |
 | `uv run ninja tools` | Download all optional tools (`m2c`, `asm-differ`, `decomp-permuter`, and `objdiff-cli`). |
 | `uv run ninja -t clean` | Remove build outputs (pass `-g` to remove downloaded tools and split files as well). |
 

@@ -58,7 +58,7 @@ segments:
     - [0x1000, hasm, entry]
 
   - name: main
-    dir: system
+    dir: sys
     type: code
     start: 0x1050
     vram: 0x80000450
