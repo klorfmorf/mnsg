@@ -40,7 +40,7 @@ sudo pacman -S base-devel
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/klorfmorf/mnsg.git
+   git clone https://github.com/klorfmorf/mnsg.git --recurse-submodules
    cd mnsg
    ```
 
