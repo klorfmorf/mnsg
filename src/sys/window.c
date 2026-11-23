@@ -2045,6 +2045,7 @@ Gfx D_80063678[] = {
 int          D_80167C40[2];
 int          D_80167C48[3];
 WindowStyle *D_80167C54;
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B880.s")

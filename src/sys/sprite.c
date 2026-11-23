@@ -51,6 +51,7 @@ ObjSpritePart D_8005B8C0[11] = {
     { 0x8000, 32, 24, 96, -24, 31744, 0 },
     { 0xC000, 64, 48, 0, -24, 0, 0 },
 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sprite/func_80008650.s")

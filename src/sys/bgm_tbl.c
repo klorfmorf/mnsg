@@ -42,4 +42,5 @@ unsigned char D_8006F14C[380] = {
 unsigned int D_8006F2C8[2] = {
     0x04000000, 0x00000000,
 };
+
 // clang-format on

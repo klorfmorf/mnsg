@@ -16,6 +16,7 @@ const char D_8007AB00[] =
     "\0\0\0\0"
     "\0\0\0\0"
     "\0\0\0";
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage/func_8000B2A0.s")

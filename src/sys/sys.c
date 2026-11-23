@@ -30,6 +30,7 @@ unsigned long long D_8015DDF0[1173];
 int                D_80160298[3];
 int                D_801602A4;
 int                D_801602A8[0x1BB2];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sys/func_80004170.s")

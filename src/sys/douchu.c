@@ -20,6 +20,7 @@ unsigned int D_8006B73C[17] = {
 
 // <<<<< rodata >>>>>
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/douchu/D_8007B970.s")
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/douchu/func_8001F8B0.s")

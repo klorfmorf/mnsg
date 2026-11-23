@@ -1263,4 +1263,5 @@ void *D_8007477C[513] = {
     D_800735A4,
     NULL,
 };
+
 // clang-format on

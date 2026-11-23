@@ -15,6 +15,7 @@ int            s_lzkn64_left;
 int            s_lzkn64_buf_left;
 unsigned short s_lzkn64_plane;
 unsigned short s_lzkn64_planes;
+
 // clang-format on
 
 #ifdef NON_MATCHING

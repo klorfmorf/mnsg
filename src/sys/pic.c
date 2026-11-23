@@ -58,6 +58,7 @@ int             s_pic_color_cache_top;
 unsigned short *s_pic_image16;
 unsigned char  *s_pic_image_indexed;
 unsigned char  *s_pic_chain_flags;
+
 // clang-format on
 
 Pic *picOpen(unsigned char *data, Pic *pic)

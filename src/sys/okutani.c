@@ -31,6 +31,7 @@ const double D_8007AC88[] = { 255.0 };
 
 // <<<<< bss >>>>>
 int D_80167C60[4];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/okutani/func_8000DBF0.s")

@@ -15,6 +15,7 @@ unsigned char D_8016DAF0[4];
 int           D_8016DAF4;
 int           D_8016DAF8[2];
 int           D_8016DB00[28];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/vibration_pak/func_800379D0.s")

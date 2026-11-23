@@ -600,6 +600,7 @@ Gfx D_8006E1C8[] = {
     gsSP1Quadrangle(21, 23, 22, 23, 0),
     gsSPEndDisplayList(),
 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/gfx_data/func_80037DB0.s")

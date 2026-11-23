@@ -74,6 +74,7 @@ GameStepTable D_80058908 = {
 
 // <<<<< rodata >>>>>
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/step/D_8007A7A0.s")
+
 // clang-format on
 
 void func_80002040(void)

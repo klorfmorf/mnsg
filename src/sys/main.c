@@ -74,6 +74,7 @@ OSScMsg       D_8008A8E0[2];
 OSScTask      D_8008A920[2];
 unsigned char D_8008A9F0[0x22C0];
 OSMesgQueue  *D_8008CCB0;
+
 // clang-format on
 
 void func_80000450(void)

@@ -105,6 +105,7 @@ float D_8006E6D0[76] = {
     1.414213f, 1.498306f, 1.5874f, 1.681791f, 1.781796f, 1.887747f,
     2.0f, 2.0f, 0.0f, 0.0f,
 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sd_sub1/func_8003A370.s")

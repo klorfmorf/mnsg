@@ -4,6 +4,7 @@
 // clang-format off
 
 // <<<<< data >>>>>
+
 // Capacity of each object kind, indexed by kind.
 unsigned short D_8006D350[8] = {
     0, 24, 192, 2, 64, 2, 0, 0,
@@ -12,6 +13,7 @@ unsigned short D_8006D350[8] = {
 // <<<<< bss >>>>>
 Obj  *D_8016DAC0[6];
 short D_8016DAD8[6];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_alloc/func_80035B50.s")

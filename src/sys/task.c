@@ -39,6 +39,7 @@ Task           D_80168FB0[80];
 unsigned short D_8016DAB0;
 short          D_8016DAB2;
 Task          *D_8016DAB4;
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/task/func_80034680.s")
@@ -74,7 +75,7 @@ void func_80034734(void)
         while (i-- > 0) {
         }
 
-        // fake?    
+        // fake?
         if (D_8016DAB4->priority == 5) {
         }
 

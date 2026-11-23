@@ -100,6 +100,7 @@ const float  D_8007B730[] = { 0.7853981853f };
 const double D_8007B738[] = { 3.14159265358979312 };
 const double D_8007B740[] = { 3.14159265358979312 };
 const double D_8007B748[] = { 6.28318530717958623 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/atan2/func_800166E0.s")

@@ -34,6 +34,7 @@ float              D_80167440;
 float              D_80167444;
 float              D_80167448[2];
 unsigned long long D_80167450[128];
+
 // clang-format on
 
 void func_80006350(OSMesgQueue *mq)

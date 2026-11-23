@@ -24,6 +24,7 @@ unsigned short D_801689F0;
 unsigned short D_801689F2;
 unsigned short D_801689F4;
 int            D_801689F8;
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/gfx_util/func_8001C970.s")

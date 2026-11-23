@@ -1,5 +1,6 @@
 #ifndef UNK_H
 #define UNK_H
+
 // Declarations of symbols that are not (yet) attributed to a translation unit.
 
 #include "common.h"

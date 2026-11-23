@@ -18,6 +18,7 @@ int _Printf(char *(*prout)(char *, const char *, int), char *arg, const char *fm
 void *D_80054900[4] = {
     osSyncPrintf, rmonPrintf, NULL, NULL,
 };
+
 // clang-format on
 
 void func_80001810(void)

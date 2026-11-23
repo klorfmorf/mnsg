@@ -95,6 +95,7 @@ unsigned short D_80167C70[4];
 unsigned char  D_80167C78[8];
 int            D_80167C80[158];
 SpriteList     D_80167EF8[16];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/yamamoto/func_80010180.s")

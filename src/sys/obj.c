@@ -86,6 +86,7 @@ int            D_80167A6C;
 unsigned short D_80167A70;
 unsigned short D_80167A72;
 unsigned short D_80167A74;
+
 // clang-format on
 
 void func_800086F0(void)

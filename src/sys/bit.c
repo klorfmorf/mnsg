@@ -10,6 +10,7 @@ int D_8006ADCC = 0;
 
 // <<<<< bss >>>>>
 unsigned char *D_80168160;
+
 // clang-format on
 
 void bitInit(unsigned char *arg0)

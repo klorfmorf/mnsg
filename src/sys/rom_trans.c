@@ -1681,6 +1681,7 @@ LoadRomTable D_800573C8 = {
         FILE_ROM_START(file_1309), FILE_ROM_START(file_1310), FILE_ROM_START(file_1311), FILE_ROM_END(file_1311),
     },
 };
+
 // clang-format on
 
 int func_80001C00(unsigned int id, int addr)

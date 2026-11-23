@@ -790,6 +790,7 @@ int            D_801C7924;
 int            D_801C7928;
 int            D_801C792C;
 unsigned char  D_801C7930[16];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8C0.s")

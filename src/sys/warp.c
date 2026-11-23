@@ -22,6 +22,7 @@ EntryPoint D_8006D410[16] = {
     { 440, 0, -40, -75, 0, 19 },
     { 441, 0, -40, -75, 0, 19 },
 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037000.s")

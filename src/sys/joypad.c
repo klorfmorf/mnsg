@@ -30,6 +30,7 @@ unsigned char  D_801671BF;
 unsigned char  D_801671C0[32];
 int            D_801671E0[4];
 unsigned char  D_801671F0[0x1B0];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/joypad/func_80004910.s")

@@ -99,6 +99,7 @@ AnimeJoint    *s_anime_path_joint[10];
 ObjSolid      *s_anime_path_solid[10];
 int            s_anime_root_countdown;
 int            s_anime_joint_countdown;
+
 // clang-format on
 
 void anime_init_frame(void)

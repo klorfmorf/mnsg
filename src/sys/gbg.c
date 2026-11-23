@@ -34,6 +34,7 @@ unsigned int D_8006D168 = 0x000000F0;
 const char D_8007BC80[] =
     "gbgDraw: undecoded wave %d\n\0"
     "\0\0\0";
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/gbg/func_800215D0.s")

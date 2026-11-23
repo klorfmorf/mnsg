@@ -5,6 +5,7 @@
 
 // <<<<< bss >>>>>
 unsigned short D_80167A80[224];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_sort/func_8000A680.s")

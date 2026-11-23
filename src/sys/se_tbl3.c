@@ -1049,4 +1049,5 @@ void *D_80075BD0[348] = {
     (void *) 0x0A010000,
     D_80074F90,
 };
+
 // clang-format on

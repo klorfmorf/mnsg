@@ -31,6 +31,7 @@ const char D_8007C840[] =
     "HOLD\n\0\0\0"
     "DEC: %.1f\n\0\0"
     "\0\0\0";
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036840.s")

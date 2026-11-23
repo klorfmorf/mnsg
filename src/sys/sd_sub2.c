@@ -331,6 +331,7 @@ DrumInstParam D_8006EF88[53] = {
     { 45, { -6, 26, 127, 0, 0, 31, 64 } },
     { 30, { -6, 8, 127, 90, 35, 14, 64 } },
 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sd_sub2/func_8003B410.s")

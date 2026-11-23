@@ -76,6 +76,7 @@ const float  D_8007C09C[] = { 0.02f };
 const float  D_8007C0A0[] = { 0.04f };
 const double D_8007C0A8[] = { 127.0 };
 const double D_8007C0B0[] = { 127.0, 0.0 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/ripple/func_80024160.s")

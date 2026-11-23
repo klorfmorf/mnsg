@@ -733,6 +733,7 @@ short D_8006D0B4[12] = {
 short D_8006D0CC[12] = {
     300, 50, 50, 140, 4, 5, 12, 27, 19, 6, 5, 1,
 };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80020730.s")

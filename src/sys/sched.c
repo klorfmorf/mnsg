@@ -70,6 +70,7 @@ static int firsttime = 1;
 int              D_80167850;
 static OSScTask *currentGfxTask;
 static u8        runningNonGfxTask;
+
 // clang-format on
 
 /***********************************************************************

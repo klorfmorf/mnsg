@@ -28,6 +28,7 @@ int           D_80172254;
 unsigned char D_80172258[0x600];
 OSMesgQueue   D_80172858;
 OSMesg        D_80172870[64];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/audiomgr/func_80037DC0.s")

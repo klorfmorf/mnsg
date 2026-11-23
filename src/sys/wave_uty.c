@@ -2856,6 +2856,7 @@ int            D_8016814C;
 unsigned short D_80168150;
 int            D_80168154;
 int            D_80168158;
+
 // clang-format on
 
 void func_80013940(void)

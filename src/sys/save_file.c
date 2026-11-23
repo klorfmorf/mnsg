@@ -33,6 +33,7 @@ const char D_8007AB40[] =
     "\0\0\0\0"
     "\0\0\0\0"
     "\0\0\0";
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B5D0.s")

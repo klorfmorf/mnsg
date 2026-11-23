@@ -76,6 +76,7 @@ unsigned char D_80167960[64];
 unsigned char D_801679A0[64];
 unsigned char D_801679E0[64];
 unsigned char D_80167A20[64];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007970.s")

@@ -21,6 +21,7 @@ float         D_80168F84;
 float         D_80168F88;
 float         D_80168F8C;
 unsigned char D_80168F90[32];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80032B20.s")

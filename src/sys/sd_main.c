@@ -147,6 +147,7 @@ int            D_801C1728;
 int            D_801C172C;
 unsigned char  D_801C1730[0x6000];
 int            D_801C7730[4];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sd_main/func_800386E0.s")

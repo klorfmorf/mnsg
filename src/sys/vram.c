@@ -16,6 +16,7 @@ ColHit func_8002A750(float x, float y, float z, unsigned short length);
 // <<<<< bss >>>>>
 ColPlane *D_80168F60;
 ColNode  *D_80168F64;
+
 // clang-format on
 
 float func_800273E0(ColHit *hit, ColObj *obj, unsigned char arg2, float arg3)

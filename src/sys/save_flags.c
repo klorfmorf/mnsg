@@ -8,6 +8,7 @@ unsigned char D_80168E90[100];
 unsigned char D_80168EF4[4];
 unsigned char D_80168EF8[100];
 unsigned char D_80168F5C[4];
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_flags/func_80023DF0.s")

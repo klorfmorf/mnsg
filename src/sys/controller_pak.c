@@ -20,6 +20,7 @@ unsigned char D_80168A00[8];
 unsigned char D_80168A08[112];
 unsigned char D_80168A78[1036];
 MemPak       *D_80168E84;
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/controller_pak/func_800231E0.s")

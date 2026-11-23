@@ -629,6 +629,7 @@ const double D_8007A8C0[] = { 1e-06 };
 const double D_8007A8C8[] = { 3.141592653589793 };
 const double D_8007A8D0[] = { 3.141592653589793 };
 const float  D_8007A8D8[] = { 1.5707964f };
+
 // clang-format on
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_800039C0.s")
