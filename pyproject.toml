@@ -9,6 +9,7 @@ dependencies = [
     "cxxfilt>=0.3.0",
     "levenshtein>=0.27.3",
     "lzkn64>=0.2.0",
+    "ninja>=1.13.2",
     "ninja-syntax>=1.7.2",
     "pycparser>=2.23",
     "pyyaml>=6.0.3",
