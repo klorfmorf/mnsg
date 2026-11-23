@@ -296,6 +296,52 @@ D_08001C50_707A40 = 0x08001C50; // defined:true segment:file_47
 g_sys = 0x8015C5C8;
 g_sys_real = 0x8008CCC0; // size:0xCF908
 
+// atan2.c
+D_8007B720 = 0x8007B720; // type:f64 force_not_migration:True
+D_8007B728 = 0x8007B728; // type:f64 force_not_migration:True
+D_8007B730 = 0x8007B730; // type:f32 force_not_migration:True
+D_8007B738 = 0x8007B738; // type:f64 force_not_migration:True
+D_8007B740 = 0x8007B740; // type:f64 force_not_migration:True
+D_8007B748 = 0x8007B748; // type:f64 force_not_migration:True
+
+// gfx_util.c
+D_8007B8D0 = 0x8007B8D0; // type:f64 force_not_migration:True
+D_8007B8D8 = 0x8007B8D8; // type:f64 force_not_migration:True
+D_8007B8E0 = 0x8007B8E0; // type:f64 force_not_migration:True
+D_8007B8E8 = 0x8007B8E8; // type:f64 force_not_migration:True
+D_8007B8F0 = 0x8007B8F0; // type:f64 force_not_migration:True
+D_8007B8F8 = 0x8007B8F8; // type:f64 force_not_migration:True
+D_8007B900 = 0x8007B900; // type:f64 force_not_migration:True
+D_8007B908 = 0x8007B908; // type:f64 force_not_migration:True
+
+// joypad.c
+D_8007A970 = 0x8007A970; // type:f64 force_not_migration:True
+
+// math.c
+D_8007A8C0 = 0x8007A8C0; // type:f64 force_not_migration:True
+D_8007A8C8 = 0x8007A8C8; // type:f64 force_not_migration:True
+D_8007A8D0 = 0x8007A8D0; // type:f64 force_not_migration:True
+D_8007A8D8 = 0x8007A8D8; // type:f32 force_not_migration:True
+
+// okutani.c
+D_8007AC78 = 0x8007AC78; // type:f64 force_not_migration:True
+D_8007AC80 = 0x8007AC80; // type:f64 force_not_migration:True
+D_8007AC88 = 0x8007AC88; // type:f64 force_not_migration:True
+
+// ripple.c
+D_8007C09C = 0x8007C09C; // type:f32 force_not_migration:True
+D_8007C0A0 = 0x8007C0A0; // type:f32 force_not_migration:True
+D_8007C0A8 = 0x8007C0A8; // type:f64 force_not_migration:True
+D_8007C0B0 = 0x8007C0B0; // type:f64 force_not_migration:True
+
+// sched.c
+osCreateScheduler = 0x80006DF0; // type:func
+osScAddClient = 0x80006F3C; // type:func
+osScRemoveClient = 0x80006F8C; // type:func
+osScGetCmdQ = 0x80007014; // type:func
+osScGetUnknownQ = 0x8000701C; // type:func
+osScGetInterruptQ = 0x80007024; // type:func
+
 // bit.c
 bitInit = 0x80014C20; // type:func
 bitRead1 = 0x80014C54; // type:func
@@ -349,7 +395,7 @@ s_pic_image_indexed = 0x80168490;
 s_pic_chain_flags = 0x80168494;
 g_frame_buffers = 0x80261000; // size:0x70800
 
-// data_load.c
+// rom_trans.c
 D_80054910 = 0x80054910; // size:0x1BC
 D_80054ACC = 0x80054ACC; // size:0x28F8
 D_800573C8 = 0x800573C8; // size:0x1490
@@ -440,7 +486,7 @@ D_8020CF58_638338 = 0x8020CF58; // type:f32 rom:0x638338
 // main.c
 osTvType = 0x80000300; // type:s32 size:0x4
 
-// lzkn64.c
+// rom_decode.c
 s_lzkn64_rom = 0x801673A0;
 s_lzkn64_pos = 0x801673A4;
 s_lzkn64_rom_left = 0x801673A8;
@@ -448,3 +494,89 @@ s_lzkn64_left = 0x801673AC;
 s_lzkn64_buf_left = 0x801673B0;
 s_lzkn64_plane = 0x801673B4;
 s_lzkn64_planes = 0x801673B6;
+
+// file_43.c
+D_08007BF0_6FB0D0 = 0x08007BF0; // type:f64 size:0x10 segment:file_43 function_owner:func_080028B8_6F5D98
+D_08007C00_6FB0E0 = 0x08007C00; // type:f64 size:0x18 segment:file_43 function_owner:func_080028B8_6F5D98
+D_08007C18_6FB0F8 = 0x08007C18; // type:f64 size:0x8 segment:file_43 function_owner:func_080028B8_6F5D98
+
+// impact_battle.c
+D_08000610 = 0x08000610; // size:1
+D_08000C78 = 0x08000C78; // size:1
+
+// impact_battle.c
+D_080031C0 = 0x080031C0; // size:1
+D_08003D64 = 0x08003D64; // size:1
+D_08019B70 = 0x08019B70; // size:1
+D_0801A804 = 0x0801A804; // size:1
+D_0801B0A0 = 0x0801B0A0; // size:1
+D_0801BE38 = 0x0801BE38; // size:1
+D_0800041C = 0x0800041C; // size:1
+D_08000430 = 0x08000430; // size:1
+D_08002FC0 = 0x08002FC0; // size:1
+D_8006E5D0 = 0x8006E5D0; // size:0x38
+
+// bss labels that clash with symbols of other overlays
+D_8020EF20_63A300 = 0x8020EF20; // segment:file_13
+D_8020EED8_63A2B8 = 0x8020EED8; // segment:file_13
+D_080000E0_1336700 = 0x080000E0; // segment:file_1193
+D_080000E0_1337110 = 0x080000E0; // segment:file_1195
+D_08001DF0_13BCF80 = 0x08001DF0; // segment:file_1215
+D_08001630_13CD870 = 0x08001630; // segment:file_1222
+D_08000460_140D1D0 = 0x08000460; // segment:file_1233
+D_080001C0_14790E0 = 0x080001C0; // segment:file_1242
+D_080008E0_14C6C60 = 0x080008E0; // segment:file_1289
+D_08005090_9A9FC0 = 0x08005090; // segment:file_170
+D_08004280_AC4CB0 = 0x08004280; // segment:file_201
+D_08002B70_BEE2D0 = 0x08002B70; // segment:file_244
+D_08003EE0_BFE710 = 0x08003EE0; // segment:file_248
+D_080007E0_1040C50 = 0x080007E0; // segment:file_405
+D_08003B10_10448E0 = 0x08003B10; // segment:file_407
+D_080002D0_10528F0 = 0x080002D0; // segment:file_411
+D_080034A0_105A330 = 0x080034A0; // segment:file_415
+D_08000CE0_1061240 = 0x08000CE0; // segment:file_423
+D_08001070_1066750 = 0x08001070; // segment:file_429
+D_08000490_106F600 = 0x08000490; // segment:file_432
+D_08003810_10759A0 = 0x08003810; // segment:file_434
+D_08001810_10EF630 = 0x08001810; // segment:file_468
+D_080000E0_10F5CB0 = 0x080000E0; // segment:file_482
+D_08000B30_110AE60 = 0x08000B30; // segment:file_487
+D_080017B0_1128910 = 0x080017B0; // segment:file_504
+D_08002240_112F760 = 0x08002240; // segment:file_507
+D_08000390_112FEA0 = 0x08000390; // segment:file_509
+D_08000F50_1149900 = 0x08000F50; // segment:file_575
+D_08002890_115F290 = 0x08002890; // segment:file_591
+D_08001E00_1182B10 = 0x08001E00; // segment:file_638
+D_080000E0_11C0390 = 0x080000E0; // segment:file_649
+D_080020F0_11E71D0 = 0x080020F0; // segment:file_658
+D_08003770_122D800 = 0x08003770; // segment:file_680
+D_080002C0_1278CE0 = 0x080002C0; // segment:file_707
+D_080032D0_1282180 = 0x080032D0; // defined:true segment:file_712
+D_08005210_128C8D0 = 0x08005210; // segment:file_717
+D_080004E0_129BB30 = 0x080004E0; // segment:file_795
+D_08001810_129E0B0 = 0x08001810; // segment:file_801
+D_08000BC0_129EC70 = 0x08000BC0; // segment:file_815
+D_08000A40_12A2030 = 0x08000A40; // segment:file_821
+D_0800C370_file_1192 = 0x0800C370; // segment:file_1192
+D_08001480_file_1218 = 0x08001480; // segment:file_1218
+D_08001C00_file_1226 = 0x08001C00; // segment:file_1226
+D_08005540_file_1240 = 0x08005540; // segment:file_1240
+D_08005210_file_1245 = 0x08005210; // segment:file_1245
+D_080001C0_14C6E20 = 0x080001C0; // segment:file_1290
+D_08003CD0_file_1291 = 0x08003CD0; // segment:file_1291
+D_08004C50_file_175 = 0x08004C50; // segment:file_175
+D_08003D70_file_462 = 0x08003D70; // segment:file_462
+D_08002360_file_488 = 0x08002360; // segment:file_488
+D_08001740_file_494 = 0x08001740; // segment:file_494
+D_08000B50_file_502 = 0x08000B50; // segment:file_502
+D_080034A0_file_589 = 0x080034A0; // segment:file_589
+D_08001D40_file_631 = 0x08001D40; // segment:file_631
+D_080018B0_file_634 = 0x080018B0; // segment:file_634
+D_08002090_file_635 = 0x08002090; // segment:file_635
+D_08002010_file_637 = 0x08002010; // segment:file_637
+D_08003B10_file_639 = 0x08003B10; // segment:file_639
+D_08002EC0_file_643 = 0x08002EC0; // segment:file_643
+D_0800C330_file_646 = 0x0800C330; // segment:file_646
+D_08004CD0_file_704 = 0x08004CD0; // segment:file_704
+D_08001390_file_709 = 0x08001390; // segment:file_709
+D_08002090_1179A20 = 0x08002090; // segment:file_633

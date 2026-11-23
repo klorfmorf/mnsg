@@ -1,4 +1,4 @@
-// Fake relocations identified by review_relocs.py
+// Fake relocations
 // These should be marked as MIPS_NONE to suppress incorrect symbolization
 
 
@@ -1097,7 +1097,7 @@ rom:0x45AC reloc:MIPS_NONE symbol:D_3ADD6
 rom:0x33C8 reloc:MIPS_NONE symbol:D_3ADD6
 rom:0x33D0 reloc:MIPS_NONE symbol:D_3ADD6
 
-// file_request.c
+// rom_queue.c
 rom:0x6628 reloc:MIPS_NONE symbol:D_3B074
 rom:0x6634 reloc:MIPS_NONE symbol:D_3B074
 rom:0x6648 reloc:MIPS_NONE symbol:D_3B074
@@ -1105,8 +1105,357 @@ rom:0x6654 reloc:MIPS_NONE symbol:D_3B074
 rom:0x674C reloc:MIPS_NONE symbol:D_3B074
 rom:0x6754 reloc:MIPS_NONE symbol:D_3B074
 
-// is64.c
+// is_debug.c
 rom:0x2418 reloc:MIPS_NONE symbol:D_BFF00000
 rom:0x241C reloc:MIPS_NONE symbol:D_BFF00000
 rom:0x2474 reloc:MIPS_NONE symbol:D_BFF00000
 rom:0x2478 reloc:MIPS_NONE symbol:D_BFF00000
+
+// Function: func_080008F4_6F0B04
+// Fake symbol: func_080005DC_6F07EC -> 0x080005DC
+rom:0x6F0B20 reloc:MIPS_NONE symbol:func_080005DC_6F07EC
+rom:0x6F0B2C reloc:MIPS_NONE symbol:func_080005DC_6F07EC
+
+// Function: func_08000000_6FEA30
+// Fake symbol: func_08000000_6FEA30 -> 0x08000000
+rom:0x6FEA98 reloc:MIPS_NONE symbol:func_08000000_6FEA30
+rom:0x6FEA9C reloc:MIPS_NONE symbol:func_08000000_6FEA30
+
+// Function: func_0800044C_70623C
+// Fake symbol: func_080002B4_7060A4 -> 0x080002B4
+rom:0x706258 reloc:MIPS_NONE symbol:func_080002B4_7060A4
+rom:0x706264 reloc:MIPS_NONE symbol:func_080002B4_7060A4
+
+// Function: func_080004F8_707F38
+// Fake symbol: func_080002E8_707D28 -> 0x080002E8
+rom:0x707F48 reloc:MIPS_NONE symbol:func_080002E8_707D28
+rom:0x707F4C reloc:MIPS_NONE symbol:func_080002E8_707D28
+
+// Function: func_080007C4_708204
+// Fake symbol: func_080005D0_708010 -> 0x080005D0
+rom:0x708220 reloc:MIPS_NONE symbol:func_080005D0_708010
+rom:0x70822C reloc:MIPS_NONE symbol:func_080005D0_708010
+
+// Function: func_08000418_70A458
+// Fake symbol: func_0800019C_70A1DC -> 0x0800019C
+rom:0x70A474 reloc:MIPS_NONE symbol:func_0800019C_70A1DC
+rom:0x70A480 reloc:MIPS_NONE symbol:func_0800019C_70A1DC
+
+// Function: func_08000690_71DE60
+// Fake symbol: func_0800043C_71DC0C -> 0x0800043C
+rom:0x71DE74 reloc:MIPS_NONE symbol:func_0800043C_71DC0C
+rom:0x71DE7C reloc:MIPS_NONE symbol:func_0800043C_71DC0C
+
+// Function: func_08001234_71EA04
+// Fake symbol: func_08000DC4_71E594 -> 0x08000DC4
+rom:0x71EA1C reloc:MIPS_NONE symbol:func_08000DC4_71E594
+rom:0x71EA28 reloc:MIPS_NONE symbol:func_08000DC4_71E594
+
+// Function: func_08001540_71ED10
+// Fake symbol: func_08001330_71EB00 -> 0x08001330
+rom:0x71ED20 reloc:MIPS_NONE symbol:func_08001330_71EB00
+rom:0x71ED24 reloc:MIPS_NONE symbol:func_08001330_71EB00
+
+// Function: func_080019DC_71F1AC
+// Fake symbol: func_08001670_71EE40 -> 0x08001670
+rom:0x71F1BC reloc:MIPS_NONE symbol:func_08001670_71EE40
+rom:0x71F1E0 reloc:MIPS_NONE symbol:func_08001670_71EE40
+
+// Function: func_080026B8_71FE88
+// Fake symbol: func_08001D2C_71F4FC -> 0x08001D2C
+rom:0x71FED4 reloc:MIPS_NONE symbol:func_08001D2C_71F4FC
+rom:0x71FEDC reloc:MIPS_NONE symbol:func_08001D2C_71F4FC
+
+// Function: func_08000B9C_72A13C
+// Fake symbol: func_08000AB0_72A050 -> 0x08000AB0
+rom:0x72A14C reloc:MIPS_NONE symbol:func_08000AB0_72A050
+rom:0x72A150 reloc:MIPS_NONE symbol:func_08000AB0_72A050
+
+// Function: func_080005C0_72BE10
+// Fake symbol: func_080002B4_72BB04 -> 0x080002B4
+rom:0x72BE2C reloc:MIPS_NONE symbol:func_080002B4_72BB04
+rom:0x72BE38 reloc:MIPS_NONE symbol:func_080002B4_72BB04
+
+// Function: func_08000B1C_72C36C
+// Fake symbol: func_0800090C_72C15C -> 0x0800090C
+rom:0x72C37C reloc:MIPS_NONE symbol:func_0800090C_72C15C
+rom:0x72C380 reloc:MIPS_NONE symbol:func_0800090C_72C15C
+
+// Function: func_08000CBC_73054C
+// Fake symbol: func_08000BA8_730438 -> 0x08000BA8
+rom:0x73055C reloc:MIPS_NONE symbol:func_08000BA8_730438
+rom:0x730560 reloc:MIPS_NONE symbol:func_08000BA8_730438
+
+// Function: func_08000BD8_733B08
+// Fake symbol: func_08000ABC_7339EC -> 0x08000ABC
+rom:0x733B18 reloc:MIPS_NONE symbol:func_08000ABC_7339EC
+rom:0x733B1C reloc:MIPS_NONE symbol:func_08000ABC_7339EC
+
+// Function: func_08001704_734634
+// Fake symbol: func_0800165C_73458C -> 0x0800165C
+rom:0x734644 reloc:MIPS_NONE symbol:func_0800165C_73458C
+rom:0x734648 reloc:MIPS_NONE symbol:func_0800165C_73458C
+
+// Function: func_080009E8_7390B8
+// Fake symbol: func_080008CC_738F9C -> 0x080008CC
+rom:0x7390C8 reloc:MIPS_NONE symbol:func_080008CC_738F9C
+rom:0x7390CC reloc:MIPS_NONE symbol:func_080008CC_738F9C
+
+// Function: func_080010C4_739794
+// Fake symbol: func_08000F10_7395E0 -> 0x08000F10
+rom:0x7397A8 reloc:MIPS_NONE symbol:func_08000F10_7395E0
+rom:0x7397AC reloc:MIPS_NONE symbol:func_08000F10_7395E0
+
+// Function: func_0800124C_73991C
+// Fake symbol: func_08001168_739838 -> 0x08001168
+rom:0x73992C reloc:MIPS_NONE symbol:func_08001168_739838
+rom:0x739930 reloc:MIPS_NONE symbol:func_08001168_739838
+
+// Function: func_08001490_739B60
+// Fake symbol: func_0800129C_73996C -> 0x0800129C
+rom:0x739B78 reloc:MIPS_NONE symbol:func_0800129C_73996C
+rom:0x739B80 reloc:MIPS_NONE symbol:func_0800129C_73996C
+
+// Function: func_08000254_73A0F4
+// Fake symbol: func_08000060_739F00 -> 0x08000060
+rom:0x73A10C reloc:MIPS_NONE symbol:func_08000060_739F00
+rom:0x73A114 reloc:MIPS_NONE symbol:func_08000060_739F00
+
+// Function: func_08000488_73A328
+// Fake symbol: func_080003A4_73A244 -> 0x080003A4
+rom:0x73A338 reloc:MIPS_NONE symbol:func_080003A4_73A244
+rom:0x73A33C reloc:MIPS_NONE symbol:func_080003A4_73A244
+
+// Function: func_080008C4_73C4C4
+// Fake symbol: func_08000824_73C424 -> 0x08000824
+rom:0x73C4D8 reloc:MIPS_NONE symbol:func_08000824_73C424
+rom:0x73C4DC reloc:MIPS_NONE symbol:func_08000824_73C424
+
+
+// Function: func_80038F68
+rom:0x39C2C reloc:MIPS_HI16 symbol:D_8006E5D0 addend:-4
+rom:0x39C34 reloc:MIPS_LO16 symbol:D_8006E5D0 addend:-4
+
+// Functions: func_80003E10, func_80003EA0
+rom:0x4A30 reloc:MIPS_HI16 symbol:D_80058950 addend:0
+rom:0x4A3C reloc:MIPS_LO16 symbol:D_80058950 addend:0
+rom:0x4A50 reloc:MIPS_HI16 symbol:D_80058950 addend:4096
+rom:0x4A5C reloc:MIPS_LO16 symbol:D_80058950 addend:4096
+rom:0x4A70 reloc:MIPS_HI16 symbol:D_80058950 addend:-4096
+rom:0x4A78 reloc:MIPS_LO16 symbol:D_80058950 addend:-4096
+rom:0x4A88 reloc:MIPS_HI16 symbol:D_80058950 addend:8192
+rom:0x4A90 reloc:MIPS_LO16 symbol:D_80058950 addend:8192
+rom:0x4AC0 reloc:MIPS_HI16 symbol:D_80058950 addend:4
+rom:0x4ACC reloc:MIPS_LO16 symbol:D_80058950 addend:4
+rom:0x4AE0 reloc:MIPS_HI16 symbol:D_80058950 addend:4100
+rom:0x4AE8 reloc:MIPS_LO16 symbol:D_80058950 addend:4100
+rom:0x4B04 reloc:MIPS_HI16 symbol:D_80058950 addend:-4092
+rom:0x4B0C reloc:MIPS_LO16 symbol:D_80058950 addend:-4092
+rom:0x4B1C reloc:MIPS_HI16 symbol:D_80058950 addend:8196
+rom:0x4B24 reloc:MIPS_LO16 symbol:D_80058950 addend:8196
+
+// Function: func_800142BC
+rom:0x14ED8 reloc:MIPS_HI16 symbol:D_80069920 addend:-4
+rom:0x14F14 reloc:MIPS_LO16 symbol:D_80069920 addend:-4
+
+// Function: func_80013C90
+rom:0x14A64 reloc:MIPS_HI16 symbol:D_80069920 addend:-4
+rom:0x14A74 reloc:MIPS_LO16 symbol:D_80069920 addend:-4
+
+// Function: func_801DCA64_598974
+rom:0x5989C0 reloc:MIPS_HI16 symbol:D_80069920 addend:-4
+rom:0x5989CC reloc:MIPS_LO16 symbol:D_80069920 addend:-4
+
+// Function: func_80036448
+rom:0x3708C reloc:MIPS_HI16 symbol:D_8006D350 addend:4
+rom:0x370B4 reloc:MIPS_LO16 symbol:D_8006D350 addend:4
+
+// Function: func_8003A138
+rom:0x3AD54 reloc:MIPS_HI16 symbol:D_8006E608 addend:-7
+rom:0x3AD6C reloc:MIPS_LO16 symbol:D_8006E608 addend:-7
+rom:0x3AD90 reloc:MIPS_HI16 symbol:D_8006E608 addend:-7
+rom:0x3ADA8 reloc:MIPS_LO16 symbol:D_8006E608 addend:-7
+
+// Function: func_8003BB70
+rom:0x3C7F0 reloc:MIPS_HI16 symbol:D_8006E2B0 addend:12
+rom:0x3C7F4 reloc:MIPS_LO16 symbol:D_8006E2B0 addend:12
+rom:0x3C83C reloc:MIPS_HI16 symbol:D_8006E2B0 addend:16
+rom:0x3C840 reloc:MIPS_LO16 symbol:D_8006E2B0 addend:16
+// Function: func_8003A838
+rom:0x3B4E0 reloc:MIPS_HI16 symbol:D_8006E610 addend:-832
+rom:0x3B4E8 reloc:MIPS_LO16 symbol:D_8006E610 addend:-832
+
+// Function: func_800390D8
+rom:0x39D0C reloc:MIPS_HI16 symbol:D_8006E280 addend:28
+rom:0x39D14 reloc:MIPS_LO16 symbol:D_8006E280 addend:28
+rom:0x39EF8 reloc:MIPS_HI16 symbol:D_8006E280 addend:28
+rom:0x39F00 reloc:MIPS_LO16 symbol:D_8006E280 addend:28
+
+// bss merge
+rom:0x10F64 reloc:MIPS_HI16 symbol:D_80167EF8 addend:2
+rom:0x10F70 reloc:MIPS_LO16 symbol:D_80167EF8 addend:2
+rom:0x5B4860 reloc:MIPS_HI16 symbol:D_80167FC0 addend:32
+rom:0x5B486C reloc:MIPS_LO16 symbol:D_80167FC0 addend:32
+rom:0x208A4 reloc:MIPS_HI16 symbol:D_80167FC0 addend:12
+rom:0x208B4 reloc:MIPS_LO16 symbol:D_80167FC0 addend:12
+rom:0x3550C reloc:MIPS_HI16 symbol:D_80168FB0 addend:240
+rom:0x35514 reloc:MIPS_LO16 symbol:D_80168FB0 addend:240
+rom:0x6DF2C reloc:MIPS_32 symbol:D_80168FB0 addend:18960
+rom:0x6DF40 reloc:MIPS_32 symbol:D_80168FB0 addend:18960
+rom:0x36790 reloc:MIPS_HI16 symbol:D_8016DAC0 addend:4
+rom:0x3679C reloc:MIPS_LO16 symbol:D_8016DAC0 addend:4
+rom:0x36800 reloc:MIPS_HI16 symbol:D_8016DAC0 addend:8
+rom:0x36810 reloc:MIPS_LO16 symbol:D_8016DAC0 addend:8
+rom:0x36884 reloc:MIPS_HI16 symbol:D_8016DAC0 addend:12
+rom:0x36894 reloc:MIPS_LO16 symbol:D_8016DAC0 addend:12
+rom:0x36908 reloc:MIPS_HI16 symbol:D_8016DAC0 addend:20
+rom:0x36918 reloc:MIPS_LO16 symbol:D_8016DAC0 addend:20
+rom:0x367E4 reloc:MIPS_HI16 symbol:D_8016DAD8 addend:2
+rom:0x367E8 reloc:MIPS_LO16 symbol:D_8016DAD8 addend:2
+rom:0x36868 reloc:MIPS_HI16 symbol:D_8016DAD8 addend:4
+rom:0x3686C reloc:MIPS_LO16 symbol:D_8016DAD8 addend:4
+rom:0x37090 reloc:MIPS_HI16 symbol:D_8016DAD8 addend:4
+rom:0x370B8 reloc:MIPS_LO16 symbol:D_8016DAD8 addend:4
+rom:0x368EC reloc:MIPS_HI16 symbol:D_8016DAD8 addend:6
+rom:0x368F0 reloc:MIPS_LO16 symbol:D_8016DAD8 addend:6
+rom:0x36970 reloc:MIPS_HI16 symbol:D_8016DAD8 addend:10
+rom:0x36974 reloc:MIPS_LO16 symbol:D_8016DAD8 addend:10
+
+// bss merge
+rom:0x7108 reloc:MIPS_LO16 symbol:D_801673C0 addend:4
+rom:0x71A4 reloc:MIPS_LO16 symbol:D_801673C0 addend:4
+rom:0x71C4 reloc:MIPS_HI16 symbol:D_801673C0 addend:4
+rom:0x71C8 reloc:MIPS_LO16 symbol:D_801673C0 addend:4
+rom:0x722C reloc:MIPS_LO16 symbol:D_801673C0 addend:4
+rom:0x7360 reloc:MIPS_HI16 symbol:D_801673D0 addend:4
+rom:0x7364 reloc:MIPS_LO16 symbol:D_801673D0 addend:4
+rom:0x738C reloc:MIPS_LO16 symbol:D_801673D0 addend:4
+rom:0x73AC reloc:MIPS_HI16 symbol:D_801673D0 addend:4
+rom:0x73B0 reloc:MIPS_LO16 symbol:D_801673D0 addend:4
+rom:0x73EC reloc:MIPS_HI16 symbol:D_801673D0 addend:4
+rom:0x73FC reloc:MIPS_LO16 symbol:D_801673D0 addend:4
+rom:0x74B8 reloc:MIPS_HI16 symbol:D_801673E0 addend:4
+rom:0x74BC reloc:MIPS_LO16 symbol:D_801673E0 addend:4
+rom:0x7490 reloc:MIPS_HI16 symbol:D_801673E8 addend:4
+rom:0x7494 reloc:MIPS_LO16 symbol:D_801673E8 addend:4
+rom:0x74C8 reloc:MIPS_HI16 symbol:D_801673E8 addend:4
+rom:0x74CC reloc:MIPS_LO16 symbol:D_801673E8 addend:4
+rom:0x7208 reloc:MIPS_LO16 symbol:D_801673F0 addend:4
+rom:0x7238 reloc:MIPS_HI16 symbol:D_801673F0 addend:4
+rom:0x723C reloc:MIPS_LO16 symbol:D_801673F0 addend:4
+rom:0x7264 reloc:MIPS_LO16 symbol:D_801673F0 addend:4
+rom:0x7284 reloc:MIPS_HI16 symbol:D_801673F0 addend:4
+rom:0x7288 reloc:MIPS_LO16 symbol:D_801673F0 addend:4
+rom:0x72C4 reloc:MIPS_LO16 symbol:D_801673F0 addend:4
+rom:0x72E8 reloc:MIPS_LO16 symbol:D_801673F0 addend:4
+rom:0x7300 reloc:MIPS_LO16 symbol:D_80167400 addend:4
+rom:0x7320 reloc:MIPS_HI16 symbol:D_80167400 addend:4
+rom:0x7324 reloc:MIPS_LO16 symbol:D_80167400 addend:4
+rom:0x741C reloc:MIPS_LO16 symbol:D_80167410 addend:4
+rom:0x743C reloc:MIPS_HI16 symbol:D_80167410 addend:4
+rom:0x7440 reloc:MIPS_LO16 symbol:D_80167410 addend:4
+
+// bss merge
+rom:0x5DD4AC reloc:MIPS_HI16 symbol:D_801C7740 addend:2
+rom:0x5DD4B0 reloc:MIPS_LO16 symbol:D_801C7740 addend:2
+rom:0x40210 reloc:MIPS_HI16 symbol:D_801C7740 addend:2
+rom:0x40218 reloc:MIPS_LO16 symbol:D_801C7740 addend:2
+rom:0x40234 reloc:MIPS_HI16 symbol:D_801C7740 addend:2
+rom:0x4024C reloc:MIPS_LO16 symbol:D_801C7740 addend:2
+rom:0x40238 reloc:MIPS_HI16 symbol:D_801C7744 addend:3
+rom:0x40244 reloc:MIPS_LO16 symbol:D_801C7744 addend:3
+rom:0x4023C reloc:MIPS_HI16 symbol:D_801C7748 addend:3
+rom:0x40240 reloc:MIPS_LO16 symbol:D_801C7748 addend:3
+rom:0x3E9E8 reloc:MIPS_HI16 symbol:D_801C78E8 addend:2
+rom:0x3E9F0 reloc:MIPS_LO16 symbol:D_801C78E8 addend:2
+rom:0x42A14 reloc:MIPS_HI16 symbol:D_801C8BA0 addend:60
+rom:0x42A38 reloc:MIPS_LO16 symbol:D_801C8BA0 addend:60
+rom:0x4111C reloc:MIPS_HI16 symbol:D_801C8BA0 addend:60
+rom:0x4113C reloc:MIPS_LO16 symbol:D_801C8BA0 addend:60
+rom:0x42DC4 reloc:MIPS_LO16 symbol:D_801C9E10 addend:2
+rom:0x42DC8 reloc:MIPS_LO16 symbol:D_801C9E10 addend:4
+rom:0x42DE0 reloc:MIPS_LO16 symbol:D_801C9E28 addend:2
+rom:0x42DE4 reloc:MIPS_LO16 symbol:D_801C9E28 addend:4
+rom:0x4BF80 reloc:MIPS_HI16 symbol:D_801CA290 addend:4
+rom:0x4BF8C reloc:MIPS_LO16 symbol:D_801CA290 addend:4
+rom:0x43020 reloc:MIPS_HI16 symbol:D_801CA290 addend:4
+rom:0x43028 reloc:MIPS_LO16 symbol:D_801CA290 addend:4
+rom:0x43054 reloc:MIPS_HI16 symbol:D_801CA290 addend:4
+rom:0x43058 reloc:MIPS_LO16 symbol:D_801CA290 addend:4
+rom:0x43088 reloc:MIPS_HI16 symbol:D_801CA290 addend:4
+rom:0x43094 reloc:MIPS_LO16 symbol:D_801CA290 addend:4
+rom:0x42B0C reloc:MIPS_HI16 symbol:D_801CA290 addend:4
+rom:0x42B10 reloc:MIPS_LO16 symbol:D_801CA290 addend:4
+
+// bss merge
+rom:0x38B64 reloc:MIPS_HI16 symbol:D_8016DB70 addend:8
+rom:0x38B6C reloc:MIPS_LO16 symbol:D_8016DB70 addend:8
+rom:0x38BB0 reloc:MIPS_HI16 symbol:D_8016DB70 addend:12
+rom:0x38BB4 reloc:MIPS_LO16 symbol:D_8016DB70 addend:12
+rom:0x38AEC reloc:MIPS_HI16 symbol:D_80171FC8 addend:20
+rom:0x38AF8 reloc:MIPS_LO16 symbol:D_80171FC8 addend:20
+rom:0x3A8F0 reloc:MIPS_HI16 symbol:D_801C09E0 addend:1
+rom:0x3A8F4 reloc:MIPS_LO16 symbol:D_801C09E0 addend:1
+rom:0x3A9B8 reloc:MIPS_LO16 symbol:D_801C09E0 addend:1
+rom:0x3A90C reloc:MIPS_HI16 symbol:D_801C09E0 addend:2
+rom:0x3A910 reloc:MIPS_LO16 symbol:D_801C09E0 addend:2
+rom:0x3A9BC reloc:MIPS_LO16 symbol:D_801C09E0 addend:2
+rom:0x3A928 reloc:MIPS_HI16 symbol:D_801C09E0 addend:3
+rom:0x3A92C reloc:MIPS_LO16 symbol:D_801C09E0 addend:3
+rom:0x3A9C0 reloc:MIPS_LO16 symbol:D_801C09E0 addend:3
+rom:0x394AC reloc:MIPS_HI16 symbol:D_801C09FC addend:1
+rom:0x394B8 reloc:MIPS_LO16 symbol:D_801C09FC addend:1
+rom:0x3988C reloc:MIPS_HI16 symbol:D_801C09FC addend:1
+rom:0x39898 reloc:MIPS_LO16 symbol:D_801C09FC addend:1
+rom:0x39B70 reloc:MIPS_HI16 symbol:D_801C09FC addend:1
+rom:0x39B74 reloc:MIPS_LO16 symbol:D_801C09FC addend:1
+rom:0x3A058 reloc:MIPS_HI16 symbol:D_801C1308 addend:4
+rom:0x3A064 reloc:MIPS_LO16 symbol:D_801C1308 addend:4
+rom:0x3E1DC reloc:MIPS_HI16 symbol:D_801C7770 addend:4
+rom:0x3E1E0 reloc:MIPS_LO16 symbol:D_801C7770 addend:4
+rom:0x3E8AC reloc:MIPS_HI16 symbol:D_801C7770 addend:4
+rom:0x3E8DC reloc:MIPS_LO16 symbol:D_801C7770 addend:4
+rom:0x3F070 reloc:MIPS_HI16 symbol:D_801C7770 addend:4
+rom:0x3F07C reloc:MIPS_LO16 symbol:D_801C7770 addend:4
+rom:0x3F0F8 reloc:MIPS_HI16 symbol:D_801C7770 addend:4
+rom:0x3F104 reloc:MIPS_LO16 symbol:D_801C7770 addend:4
+rom:0x3F338 reloc:MIPS_HI16 symbol:D_801C7808 addend:20
+rom:0x3F33C reloc:MIPS_LO16 symbol:D_801C7808 addend:20
+rom:0x3EDB4 reloc:MIPS_HI16 symbol:D_801C78D0 addend:8
+rom:0x3EDC4 reloc:MIPS_LO16 symbol:D_801C78D0 addend:8
+rom:0x3EF28 reloc:MIPS_HI16 symbol:D_801C78D0 addend:8
+rom:0x3EF38 reloc:MIPS_LO16 symbol:D_801C78D0 addend:8
+rom:0x3EF68 reloc:MIPS_HI16 symbol:D_801C78D0 addend:8
+rom:0x3EF70 reloc:MIPS_LO16 symbol:D_801C78D0 addend:8
+rom:0x3EFEC reloc:MIPS_HI16 symbol:D_801C78D0 addend:8
+rom:0x3EFF0 reloc:MIPS_LO16 symbol:D_801C78D0 addend:8
+rom:0x3EF48 reloc:MIPS_HI16 symbol:D_801C78D0 addend:12
+rom:0x3EF4C reloc:MIPS_LO16 symbol:D_801C78D0 addend:12
+rom:0x3EF78 reloc:MIPS_HI16 symbol:D_801C78D0 addend:12
+rom:0x3EF7C reloc:MIPS_LO16 symbol:D_801C78D0 addend:12
+rom:0x3DF58 reloc:MIPS_HI16 symbol:D_801C7900 addend:4
+rom:0x3DF68 reloc:MIPS_LO16 symbol:D_801C7900 addend:4
+rom:0x3DFD0 reloc:MIPS_HI16 symbol:D_801C7900 addend:4
+rom:0x3DFE0 reloc:MIPS_HI16 symbol:D_801C7900 addend:4
+rom:0x3DFE8 reloc:MIPS_LO16 symbol:D_801C7900 addend:4
+rom:0x3DFEC reloc:MIPS_LO16 symbol:D_801C7900 addend:4
+rom:0x3E168 reloc:MIPS_HI16 symbol:D_801C7900 addend:4
+rom:0x3E16C reloc:MIPS_LO16 symbol:D_801C7900 addend:4
+rom:0x3DDA8 reloc:MIPS_HI16 symbol:D_801C7900 addend:8
+rom:0x3DDAC reloc:MIPS_LO16 symbol:D_801C7900 addend:8
+rom:0x3DE00 reloc:MIPS_HI16 symbol:D_801C7900 addend:8
+rom:0x3DE04 reloc:MIPS_LO16 symbol:D_801C7900 addend:8
+rom:0x3DE5C reloc:MIPS_HI16 symbol:D_801C7900 addend:8
+rom:0x3DE60 reloc:MIPS_LO16 symbol:D_801C7900 addend:8
+rom:0x3E830 reloc:MIPS_HI16 symbol:D_801C7900 addend:8
+rom:0x3E844 reloc:MIPS_LO16 symbol:D_801C7900 addend:8
+rom:0x3F614 reloc:MIPS_HI16 symbol:D_801C7900 addend:8
+rom:0x3F618 reloc:MIPS_LO16 symbol:D_801C7900 addend:8
+rom:0x5DEAF0 reloc:MIPS_HI16 symbol:D_801C7900 addend:12
+rom:0x5DEAF4 reloc:MIPS_LO16 symbol:D_801C7900 addend:12
+rom:0x3F048 reloc:MIPS_HI16 symbol:D_801C7900 addend:12
+rom:0x3F04C reloc:MIPS_LO16 symbol:D_801C7900 addend:12
+rom:0x3F0C0 reloc:MIPS_HI16 symbol:D_801C7900 addend:12
+rom:0x3F0C4 reloc:MIPS_LO16 symbol:D_801C7900 addend:12
+rom:0x3F550 reloc:MIPS_HI16 symbol:D_801C7900 addend:12
+rom:0x3F554 reloc:MIPS_LO16 symbol:D_801C7900 addend:12
