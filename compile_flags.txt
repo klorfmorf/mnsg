@@ -8,8 +8,11 @@
 -DF3DEX_GBI
 -D__sgi
 -DNDEBUG
+-DBUILD_VERSION=VERSION_I
+-DBUILD_VERSION_STRING="2.0I"
 -Iinclude
--Ilibultra/include
--Ilibultra/include/PR
+-Ilib/ultralib/include
+-Ilib/ultralib/include/PR
+-Ilib/ultralib/include/compiler/ido
 -Isrc
 -I.

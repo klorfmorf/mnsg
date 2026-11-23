@@ -1,0 +1,83 @@
+[ido]
+version = "v1.2"
+exe = "cc"
+strip = 0
+
+[ido.platforms.linux-x86_64]
+url = "https://github.com/decompals/ido-static-recomp/releases/download/v1.2/ido-5.3-recomp-linux.tar.gz"
+sha256 = "ab5c741561f80913d58c8b074771f23941a3edd312505a8ebed6d1dfeb65e506"
+
+[ido.platforms.linux-aarch64]
+url = "https://github.com/decompals/ido-static-recomp/releases/download/v1.2/ido-5.3-recomp-linux-arm.tar.gz"
+sha256 = "b6844c986fa65d7de4ce10b27583769a5ec7a88ae37a151f6dc66c929d3e1c92"
+
+[ido.platforms.macos-x86_64]
+url = "https://github.com/decompals/ido-static-recomp/releases/download/v1.2/ido-5.3-recomp-macos.tar.gz"
+sha256 = "5b1ca006ee4b158ffba0422fc3f00b9b330f9036f279bae2ea1b4703317ad9c0"
+
+[ido.platforms.macos-arm64]
+url = "https://github.com/decompals/ido-static-recomp/releases/download/v1.2/ido-5.3-recomp-macos.tar.gz"
+sha256 = "5b1ca006ee4b158ffba0422fc3f00b9b330f9036f279bae2ea1b4703317ad9c0"
+
+[asm-processor]
+version = "1.0.1"
+exe = "asm-processor"
+strip = 1
+
+[asm-processor.platforms.linux-x86_64]
+url = "https://github.com/simonlindholm/asm-processor/releases/download/1.0.1/asm-processor-x86_64-unknown-linux-gnu.tar.xz"
+sha256 = "9385a83c5f85a76777755d054c19f95c5dd8db4477822c7c6b41cd5dedf9e8e7"
+
+[asm-processor.platforms.linux-aarch64]
+url = "https://github.com/simonlindholm/asm-processor/releases/download/1.0.1/asm-processor-aarch64-unknown-linux-gnu.tar.xz"
+sha256 = "8d2fcf12dafaae642de38e424032f3be78222a086993b8384612466aa0d0c5c8"
+
+[asm-processor.platforms.macos-x86_64]
+url = "https://github.com/simonlindholm/asm-processor/releases/download/1.0.1/asm-processor-x86_64-apple-darwin.tar.xz"
+sha256 = "07f2985603d3da4d8822cfd5fb9101a7cb6ca357c48e521e014ccb82d97a4c2b"
+
+[asm-processor.platforms.macos-arm64]
+url = "https://github.com/simonlindholm/asm-processor/releases/download/1.0.1/asm-processor-aarch64-apple-darwin.tar.xz"
+sha256 = "4c28a3f40502325d0ac284024b8aba24021595886982969e685d12f4ccb406f4"
+
+[objdiff-cli]
+version = "v3.8.3"
+exe = "objdiff-cli"
+strip = 0
+
+[objdiff-cli.platforms.linux-x86_64]
+url = "https://github.com/encounter/objdiff/releases/download/v3.8.3/objdiff-cli-linux-x86_64"
+sha256 = "e823ae932a56c68dcd86b68d12f2268c953e0c027402162c8a6dfa6a00d65008"
+
+[objdiff-cli.platforms.linux-aarch64]
+url = "https://github.com/encounter/objdiff/releases/download/v3.8.3/objdiff-cli-linux-aarch64"
+sha256 = "0e630457e2f33a43da3723e195ecd0b39b683a6a83122955fdc68c5b17183cbc"
+
+[objdiff-cli.platforms.macos-x86_64]
+url = "https://github.com/encounter/objdiff/releases/download/v3.8.3/objdiff-cli-macos-x86_64"
+sha256 = "4a0f5079600cb9ddf2369414e712f96838bc0ae05cd1a98c92f6131078ec4b0e"
+
+[objdiff-cli.platforms.macos-arm64]
+url = "https://github.com/encounter/objdiff/releases/download/v3.8.3/objdiff-cli-macos-arm64"
+sha256 = "27dbd79196394c246dde77ef0a6ac855ff6c568069171dd7db0093f39c03ee8d"
+
+[m2c]
+version = "a21c1dc"
+exe = "m2c.py"
+strip = 1
+url = "https://github.com/matt-kempster/m2c/archive/a21c1dcd7255b176c032bb932f521846e98d4372.tar.gz"
+sha256 = "f2aa98f1e85feb00048d20987f8c9ec0ce0693c3168b58df6b48d4de693eb973"
+
+[asm-differ]
+version = "4eb23bc"
+exe = "diff.py"
+strip = 1
+url = "https://github.com/simonlindholm/asm-differ/archive/4eb23bcd4bbeab81c16535c6318389e0c55584f7.tar.gz"
+sha256 = "43ea0bb0fccc4abe29729da11935be50d86270baa7a42bd2ce583ccadcc67b3a"
+
+[decomp-permuter]
+version = "ec2efee"
+exe = "permuter.py"
+strip = 1
+url = "https://github.com/simonlindholm/decomp-permuter/archive/ec2efeebb33e2b1de81e39fbf7cbe3cd97350472.tar.gz"
+sha256 = "f5ea4a43a29269789b941d9d8a589ccf4c2d6fe1dbab7176702eaf5e06269cdb"

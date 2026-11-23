@@ -5,7 +5,7 @@ __pycache__/
 .vscode/
 asm/
 bin/
-build/
+/build/
 expected/
 nonmatchings/
 keep/
@@ -17,6 +17,12 @@ keep/
 *auto.txt
 .splat_cache
 context.c
+
+# Written by configure.py
+build.ninja
+.ninja_deps
+.ninja_log
+objdiff.json
 
 # Manifest files
 rommy.yaml 
