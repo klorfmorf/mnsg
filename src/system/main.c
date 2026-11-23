@@ -1,29 +1,90 @@
 #include "system/main.h"
-#include "audio_interface.h"
-#include "controller.h"
-#include "dialog_gfx.h"
-#include "memory_pak.h"
-#include "object_order.h"
-#include "rumble.h"
-#include "scenario.h"
-#include "scheduler.h"
-#include "sprite.h"
-#include "sys.h"
+#include "system/sd_main.h"
+#include "system/joypad.h"
+#include "system/window.h"
+#include "system/controller_pak.h"
+#include "system/obj_sort.h"
+#include "system/vibration_pak.h"
+#include "system/scenario.h"
+#include "system/sched.h"
+#include "structs.h"
+#include "system/sys.h"
 #include "system/anime.h"
-#include "system/data_load.h"
-#include "system/file_request.h"
-#include "system/game_loop.h"
-#include "system/object.h"
-#include "system/print_text.h"
+#include "system/rom_trans.h"
+#include "system/rom_queue.h"
+#include "system/step.h"
+#include "system/obj.h"
+#include "system/string.h"
 #include "unk.h"
+#include "system/gfx_data.h"
+#include "system/profiler.h"
 
-void func_80000450(void) {
+void func_800004AC(void *arg);
+void func_80000580(void *arg);
+void func_8000098C(void);
+void func_80000AD8(void *arg);
+void func_80000D00(void);
+void func_800011A0(void);
+void func_800012FC(void);
+void func_80001328(void);
+void func_80001498(void);
+void func_80001614(void);
+void func_800016E4(OSScTask *task, OSScMsg *msg, unsigned long long *ucode, unsigned long long *ucode_data, int done);
+
+// clang-format off
+
+// <<<<< data >>>>>
+OSMesg D_800548D0 = NULL;
+
+int D_800548D4 = 0;
+
+int D_800548D8 = 0;
+
+int D_800548DC = 0;
+
+int D_800548E0 = 0;
+
+int D_800548E4 = 0;
+
+int D_800548E8 = 0;
+
+unsigned short D_800548EC = 0;
+
+unsigned short D_800548F0 = 0;
+
+unsigned short D_800548F4 = 0;
+
+// <<<<< bss >>>>>
+unsigned char D_8007E020[0x2000];
+OSThread      D_80080020;
+unsigned char D_800801D0[0x4000];
+OSThread      D_800841D0;
+unsigned char D_80084380[0x4000];
+OSThread      D_80088380;
+unsigned char D_80088530[0x2000];
+OSMesgQueue   D_8008A530;
+OSMesg        D_8008A548[0xC8];
+OSMesgQueue   D_8008A868;
+OSMesg        D_8008A880[1];
+OSMesgQueue   D_8008A888;
+OSMesg        D_8008A8A0[8];
+OSMesgQueue   D_8008A8C0;
+OSMesg        D_8008A8D8[1];
+OSScMsg       D_8008A8E0[2];
+OSScTask      D_8008A920[2];
+unsigned char D_8008A9F0[0x22C0];
+OSMesgQueue  *D_8008CCB0;
+// clang-format on
+
+void func_80000450(void)
+{
     osInitialize();
     osCreateThread(&D_80080020, 1, func_800004AC, NULL, &D_800841D0, 9);
     osStartThread(&D_80080020);
 }
 
-void func_800004AC(void *arg) {
+void func_800004AC(void *arg)
+{
     osCreatePiManager(0x96, &D_8008A530, D_8008A548, 0xC8);
     osCreateThread(&D_800841D0, 3, func_80000580, arg, &D_80088380, 0xA);
     osStartThread(&D_800841D0);
@@ -35,11 +96,12 @@ void func_800004AC(void *arg) {
 }
 
 #ifdef NON_MATCHING
-void func_80000580(void *arg) {
-    OSScClient client;
-    OSScMsg *msg = NULL;
-    int i;
-    int k;
+void func_80000580(void *arg)
+{
+    OSScClient     client;
+    OSScMsg       *msg = NULL;
+    int            i;
+    int            k;
     unsigned char *p;
 
     func_80004170();
@@ -51,24 +113,24 @@ void func_80000580(void *arg) {
     func_80001C00(8, g_frame_buffers);
     func_80001C00(0xA, D_80304000);
     if (osTvType == OS_TV_MPAL) {
-        func_80006DF0(D_8008A9F0, &D_8008A9F0[0x22C0], 0xD, 0x1E, 1);
+        osCreateScheduler((OSSched *) D_8008A9F0, &D_8008A9F0[0x22C0], 0xD, 0x1E, 1);
     } else {
-        func_80006DF0(D_8008A9F0, &D_8008A9F0[0x22C0], 0xD, 2, 1);
+        osCreateScheduler((OSSched *) D_8008A9F0, &D_8008A9F0[0x22C0], 0xD, 2, 1);
     }
-    g_sys->clear_depth_buffer = 1;
+    g_sys->clear_depth_buffer     = 1;
     g_sys->retraces_per_game_step = 2;
-    g_sys->current_graphics_pool = 0;
-    g_sys->frames_elapsed = 0;
-    g_sys->current_frame_buffer = 1;
+    g_sys->current_graphics_pool  = 0;
+    g_sys->frames_elapsed         = 0;
+    g_sys->current_frame_buffer   = 1;
     g_sys->disable_graphics_tasks = 0;
-    func_80006F3C(D_8008A9F0, &client, &D_8008A888);
-    D_8008CCB0 = func_80007014(D_8008A9F0);
+    osScAddClient((OSSched *) D_8008A9F0, &client, &D_8008A888);
+    D_8008CCB0 = osScGetCmdQ((OSSched *) D_8008A9F0);
     osViSetSpecialFeatures(0x5A);
     func_800049D0();
-    for (i = (int)D_2FFFFF; i != 0; i--) {
+    for (i = (int) D_2FFFFF; i != 0; i--) {
     }
     func_800386E0();
-    for (p = (unsigned char *)0x2FFFFF; p != 0; p--) {
+    for (p = (unsigned char *) 0x2FFFFF; p != 0; p--) {
     }
     if ((g_sys_real.is_controller_pak_connected = func_800231E0()) != 0 || func_800232EC() != 0 || func_80023410() != 0 ||
         func_80023480() != 0 || func_80023560(D_8015CC18) != 0) {
@@ -79,7 +141,7 @@ void func_80000580(void *arg) {
         } while (++k < 12);
     }
     while (1) {
-        osRecvMesg(&D_8008A888, (OSMesg *)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&D_8008A888, (OSMesg *) &msg, OS_MESG_BLOCK);
         switch (msg->type) {
             case 0:
                 break;
@@ -116,26 +178,28 @@ void func_80000580(void *arg) {
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/system/main/func_80000580.s")
 #endif
 
-void func_8000098C(void) {
+void func_8000098C(void)
+{
     OSScTask *task;
 
     if (g_sys->disable_graphics_tasks == 0 && D_800548E4 != 0) {
-        task = &D_8008A920[g_sys->current_graphics_pool];
-        task->framebuffer = g_frame_buffers[g_sys->current_frame_buffer];
-        D_800548D8 = 1;
-        D_800548E4 = 0;
-        D_800548DC = 0;
+        task               = &D_8008A920[g_sys->current_graphics_pool];
+        task->frame_buffer = g_frame_buffers[g_sys->current_frame_buffer];
+        D_800548D8         = 1;
+        D_800548E4         = 0;
+        D_800548DC         = 0;
         g_sys->current_graphics_pool ^= 1;
         g_sys->frames_elapsed++;
         g_sys->current_frame_buffer++;
         if (g_sys->current_frame_buffer >= 3) {
             g_sys->current_frame_buffer = 0;
         }
-        osSendMesg(func_80007024(D_8008A9F0), task, OS_MESG_BLOCK);
+        osSendMesg(osScGetInterruptQ((OSSched *) D_8008A9F0), task, OS_MESG_BLOCK);
     }
 }
 
-void func_80000AD8(void *arg) {
+void func_80000AD8(void *arg)
+{
     short i;
 
     while (1) {
@@ -143,7 +207,7 @@ void func_80000AD8(void *arg) {
         D_800548E8 = 1;
         D_800548E0 = 1;
         osContStartReadData(&D_80167170);
-        D_8015C5CC = (Gfx *)&g_sys->graphics_buffer[g_sys->current_graphics_pool];
+        D_8015C5CC = (Gfx *) &g_sys->graphics_buffer[g_sys->current_graphics_pool];
         func_800011A0();
         func_800012FC();
         if (g_sys->clear_depth_buffer != 0) {
@@ -153,15 +217,15 @@ void func_80000AD8(void *arg) {
         func_80004AF8();
         func_80002040();
         if (g_sys->dont_process_draw_lists == 0) {
-            func_8000AAE8(g_sys->draw_lists);
-            func_8000AA00(g_sys->draw_lists);
+            func_8000AAE8(g_sys->layers);
+            func_8000AA00(g_sys->layers);
             anime_init_frame();
             if (g_sys_real.unk_3ae28 == 0) {
                 func_8000AB74();
             }
             for (i = 0; i < 12; i++) {
-                func_8000A99C(&g_sys->draw_lists[i]);
-                func_800087C4(&g_sys->draw_lists[i]);
+                func_8000A99C(&g_sys->layers[i]);
+                func_800087C4(&g_sys->layers[i]);
             }
             func_800012FC();
             func_8000433C();
@@ -179,7 +243,8 @@ void func_80000AD8(void *arg) {
     }
 }
 
-void func_80000D00(void) {
+void func_80000D00(void)
+{
     unsigned short x;
 
     if (D_800548F0 < 0x12) {
@@ -202,14 +267,14 @@ void func_80000D00(void) {
                 }
             }
             D_800548F4++;
-            D_8015C5CC = (Gfx *)&g_sys->graphics_buffer[g_sys->current_graphics_pool];
+            D_8015C5CC = (Gfx *) &g_sys->graphics_buffer[g_sys->current_graphics_pool];
             func_800011A0();
             func_800012FC();
             gDPSetScissor(D_8015C5CC++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
             gDPPipeSync(D_8015C5CC++);
             gDPSetCycleType(D_8015C5CC++, G_CYC_FILL);
             gDPSetColorImage(D_8015C5CC++, G_IM_FMT_RGBA, g_sys->frame_buffer_bits_per_pixel, 320,
-                             OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
+                OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
             gDPSetFillColor(D_8015C5CC++, GPACK_RGBA5551(0, 0, 0, 1) << 16 | GPACK_RGBA5551(0, 0, 0, 1));
             x = D_800548F4 * 10;
             if (x >= 0xA0) {
@@ -245,9 +310,9 @@ void func_80000D00(void) {
         if (D_800548F4 == 0x11) {
             osViSetYScale(1.0f);
             func_80038BC8(1);
-            g_sys->fill_color_red = 0;
+            g_sys->fill_color_red   = 0;
             g_sys->fill_color_green = 0;
-            g_sys->fill_color_blue = 0;
+            g_sys->fill_color_blue  = 0;
             if (func_80037B10(0) == 0) {
                 func_80037C20(0, 2, 0);
             }
@@ -255,7 +320,8 @@ void func_80000D00(void) {
     }
 }
 
-void func_800011A0(void) {
+void func_800011A0(void)
+{
     gSPSegment(D_8015C5CC++, 0, 0);
     gSPSegment(D_8015C5CC++, 1, D_2D1800);
     gSPSegment(D_8015C5CC++, 2, OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
@@ -265,50 +331,55 @@ void func_800011A0(void) {
     gSPSegment(D_8015C5CC++, 9, 0x325800);
 }
 
-void func_800012FC(void) {
+void func_800012FC(void)
+{
     gSPDisplayList(D_8015C5CC++, D_8006D4E0);
 }
 
-void func_80001328(void) {
+void func_80001328(void)
+{
     OSScTask *task;
 
     gDPFullSync(D_8015C5CC++);
     gSPEndDisplayList(D_8015C5CC++);
     osWritebackDCache(&g_sys->graphics_buffer[g_sys->current_graphics_pool], sizeof(GraphBuf));
-    task = &D_8008A920[g_sys->current_graphics_pool];
-    task->list.t.data_ptr = (u64 *)&g_sys->graphics_buffer[g_sys->current_graphics_pool];
-    task->list.t.data_size = (D_8015C5CC - (Gfx *)&g_sys->graphics_buffer[g_sys->current_graphics_pool]) * sizeof(Gfx);
-    task->list.t.ucode_boot_size = (u32)D_80052680 - (u32)D_800525B0;
-    task->list.t.output_buff = D_8015DDF0;
-    task->list.t.output_buff_size = (u64 *)((u32)D_8015DDF0 + 0x2380);
-    task->flags = OS_SC_NEEDS_RDP | OS_SC_NEEDS_RSP | OS_SC_LAST_TASK | OS_SC_SWAPBUFFER;
+    task                          = &D_8008A920[g_sys->current_graphics_pool];
+    task->list.t.data_ptr         = (unsigned long long *) &g_sys->graphics_buffer[g_sys->current_graphics_pool];
+    task->list.t.data_size        = (D_8015C5CC - (Gfx *) &g_sys->graphics_buffer[g_sys->current_graphics_pool]) * sizeof(Gfx);
+    task->list.t.ucode_boot_size  = (unsigned int) D_80052680 - (unsigned int) D_800525B0;
+    task->list.t.output_buff      = D_8015DDF0;
+    task->list.t.output_buff_size = (unsigned long long *) ((unsigned int) D_8015DDF0 + 0x2380);
+    task->flags                   = OS_SC_NEEDS_RDP | OS_SC_NEEDS_RSP | OS_SC_LAST_TASK | OS_SC_SWAPBUFFER;
     D_800548E4++;
     if (D_800548D8 == 0) {
         func_8000098C();
     }
 }
 
-void func_80001498(void) {
+void func_80001498(void)
+{
     gDPPipeSync(D_8015C5CC++);
     gDPSetCycleType(D_8015C5CC++, G_CYC_FILL);
     gDPSetColorImage(D_8015C5CC++, G_IM_FMT_RGBA, g_sys->frame_buffer_bits_per_pixel, 320,
-                     OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
+        OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
     gDPSetFillColor(D_8015C5CC++,
-                    GPACK_RGBA5551(g_sys->fill_color_red, g_sys->fill_color_green, g_sys->fill_color_blue, g_sys->fill_color_alpha) << 16 |
-                    GPACK_RGBA5551(g_sys->fill_color_red, g_sys->fill_color_green, g_sys->fill_color_blue, g_sys->fill_color_alpha));
+        GPACK_RGBA5551(g_sys->fill_color_red, g_sys->fill_color_green, g_sys->fill_color_blue, g_sys->fill_color_alpha) << 16 |
+            GPACK_RGBA5551(g_sys->fill_color_red, g_sys->fill_color_green, g_sys->fill_color_blue, g_sys->fill_color_alpha));
     gDPFillRectangle(D_8015C5CC++, 0, 0, 319, 239);
     gDPPipeSync(D_8015C5CC++);
     gDPSetCycleType(D_8015C5CC++, G_CYC_1CYCLE);
 }
 
-void func_80001614(void) {
+void func_80001614(void)
+{
     gSPDisplayList(D_8015C5CC++, D_8006E030);
 }
 
-void func_80001640(u32 rom, void *dst, s32 size) {
+void func_80001640(unsigned int rom, void *dst, int size)
+{
     unsigned short i = 0x1000;
-    OSIoMesg io;
-    OSMesg msg = NULL;
+    OSIoMesg       io;
+    OSMesg         msg = NULL;
 
     osInvalDCache(dst, size);
     osInvalICache(dst, size);
@@ -318,32 +389,33 @@ void func_80001640(u32 rom, void *dst, s32 size) {
     }
 }
 
-void func_800016E4(OSScTask *task, OSScMsg *msg, u64 *ucode, u64 *ucode_data, int done) {
+void func_800016E4(OSScTask *task, OSScMsg *msg, unsigned long long *ucode, unsigned long long *ucode_data, int done)
+{
     int i;
 
     for (i = 0; i != 2; i++) {
-        task->framebuffer = g_frame_buffers[i];
-        task->next = NULL;
-        task->state = 0;
-        task->flags = 0;
-        task->list.t.type = 1;
-        task->list.t.flags = 2;
-        task->list.t.ucode_boot = D_800525B0;
-        task->list.t.ucode_boot_size = 0;
-        task->list.t.ucode = ucode;
-        task->list.t.ucode_size = 0x1000;
-        task->list.t.ucode_data = ucode_data;
-        task->list.t.ucode_data_size = 0x800;
-        task->list.t.dram_stack = D_80167450;
-        task->list.t.dram_stack_size = 0x400;
-        task->list.t.output_buff = D_8015DDF0;
+        task->frame_buffer            = g_frame_buffers[i];
+        task->next                    = NULL;
+        task->state                   = 0;
+        task->flags                   = 0;
+        task->list.t.type             = 1;
+        task->list.t.flags            = 2;
+        task->list.t.ucode_boot       = D_800525B0;
+        task->list.t.ucode_boot_size  = 0;
+        task->list.t.ucode            = ucode;
+        task->list.t.ucode_size       = 0x1000;
+        task->list.t.ucode_data       = ucode_data;
+        task->list.t.ucode_data_size  = 0x800;
+        task->list.t.dram_stack       = D_80167450;
+        task->list.t.dram_stack_size  = 0x400;
+        task->list.t.output_buff      = D_8015DDF0;
         task->list.t.output_buff_size = NULL;
-        task->list.t.data_ptr = NULL;
-        task->list.t.data_size = 0;
-        task->list.t.yield_data_ptr = D_8015CDF0;
-        task->list.t.yield_data_size = 0xC00;
-        task->msgQ = &D_8008A888;
-        task->msg = &msg[i];
+        task->list.t.data_ptr         = NULL;
+        task->list.t.data_size        = 0;
+        task->list.t.yield_data_ptr   = D_8015CDF0;
+        task->list.t.yield_data_size  = 0xC00;
+        task->msgQ                    = &D_8008A888;
+        task->msg                     = &msg[i];
         task++;
     }
     if (done) {

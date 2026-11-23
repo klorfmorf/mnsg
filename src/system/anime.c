@@ -1,12 +1,45 @@
 #include "system/anime.h"
 #include "gbi.h"
-#include "gfx_util.h"
-#include "heap.h"
-#include "math_util.h"
-#include "sys.h"
+#include "system/gfx_util.h"
+#include "system/obj_alloc.h"
+#include "system/math.h"
+#include "system/sys.h"
+#include "unk.h"
+#include "system/gfx_data.h"
 
-extern Gfx D_9002410[];
+void           anime_camera_keys(AnimeCameraKeys *keys, float (*mf)[4]);
+void           anime_camera(AnimeCamera *cam, float (*mf)[4]);
+void           anime_light_keys(AnimeLightKeys *keys);
+void           anime_ambient(AnimeAmbient *ambient);
+void           anime_light(AnimeLight *light);
+void           anime_draw_root(AnimeJoint *joint, unsigned int kind);
+void           anime_draw_joint(AnimeJoint *joint);
+void           anime_jchar(AnimeJoint *joint, unsigned int kind, ObjSolid *model_node);
+void           anime_draw_jchar_joint(AnimeJoint *joint, ObjSolid *solid);
+ObjSolid      *anime_child_node(AnimeJoint *joint, ObjSolid *solid);
+ObjSolid      *anime_sibling_node(AnimeJoint *joint, ObjSolid *solid);
+int            anime_delete_model_node(ObjSolid *solid, unsigned int model);
+int            anime_delete_model_in(ObjSolid *solid, unsigned int model);
+void           anime_push_joint(AnimeJoint *joint, ObjSolid *solid);
+void           anime_pop_joint(void);
+void           anime_model(unsigned int dlist);
+void           anime_push_solid(ObjSolid *solid);
+void           anime_joint_mtx(float (*mf)[4], AnimeJoint *joint, ObjSolid *solid);
+unsigned short anime_key_u16(unsigned short track);
+short          anime_key_s16(unsigned short track);
+unsigned short anime_key_angle(unsigned short track);
+void           anime_key_rot(AnimeJoint *joint, unsigned short *rot);
+unsigned short anime_key_decode(unsigned short pos, int frame_a, short *out_a, int frame_b);
+void           anime_set_view(AnimeCamera *cam);
+int            anime_locate_joint(ObjSolid *out, ObjSolid *solid, int target);
+int            anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, float frame, float blend, int target);
+int            anime_find_joint_path(AnimeJoint *joint, unsigned int target, int depth, ObjSolid *solid);
+int            anime_swap_joint_models(AnimeJoint *joint, unsigned int *table, ObjSolid *solid);
+void           anime_view_to_local(ObjSolid *solid);
 
+// clang-format off
+
+// <<<<< data >>>>>
 Vp g_anime_default_vp = { { { 640, 480, G_MAXZ / 2, 0 }, { 640, 480, G_MAXZ / 2, 0 } } };
 
 AnimeCamera s_anime_default_camera = {
@@ -29,6 +62,7 @@ Lights7 s_anime_default_lights = { 0 };
 Gfx     s_anime_gfx_end        = gsSPEndDisplayList();
 Gfx     s_anime_gfx_branch     = gsSPBranchList(NULL);
 
+// <<<<< bss >>>>>
 ObjSolid      *g_anime_solid;
 AnimeCamera   *s_anime_camera;
 Lights7       *s_anime_lights;
@@ -65,19 +99,7 @@ AnimeJoint    *s_anime_path_joint[10];
 ObjSolid      *s_anime_path_solid[10];
 int            s_anime_root_countdown;
 int            s_anime_joint_countdown;
-
-extern unsigned short D_801689F0;
-extern unsigned short D_801689F2;
-extern unsigned short D_801689F4;
-
-extern Gfx D_8005588[];
-extern Gfx D_8006DFF8[];
-extern Gfx D_8006E020[];
-extern Gfx D_9004958[];
-extern Gfx D_9004A88[];
-extern Gfx D_9004AA8[];
-extern Gfx D_90050F8[];
-extern Gfx D_90056E8[];
+// clang-format on
 
 void anime_init_frame(void)
 {
@@ -362,7 +384,7 @@ void anime_camera_keys(AnimeCameraKeys *keys, float (*mf)[4])
             func_80003E10(roll), func_80003EA0(roll), 0.0f,
             s_anime_camera->light[0], s_anime_camera->light[1], s_anime_camera->light[2],
             s_anime_camera->light[3], s_anime_camera->light[4], s_anime_camera->light[5],
-            (s8) s_anime_camera->tex_w, (s8) s_anime_camera->tex_h);
+            (signed char) s_anime_camera->tex_w, (signed char) s_anime_camera->tex_h);
         gSPMatrix(D_8015C5CC++, (char *) look + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     }
 
@@ -434,7 +456,7 @@ void anime_camera(AnimeCamera *cam, float (*mf)[4])
             func_80003E10(roll), func_80003EA0(roll), 0.0f,
             s_anime_camera->light[0], s_anime_camera->light[1], s_anime_camera->light[2],
             s_anime_camera->light[3], s_anime_camera->light[4], s_anime_camera->light[5],
-            (s8) s_anime_camera->tex_w, (s8) s_anime_camera->tex_h);
+            (signed char) s_anime_camera->tex_w, (signed char) s_anime_camera->tex_h);
         gSPMatrix(D_8015C5CC++, (char *) look + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     }
 
@@ -626,7 +648,7 @@ void anime_jchar(AnimeJoint *joint, unsigned int kind, ObjSolid *model_node)
         model_node           = func_80036448(g_anime_solid);
         model_node->parent   = NULL;
         g_anime_solid->child = model_node;
-    } else if (joint->model != model_node->AModel & 0x8FFFFFFE) {
+    } else if ((joint->model != model_node->AModel) & 0x8FFFFFFE) {
         func_800364FC(g_anime_solid);
         model_node           = func_80036448(g_anime_solid);
         model_node->parent   = NULL;
@@ -1729,7 +1751,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
 
         joint_id = joint->model & 0x8FFFFFFF;
 
-        if (target == joint_id || (joint_id && s_anime_joint_countdown && --s_anime_joint_countdown == 0)) {
+        if ((unsigned int) target == joint_id || (joint_id && s_anime_joint_countdown && --s_anime_joint_countdown == 0)) {
             break;
         }
 
@@ -1800,7 +1822,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
             func_8001EEF4(&out->tx, &out->ty, &out->tz, &out->rx, &out->ry, &out->rz, &out->sx, &out->sy,
                 &out->sz, s_anime_mtx_stack[0]);
         } else {
-            if (!last_root || target != (last_root->model & 0x8FFFFFFF)) {
+            if (!last_root || (unsigned int) target != (last_root->model & 0x8FFFFFFF)) {
                 return 0;
             }
 
@@ -1821,7 +1843,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
         joint = s_anime_path_joint[depth - 1];
     } else {
         joint = last_root;
-        if (!last_root || target != (last_root->model & 0x8FFFFFFF)) {
+        if (!last_root || (unsigned int) target != (last_root->model & 0x8FFFFFFF)) {
             return 0;
         }
     }

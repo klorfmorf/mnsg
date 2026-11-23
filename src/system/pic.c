@@ -1,10 +1,52 @@
 #define NO_PROTO_bitRead
 
 #include "system/pic.h"
-#include "sys.h"
+#include "system/sys.h"
 #include "system/bit.h"
 #include "system/wave_uty.h"
+#include "unk.h"
 
+void *picDecode8(int arg0, void *buf, Pic *pic);
+void *picDecode4(int arg0, void *buf, Pic *pic);
+void  picReadPalette(int n, Pic *pic);
+void  picReadHeader(Pic *pic);
+void  picExpand16(Pic *pic);
+void  picExpandChain16(Pic *pic, int x, int y, int c);
+void  picExpand8(Pic *pic);
+void  picExpand4(Pic *pic);
+int   picReadLenIndexed(Pic *pic);
+void  picExpandChain8(Pic *pic, int x, int y, int c);
+void  picExpandChain4(Pic *pic, int x, int y, int c);
+int   picReadLen(void);
+int   picReadColor(Pic *pic);
+void  picColorCacheInit(void);
+int   picNewColor(Pic *pic, int c);
+int   picGetColor(Pic *pic, int idx);
+int   picPoint(int x, int y);
+void  picPset(Pic *pic, int x, int y, int c);
+void  picPset8(int x, int y, int c);
+int   picPoint4(int x, int y);
+void  picPset4(int x, int y, int c);
+int   picParseHex(unsigned char *s);
+void  picClearTransparent(Pic *pic);
+void  picFlagSet(unsigned char *bits, int i);
+void  picFlagClear(unsigned char *bits, int i);
+int   picFlagTest(unsigned char *bits, int i);
+
+// clang-format off
+
+// <<<<< data >>>>>
+WaveReq D_8006ADD0 = {
+    0x40000001,
+    D_80301000,
+};
+
+WaveReq D_8006ADD8 = {
+    0x40000003,
+    D_80304000,
+};
+
+// <<<<< bss >>>>>
 int             s_pic_bit_len;
 int             s_pic_width;
 int             s_pic_height;
@@ -16,6 +58,7 @@ int             s_pic_color_cache_top;
 unsigned short *s_pic_image16;
 unsigned char  *s_pic_image_indexed;
 unsigned char  *s_pic_chain_flags;
+// clang-format on
 
 Pic *picOpen(unsigned char *data, Pic *pic)
 {
@@ -171,7 +214,7 @@ void *picDecode4(int arg0, void *buf, Pic *pic)
     }
 }
 
-int bitRead(unsigned int n);
+int  bitRead(unsigned int n);
 void picReadPalette(int n, Pic *pic)
 {
     int i;
@@ -207,8 +250,8 @@ void picReadHeader(Pic *pic)
     bitRead(8);
     bitRead(8);
     s_pic_transparent = PIC_NO_COLOR;
-    c      = (unsigned char) bitRead(8);
-    hex[0] = c;
+    c                 = (unsigned char) bitRead(8);
+    hex[0]            = c;
 
     if (c != 0x1A) {
         hex[1]            = bitRead(8);

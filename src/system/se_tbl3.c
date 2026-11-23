@@ -1,0 +1,1052 @@
+#include "system/se_tbl3.h"
+#include "common.h"
+
+// clang-format off
+
+// <<<<< data >>>>>
+unsigned int D_80074F80[4] = {
+    0xEF0FD080, 0xD3FF00E0, 0x1D25D600, 0x7FFF0000,
+};
+
+unsigned int D_80074F90[7] = {
+    0xF001EF02, 0xD3C323DF, 0x00D77F00, 0xD91E300E, 0x4D7FD914, 0x301E737F, 0xFF000000,
+};
+
+unsigned int D_80074FAC[4] = {
+    0xEF0FD080, 0xD3FFC7E0, 0x1D258700, 0x7FFF0000,
+};
+
+unsigned int D_80074FBC[5] = {
+    0xEF14D080, 0xD3E6C3E0, 0x1A29FF00, 0x7FF3B97F, 0xFF000000,
+};
+
+unsigned int D_80074FD0[5] = {
+    0xEF0FD080, 0xD3FA02E0, 0x1D25FF00, 0x7FF37C00, 0xFF000000,
+};
+
+unsigned int D_80074FE4[5] = {
+    0xEF0FD080, 0xD3FA03E0, 0x1D25FF00, 0x7FF31800, 0xFF000000,
+};
+
+unsigned int D_80074FF8[5] = {
+    0xEF0FD080, 0xD3FF04E0, 0x1D25FF00, 0x7FF30B00, 0xFF000000,
+};
+
+unsigned int D_8007500C[4] = {
+    0xEF0FD080, 0xD3FF05E0, 0x1D25D900, 0x7FFF0000,
+};
+
+unsigned int D_8007501C[4] = {
+    0xEF0FD080, 0xD3FF06E0, 0x1D258700, 0x7FFF0000,
+};
+
+unsigned int D_8007502C[5] = {
+    0xEF14D080, 0xD2C4DD70, 0xD5FFE01A, 0x29FF007F, 0xF3B97FFF,
+};
+
+unsigned int D_80075040[5] = {
+    0xEF0FD080, 0xD3FF07E0, 0x1D25417F, 0x3CD20825, 0x78FFFF00,
+};
+
+unsigned int D_80075054[6] = {
+    0xEF0AD080, 0xD3F001E0, 0x1D25507F, 0x7FD20925, 0x64FFD20A, 0x25A0FFFF,
+};
+
+unsigned int D_8007506C[5] = {
+    0xEF02D080, 0xD3E60BE0, 0x1D25FF7F, 0x7FD22125, 0xB3007FFF,
+};
+
+unsigned int D_80075080[4] = {
+    0xEF02D080, 0xD3F00CE0, 0x1D25B600, 0x7FFF0000,
+};
+
+unsigned int D_80075090[5] = {
+    0xEF02D080, 0xD20DDD7F, 0xD5FFE01D, 0x2517007F, 0xFF000000,
+};
+
+unsigned int D_800750A4[6] = {
+    0xEF02D080, 0xD3E60EE0, 0x1D25647F, 0x7FD20F25, 0xAFFFD21C, 0x8DFFFF00,
+};
+
+unsigned int D_800750BC[4] = {
+    0xEF02D080, 0xD3DC10E0, 0x1D251000, 0x7FFF0000,
+};
+
+unsigned int D_800750CC[4] = {
+    0xEF02D080, 0xD3FF11E0, 0x1D254D00, 0x7FFF0000,
+};
+
+unsigned int D_800750DC[5] = {
+    0xEF02D080, 0xD3FF12E0, 0x1D25FF00, 0x7FF3F300, 0xFF000000,
+};
+
+unsigned int D_800750F0[4] = {
+    0xEF02D080, 0xD3FA13E0, 0x1D259E00, 0x7FFF0000,
+};
+
+unsigned int D_80075100[4] = {
+    0xEF01D080, 0xD3C314E0, 0x1D251E00, 0x7FFF0000,
+};
+
+unsigned int D_80075110[4] = {
+    0xEF02D080, 0xD3E615E0, 0x1D25DF00, 0x7FFF0000,
+};
+
+unsigned int D_80075120[6] = {
+    0xEF02D080, 0xD3E617E0, 0x1D25FF7F, 0x7FF214D2, 0x1B25E600, 0x7FFF0000,
+};
+
+unsigned int D_80075138[7] = {
+    0xEF02D080, 0xD3FF18E0, 0x1D252C00, 0x7FD5C825, 0xF17F7FD2, 0x1625A800, 0x7FFF0000,
+};
+
+unsigned int D_80075154[5] = {
+    0xEF08D080, 0xD3FF19E0, 0x1D256D7F, 0x7F8DBC8D, 0xA88D94FF,
+};
+
+unsigned int D_80075168[4] = {
+    0xEF02D080, 0xD3F01AE0, 0x1D25BB00, 0x7FFF0000,
+};
+
+unsigned int D_80075178[5] = {
+    0xEF02D080, 0xD21DDD50, 0xD5C8E01D, 0x259A007F, 0xFF000000,
+};
+
+unsigned int D_8007518C[4] = {
+    0xEF02D080, 0xD3E620E0, 0x1D25FF00, 0x7FFF0000,
+};
+
+unsigned int D_8007519C[5] = {
+    0xEF02D080, 0xD3E61FE0, 0x1D25FF00, 0x7FF36C00, 0xFF000000,
+};
+
+unsigned int D_800751B0[4] = {
+    0xEF02D080, 0xD3F023E0, 0x1D25E300, 0x7FFF0000,
+};
+
+unsigned int D_800751C0[4] = {
+    0xEF02D080, 0xD3E624E0, 0x1D258700, 0x7FFF0000,
+};
+
+unsigned int D_800751D0[5] = {
+    0xEF02D080, 0xD225DD00, 0xD5F0E01D, 0x2521007F, 0xFF000000,
+};
+
+unsigned int D_800751E4[4] = {
+    0xEF08D080, 0xD3FF26E0, 0x1D257A00, 0x7FFF0000,
+};
+
+unsigned int D_800751F4[4] = {
+    0xEF02D080, 0xD3C827E0, 0x1D251700, 0x7FFF0000,
+};
+
+unsigned int D_80075204[5] = {
+    0xEF02D080, 0xD3F528E0, 0x1D25387F, 0x6ED22925, 0x78FFFF00,
+};
+
+unsigned int D_80075218[9] = {
+    0xEF08D080, 0xD3FF2AE0, 0x1D25A87F, 0x7FD22B25, 0x99007FFF, 0xEF0AD080, 0xD3FF2BE0, 0x1D259900,
+    0x7FFF0000,
+};
+
+unsigned int D_8007523C[4] = {
+    0xEF02D080, 0xD3F02CE0, 0x1D255B00, 0x7FFF0000,
+};
+
+unsigned int D_8007524C[5] = {
+    0xEF02D080, 0xD3FA2DE0, 0x1D25327F, 0x7FD22E25, 0xC8FFFF00,
+};
+
+unsigned int D_80075260[6] = {
+    0xEF02D080, 0xD3FA2FE0, 0x1D25327F, 0x78D23025, 0x7EFFD231, 0x25C8FFFF,
+};
+
+unsigned int D_80075278[5] = {
+    0xEF02D080, 0xD3FF32E0, 0x1D25817F, 0x7FD23425, 0x87FFFF00,
+};
+
+unsigned int D_8007528C[5] = {
+    0xEF02D080, 0xD3FF35E0, 0x1D25287F, 0x4BD23625, 0x6BFFFF00,
+};
+
+unsigned int D_800752A0[7] = {
+    0xEF02D080, 0xD237F23C, 0xD5FFE01D, 0x25647F7F, 0xD238253C, 0xEED23925, 0x5AEEFF00,
+};
+
+unsigned int D_800752BC[6] = {
+    0xEF02D080, 0xD3F03AE0, 0x1D25327F, 0x55D23B25, 0x7DFFD23C, 0x2550FFFF,
+};
+
+unsigned int D_800752D4[6] = {
+    0xEF02D080, 0xD3FF3DE0, 0x1D25787F, 0x5AD23225, 0x81FFD233, 0x2587FFFF,
+};
+
+unsigned int D_800752EC[8] = {
+    0xEF02D080, 0xD3FA3EE0, 0x1D254B7F, 0x7FD23F25, 0x5AFFD240, 0x2582FFD2, 0x412569FF, 0xFF000000,
+};
+
+unsigned int D_8007530C[6] = {
+    0xEF02D080, 0xD3FA42E0, 0x1D251A7F, 0x64D24325, 0x42F8D244, 0x256EFFFF,
+};
+
+unsigned int D_80075324[5] = {
+    0xEF02D080, 0xD3EB45E0, 0x1D25197F, 0x5FD24625, 0x64007FFF,
+};
+
+unsigned int D_80075338[5] = {
+    0xEF02D080, 0xD3FA47E0, 0x1D25467F, 0x7FD24825, 0x5FFFFF00,
+};
+
+unsigned int D_8007534C[4] = {
+    0xEF02D080, 0xD3FA49E0, 0x1D258000, 0x7FFF0000,
+};
+
+unsigned int D_8007535C[6] = {
+    0xEF02D080, 0xD3F04AE0, 0x1D25417F, 0x7FD24B8D, 0xFFD24C25, 0x5CFFFF00,
+};
+
+unsigned int D_80075374[4] = {
+    0xEF08D080, 0xD3FF4DE0, 0x1D253C00, 0x7FFF0000,
+};
+
+unsigned int D_80075384[5] = {
+    0xEF06D080, 0xD3FF4EE0, 0x1D25967F, 0x64D24F25, 0xAA007FFF,
+};
+
+unsigned int D_80075398[4] = {
+    0xEF02D080, 0xD3F050E0, 0x1D25FC00, 0x7FFF0000,
+};
+
+unsigned int D_800753A8[6] = {
+    0xEF07D080, 0xD3F051E0, 0x1D25967F, 0x7FD3C852, 0x2564007F, 0xFF000000,
+};
+
+unsigned int D_800753C0[5] = {
+    0xEF02D080, 0xD3EB53E0, 0x1D25BE7F, 0x7FD22225, 0xCD007FFF,
+};
+
+unsigned int D_800753D4[9] = {
+    0xEF02D080, 0xD3F054E0, 0x1D25557F, 0x64D25525, 0x78F3D256, 0x2546FFD2, 0x57255FFF, 0xD21E25D5,
+    0xF3FF0000,
+};
+
+unsigned int D_800753F8[5] = {
+    0xEF02D080, 0xD258DD30, 0xD5C3E01D, 0x25A7007F, 0xFF000000,
+};
+
+unsigned int D_8007540C[5] = {
+    0xEF02D080, 0xD2D3DD60, 0xD5F0E01D, 0x2525007F, 0xFF000000,
+};
+
+unsigned int D_80075420[5] = {
+    0xEF02D080, 0xD3FF59E0, 0x1D255F7F, 0x7FD25A25, 0x93FFFF00,
+};
+
+unsigned int D_80075434[5] = {
+    0xEF02D080, 0xD3FF5BE0, 0x1D25FF00, 0x7FF31F00, 0xFF000000,
+};
+
+unsigned int D_80075448[4] = {
+    0xEF02D080, 0xD3FF5CE0, 0x1D25DD00, 0x7FFF0000,
+};
+
+unsigned int D_80075458[4] = {
+    0xEF02D080, 0xD3FA5DE0, 0x1D255B00, 0x7FFF0000,
+};
+
+unsigned int D_80075468[4] = {
+    0xEF02D080, 0xD3FF5EE0, 0x1D258100, 0x7FFF0000,
+};
+
+unsigned int D_80075478[6] = {
+    0xEF02D080, 0xD3FA5FE0, 0x1D256E7F, 0x7FD26025, 0xFF007FF3, 0x3200FF00,
+};
+
+unsigned int D_80075490[4] = {
+    0xEF02D080, 0xD3FA61E0, 0x1D255700, 0x7FFF0000,
+};
+
+unsigned int D_800754A0[5] = {
+    0xEF02D080, 0xD3FA62E0, 0x1D25FF00, 0x7FF32800, 0xFF000000,
+};
+
+unsigned int D_800754B4[5] = {
+    0xEF02D080, 0xD263DD20, 0xD5E6E01D, 0x2520007F, 0xFF000000,
+};
+
+unsigned int D_800754C8[5] = {
+    0xEF02D080, 0xD3FA64E0, 0x1D25FF00, 0x7FF30400, 0xFF000000,
+};
+
+unsigned int D_800754DC[5] = {
+    0xEF02D080, 0xD3FA65E0, 0x1D25D07F, 0x7FD26625, 0x6EF3FF00,
+};
+
+unsigned int D_800754F0[4] = {
+    0xEF02D080, 0xD3DC67E0, 0x1D252800, 0x7FFF0000,
+};
+
+unsigned int D_80075500[5] = {
+    0xEF02D080, 0xD3FF68E0, 0x1D25FF00, 0x7FF31E00, 0xFF000000,
+};
+
+unsigned int D_80075514[4] = {
+    0xEF01D080, 0xD3DC69E0, 0x08281600, 0x7FFF0000,
+};
+
+unsigned int D_80075524[4] = {
+    0xEF01D080, 0xD3DC6AE0, 0x08281400, 0x7FFF0000,
+};
+
+unsigned int D_80075534[4] = {
+    0xEF01D080, 0xD3DC6BE0, 0x08283000, 0x7FFF0000,
+};
+
+unsigned int D_80075544[4] = {
+    0xEF01D080, 0xD3DC6CE0, 0x08283000, 0x7FFF0000,
+};
+
+unsigned int D_80075554[4] = {
+    0xEF01D080, 0xD3DC6DE0, 0x08282B00, 0x7FFF0000,
+};
+
+unsigned int D_80075564[4] = {
+    0xEF01D080, 0xD3DC6EE0, 0x08285600, 0x7FFF0000,
+};
+
+unsigned int D_80075574[4] = {
+    0xEF01D080, 0xD3DC6FE0, 0x08284600, 0x7FFF0000,
+};
+
+unsigned int D_80075584[4] = {
+    0xEF01D080, 0xD3DC70E0, 0x08285400, 0x7FFF0000,
+};
+
+unsigned int D_80075594[4] = {
+    0xEF01D080, 0xD3DC71E0, 0x08283100, 0x7FFF0000,
+};
+
+unsigned int D_800755A4[4] = {
+    0xEF0AD3B4, 0xC8E008D9, 0x0E26FF2A, 0x7FFF0000,
+};
+
+unsigned int D_800755B4[4] = {
+    0xEF01D080, 0xD3DC72E0, 0x08284000, 0x7FFF0000,
+};
+
+unsigned int D_800755C4[4] = {
+    0xEF01D080, 0xD3DC73E0, 0x08282300, 0x7FFF0000,
+};
+
+unsigned int D_800755D4[4] = {
+    0xEF01D080, 0xD3DC74E0, 0x08283C00, 0x7FFF0000,
+};
+
+unsigned int D_800755E4[4] = {
+    0xEF01D080, 0xD3DC75E0, 0x08284500, 0x7FFF0000,
+};
+
+unsigned int D_800755F4[4] = {
+    0xEF01D080, 0xD37876E0, 0x08282700, 0x7FFF0000,
+};
+
+unsigned int D_80075604[4] = {
+    0xEF01D080, 0xD3DC77E0, 0x08282700, 0x7FFF0000,
+};
+
+unsigned int D_80075614[4] = {
+    0xEF01D080, 0xD3DC78E0, 0x08285F00, 0x7FFF0000,
+};
+
+unsigned int D_80075624[4] = {
+    0xEF01D080, 0xD3DC79E0, 0x08281700, 0x7FFF0000,
+};
+
+unsigned int D_80075634[4] = {
+    0xEF01D080, 0xD3DC7AE0, 0x08280F00, 0x7FFF0000,
+};
+
+unsigned int D_80075644[4] = {
+    0xEF01D080, 0xD3DC7BE0, 0x08281600, 0x7FFF0000,
+};
+
+unsigned int D_80075654[4] = {
+    0xEF01D080, 0xD3DC7CE0, 0x08284B00, 0x7FFF0000,
+};
+
+unsigned int D_80075664[4] = {
+    0xEF01D080, 0xD3DC7EE0, 0x08285500, 0x7FFF0000,
+};
+
+unsigned int D_80075674[4] = {
+    0xEF01D080, 0xD3DC7FE0, 0x08283F00, 0x7FFF0000,
+};
+
+unsigned int D_80075684[4] = {
+    0xEF01D080, 0xD3DC80E0, 0x08282B00, 0x7FFF0000,
+};
+
+unsigned int D_80075694[4] = {
+    0xEF01D080, 0xD3DC81E0, 0x08284F00, 0x7FFF0000,
+};
+
+unsigned int D_800756A4[4] = {
+    0xEF01D080, 0xD3DC82E0, 0x08282A00, 0x7FFF0000,
+};
+
+unsigned int D_800756B4[4] = {
+    0xEF01D080, 0xD3DC83E0, 0x08281C00, 0x7FFF0000,
+};
+
+unsigned int D_800756C4[4] = {
+    0xEF01D080, 0xD3DC84E0, 0x08281900, 0x7FFF0000,
+};
+
+unsigned int D_800756D4[4] = {
+    0xEF01D080, 0xD3DC85E0, 0x08282800, 0x7FFF0000,
+};
+
+unsigned int D_800756E4[4] = {
+    0xEF0AD080, 0xD3B4C2E0, 0x08D90E26, 0xFF2A7FFF,
+};
+
+unsigned int D_800756F4[5] = {
+    0xEF01D080, 0xD286D76B, 0x00D58EE0, 0x08284A00, 0x7FFF0000,
+};
+
+unsigned int D_80075708[4] = {
+    0xEF01D080, 0xD3DC87E0, 0x08283300, 0x7FFF0000,
+};
+
+unsigned int D_80075718[4] = {
+    0xEF01D080, 0xD3DC88E0, 0x08281300, 0x7FFF0000,
+};
+
+unsigned int D_80075728[4] = {
+    0xEF01D080, 0xD3DC89E0, 0x08281400, 0x7FFF0000,
+};
+
+unsigned int D_80075738[4] = {
+    0xEF01D080, 0xD3DC8AE0, 0x08283E00, 0x7FFF0000,
+};
+
+unsigned int D_80075748[4] = {
+    0xEF01D080, 0xD3DC8BE0, 0x08282F00, 0x7FFF0000,
+};
+
+unsigned int D_80075758[4] = {
+    0xEF01D080, 0xD3B48DE0, 0x08285F00, 0x7FFF0000,
+};
+
+unsigned int D_80075768[4] = {
+    0xEF01D080, 0xD3DC8EE0, 0x08283A00, 0x7FFF0000,
+};
+
+unsigned int D_80075778[5] = {
+    0xEF01D080, 0xD3DC8CE0, 0x0828467F, 0x6ED28F28, 0xFF007FFF,
+};
+
+unsigned int D_8007578C[4] = {
+    0xEF01D080, 0xD3DC90E0, 0x08285600, 0x7FFF0000,
+};
+
+unsigned int D_8007579C[4] = {
+    0xEF01D080, 0xD3DC91E0, 0x08281B00, 0x7FFF0000,
+};
+
+unsigned int D_800757AC[4] = {
+    0xEF01D080, 0xD3DC92E0, 0x08284300, 0x7FFF0000,
+};
+
+unsigned int D_800757BC[4] = {
+    0xEF01D080, 0xD3DC94E0, 0x08282300, 0x7FFF0000,
+};
+
+unsigned int D_800757CC[5] = {
+    0xEF02D080, 0xD3C895E0, 0x1D25FF00, 0x7FF3E300, 0xFF000000,
+};
+
+unsigned int D_800757E0[5] = {
+    0xEF02D080, 0xD3F096E0, 0x1D25FF00, 0x7FF30E00, 0xFF000000,
+};
+
+unsigned int D_800757F4[4] = {
+    0xEF02D080, 0xD3EB97E0, 0x1D25E400, 0x7FFF0000,
+};
+
+unsigned int D_80075804[4] = {
+    0xEF02D080, 0xD3C898E0, 0x1D253600, 0x7FFF0000,
+};
+
+unsigned int D_80075814[6] = {
+    0xEF02D080, 0xD299F21E, 0xD5C8E01D, 0x25467F7F, 0xD29A25EC, 0xFFFF0000,
+};
+
+unsigned int D_8007582C[4] = {
+    0xEF14D07F, 0xD3E694DF, 0xE6DDC030, 0xC00078FF,
+};
+
+unsigned int D_8007583C[5] = {
+    0xEF14D07F, 0xD3E694DF, 0xE4DDC030, 0xC0007898, 0xF8FF0000,
+};
+
+unsigned int D_80075850[5] = {
+    0xEF14D07F, 0xD3FF94DF, 0xE2DDC030, 0xC0007F98, 0xFFFF0000,
+};
+
+unsigned int D_80075864[5] = {
+    0xEF02D080, 0xD3C89BE0, 0x1DF241F2, 0x3C254A00, 0x7FFF0000,
+};
+
+unsigned int D_80075878[5] = {
+    0xEF02D080, 0xD3FF9CE0, 0x1D25827F, 0x7FD2A025, 0x69FFFF00,
+};
+
+unsigned int D_8007588C[5] = {
+    0xEF02D080, 0xD3F59EE0, 0x1D25FF00, 0x7FF30C00, 0xFF000000,
+};
+
+unsigned int D_800758A0[4] = {
+    0xEF02D080, 0xF23CD3C8, 0x9FE01D25, 0x39007FFF,
+};
+
+unsigned int D_800758B0[4] = {
+    0xEF02D080, 0xF23CD3C8, 0xDFE01D25, 0x44007FFF,
+};
+
+unsigned int D_800758C0[10] = {
+    0xF001D4FF, 0x0D40304B, 0x007FEF08, 0x301EFFEF, 0x1098FFEF, 0x1898FFEF, 0x20301B7F, 0x7F30B4BC,
+    0x98A830BE, 0x94FF0000,
+};
+
+unsigned int D_800758E8[4] = {
+    0xEF14D080, 0xD3F5A1E0, 0x08F21428, 0xC5007FFF,
+};
+
+unsigned int D_800758F8[5] = {
+    0xEF0FD080, 0xD5D7E01A, 0xD2C529FF, 0x007FF3B9, 0x7FFF0000,
+};
+
+unsigned int D_8007590C[5] = {
+    0xEF0FD080, 0xD2C6DDA0, 0xD5D7E01A, 0x29847F7F, 0xFF000000,
+};
+
+unsigned int D_80075920[5] = {
+    0xEF0FD080, 0xD3C8A2E0, 0x1D25FF00, 0x7FF30400, 0xFF000000,
+};
+
+unsigned int D_80075934[4] = {
+    0xEF01D080, 0xD3DCC9E0, 0x08282700, 0x7FFF0000,
+};
+
+unsigned int D_80075944[4] = {
+    0xEF01D080, 0xD3DCCAE0, 0x08284B00, 0x7FFF0000,
+};
+
+unsigned int D_80075954[4] = {
+    0xEF01D080, 0xD3DCCBE0, 0x08282300, 0x7FFF0000,
+};
+
+unsigned int D_80075964[4] = {
+    0xEF0AD3B4, 0xB7E008D9, 0x0E26FF2A, 0x7FFF0000,
+};
+
+unsigned int D_80075974[4] = {
+    0xEF01D080, 0xD3C8A3E0, 0x08282200, 0x7FFF0000,
+};
+
+unsigned int D_80075984[4] = {
+    0xEF01D080, 0xD3DCA4E0, 0x08283200, 0x7FFF0000,
+};
+
+unsigned int D_80075994[4] = {
+    0xEF01D080, 0xD378CCE0, 0x08281E00, 0x7FFF0000,
+};
+
+unsigned int D_800759A4[4] = {
+    0xEF01D080, 0xD3D2A5E0, 0x08282800, 0x7FFF0000,
+};
+
+unsigned int D_800759B4[4] = {
+    0xEF01D080, 0xD3DCCDE0, 0x08281400, 0x7FFF0000,
+};
+
+unsigned int D_800759C4[5] = {
+    0xEF01D080, 0xD2CED778, 0x00D5DCE0, 0x08281000, 0x7FFF0000,
+};
+
+unsigned int D_800759D8[4] = {
+    0xEF01D080, 0xD3DCCFE0, 0x08280F00, 0x7FFF0000,
+};
+
+unsigned int D_800759E8[4] = {
+    0xEF01D080, 0xD3DCA6E0, 0x08284A00, 0x7FFF0000,
+};
+
+unsigned int D_800759F8[4] = {
+    0xEF01D080, 0xD3DCA7E0, 0x08282800, 0x7FFF0000,
+};
+
+unsigned int D_80075A08[4] = {
+    0xEF01D080, 0xD3DCD0E0, 0x08284400, 0x7FFF0000,
+};
+
+unsigned int D_80075A18[4] = {
+    0xEF01D080, 0xD3DCD1E0, 0x08282700, 0x7FFF0000,
+};
+
+unsigned int D_80075A28[4] = {
+    0xEF01D080, 0xD3D2A8E0, 0x08285400, 0x7FFF0000,
+};
+
+unsigned int D_80075A38[4] = {
+    0xEF01D080, 0xD3DCA9E0, 0x08281B00, 0x7FFF0000,
+};
+
+unsigned int D_80075A48[4] = {
+    0xEF01D080, 0xD3DCAAE0, 0x08283E00, 0x7FFF0000,
+};
+
+unsigned int D_80075A58[4] = {
+    0xEF01D080, 0xD3E6D2E0, 0x08283900, 0x7FFF0000,
+};
+
+unsigned int D_80075A68[4] = {
+    0xEF01D080, 0xF214D3FA, 0xABE01D25, 0x39007FFF,
+};
+
+unsigned int D_80075A78[5] = {
+    0xEF02D080, 0xD3C8ACE0, 0x1D25FF00, 0x7FF3FF00, 0xF34900FF,
+};
+
+unsigned int D_80075A8C[5] = {
+    0xEF0FD080, 0xD3DCADE0, 0x1DF21925, 0xFF007FF3, 0x5000FF00,
+};
+
+unsigned int D_80075AA0[4] = {
+    0xEF01D080, 0xD3DCAEE0, 0x08281400, 0x7FFF0000,
+};
+
+unsigned int D_80075AB0[4] = {
+    0xEF01D080, 0xD3E6AFE0, 0x08282100, 0x7FFF0000,
+};
+
+unsigned int D_80075AC0[4] = {
+    0xEF01D080, 0xD3DCB0E0, 0x08282900, 0x7FFF0000,
+};
+
+unsigned int D_80075AD0[4] = {
+    0xEF01D080, 0xD3DCB1E0, 0x08283100, 0x7FFF0000,
+};
+
+unsigned int D_80075AE0[4] = {
+    0xEF01D080, 0xD3DCB2E0, 0x08284700, 0x7FFF0000,
+};
+
+unsigned int D_80075AF0[4] = {
+    0xEF01D080, 0xD3DCB3E0, 0x08284000, 0x7FFF0000,
+};
+
+unsigned int D_80075B00[4] = {
+    0xEF0AD080, 0xD3B4BCE0, 0x08D90E26, 0xFF2A7FFF,
+};
+
+unsigned int D_80075B10[4] = {
+    0xEF01D080, 0xD3DCB4E0, 0x08286F00, 0x7FFF0000,
+};
+
+unsigned int D_80075B20[4] = {
+    0xEF01D080, 0xD378B5E0, 0x08285A00, 0x7FFF0000,
+};
+
+unsigned int D_80075B30[4] = {
+    0xEF01D080, 0xD3DCB6E0, 0x08284C00, 0x7FFF0000,
+};
+
+unsigned int D_80075B40[4] = {
+    0xEF01D080, 0xD3DCB8E0, 0x08280D00, 0x7FFF0000,
+};
+
+unsigned int D_80075B50[4] = {
+    0xEF01D080, 0xD3DCB9E0, 0x08281400, 0x7FFF0000,
+};
+
+unsigned int D_80075B60[4] = {
+    0xEF01D080, 0xD3DCBAE0, 0x08281A00, 0x7FFF0000,
+};
+
+unsigned int D_80075B70[4] = {
+    0xEF01D080, 0xD3DCBBE0, 0x08283400, 0x7FFF0000,
+};
+
+unsigned int D_80075B80[4] = {
+    0xEF01D080, 0xD3DCBDE0, 0x08285500, 0x7FFF0000,
+};
+
+unsigned int D_80075B90[4] = {
+    0xEF01D080, 0xD3DCBEE0, 0x08286600, 0x7FFF0000,
+};
+
+unsigned int D_80075BA0[4] = {
+    0xEF01D080, 0xD3DCBFE0, 0x08286400, 0x7FFF0000,
+};
+
+unsigned int D_80075BB0[4] = {
+    0xEF01D080, 0xD3DCC0E0, 0x08284000, 0x7FFF0000,
+};
+
+unsigned int D_80075BC0[4] = {
+    0xEF01D080, 0xD3DCC1E0, 0x08283C00, 0x7FFF0000,
+};
+
+void *D_80075BD0[348] = {
+    (void *) 0x0A020000,
+    D_80074F80,
+    (void *) 0x0F020000,
+    D_80075850,
+    (void *) 0x0A020000,
+    D_80074FAC,
+    (void *) 0x0A020000,
+    D_80074FBC,
+    (void *) 0x0A020000,
+    D_80074FD0,
+    (void *) 0x0A020000,
+    D_80074FE4,
+    (void *) 0x0A020000,
+    D_80074FF8,
+    (void *) 0x0A020000,
+    D_8007500C,
+    (void *) 0x0A020000,
+    D_8007501C,
+    (void *) 0x10020000,
+    D_8007502C,
+    (void *) 0x0A020000,
+    D_80075040,
+    (void *) 0x0A020000,
+    D_80075054,
+    (void *) 0x0A020000,
+    D_8007506C,
+    (void *) 0x0A020000,
+    D_80075080,
+    (void *) 0x0A020000,
+    D_80075090,
+    (void *) 0x0A020000,
+    D_800750A4,
+    (void *) 0x0A020000,
+    D_800750BC,
+    (void *) 0x0A020000,
+    D_800750CC,
+    (void *) 0x0A020000,
+    D_800750DC,
+    (void *) 0x0A020000,
+    D_800750F0,
+    (void *) 0x0A020000,
+    D_80075100,
+    (void *) 0x0A020000,
+    D_80075110,
+    (void *) 0x0A020000,
+    D_80075120,
+    (void *) 0x0A020000,
+    D_80075138,
+    (void *) 0x0A020000,
+    D_80075154,
+    (void *) 0x0A020000,
+    D_80075168,
+    (void *) 0x0A020000,
+    D_80075178,
+    (void *) 0x0A020000,
+    D_8007518C,
+    (void *) 0x0A020000,
+    D_8007519C,
+    (void *) 0x0A020000,
+    D_800751B0,
+    (void *) 0x0A020000,
+    D_800751C0,
+    (void *) 0x0A020000,
+    D_800751D0,
+    (void *) 0x0A020000,
+    D_800751E4,
+    (void *) 0x0A020000,
+    D_800751F4,
+    (void *) 0x0A020000,
+    D_80075204,
+    (void *) 0x0A020000,
+    D_80075218,
+    (void *) 0x0A020000,
+    D_8007523C,
+    (void *) 0x0A020000,
+    D_8007524C,
+    (void *) 0x0A020000,
+    D_80075260,
+    (void *) 0x0A020000,
+    D_80075278,
+    (void *) 0x0A020000,
+    D_8007528C,
+    (void *) 0x0A020000,
+    D_800752A0,
+    (void *) 0x0A020000,
+    D_800752BC,
+    (void *) 0x0A020000,
+    D_800752D4,
+    (void *) 0x0A020000,
+    D_800752EC,
+    (void *) 0x0A020000,
+    D_8007530C,
+    (void *) 0x0A020000,
+    D_80075324,
+    (void *) 0x0A020000,
+    D_80075338,
+    (void *) 0x0A020000,
+    D_8007534C,
+    (void *) 0x0A020000,
+    D_8007535C,
+    (void *) 0x0A020000,
+    D_80075374,
+    (void *) 0x0A020000,
+    D_80075384,
+    (void *) 0x0A020000,
+    D_80075398,
+    (void *) 0x0A020000,
+    D_800753A8,
+    (void *) 0x0A020000,
+    D_800753C0,
+    (void *) 0x0A020000,
+    D_800753D4,
+    (void *) 0x0A020000,
+    D_800753F8,
+    (void *) 0x0A020000,
+    D_8007540C,
+    (void *) 0x0A020000,
+    D_80075420,
+    (void *) 0x0A020000,
+    D_80075434,
+    (void *) 0x0A020000,
+    D_80075448,
+    (void *) 0x0A020000,
+    D_80075458,
+    (void *) 0x0A020000,
+    D_80075468,
+    (void *) 0x0A020000,
+    D_80075478,
+    (void *) 0x0A020000,
+    D_80075490,
+    (void *) 0x0A020000,
+    D_800754A0,
+    (void *) 0x0A020000,
+    D_800754B4,
+    (void *) 0x0A020000,
+    D_800754C8,
+    (void *) 0x0A020000,
+    D_800754DC,
+    (void *) 0x0A020000,
+    D_800754F0,
+    (void *) 0x0A020000,
+    D_80075500,
+    (void *) 0x0A030000,
+    D_800758C0,
+    (void *) 0x0A020000,
+    D_800757CC,
+    (void *) 0x0A020000,
+    D_800757E0,
+    (void *) 0x0A020000,
+    D_800757F4,
+    (void *) 0x0A020000,
+    D_80075804,
+    (void *) 0x0A020000,
+    D_80075814,
+    (void *) 0x0A020000,
+    D_8007582C,
+    (void *) 0x0A020000,
+    D_8007583C,
+    (void *) 0x0A020000,
+    D_80075864,
+    (void *) 0x0A020000,
+    D_80075878,
+    (void *) 0x0A020000,
+    D_8007588C,
+    (void *) 0x0A020000,
+    D_800758A0,
+    (void *) 0x0A020000,
+    D_800758B0,
+    (void *) 0x0A020000,
+    D_800758E8,
+    (void *) 0x10020000,
+    D_800758F8,
+    (void *) 0x10020000,
+    D_8007590C,
+    (void *) 0x0A020000,
+    D_80075920,
+    (void *) 0x0A020000,
+    D_80075A68,
+    (void *) 0x0A020000,
+    D_80075A78,
+    (void *) 0x0A020000,
+    D_80075A8C,
+    (void *) 0x0BA20000,
+    D_80075514,
+    (void *) 0x0BA20000,
+    D_80075524,
+    (void *) 0x0BA20000,
+    D_80075534,
+    (void *) 0x0BA20000,
+    D_80075544,
+    (void *) 0x0BA20000,
+    D_80075554,
+    (void *) 0x0DA20000,
+    D_80075564,
+    (void *) 0x0FA20000,
+    D_80075574,
+    (void *) 0x0FA20000,
+    D_80075584,
+    (void *) 0x0FA20000,
+    D_80075594,
+    (void *) 0x0DA20000,
+    D_800755B4,
+    (void *) 0x0BA20000,
+    D_800755C4,
+    (void *) 0x0BA20000,
+    D_800755D4,
+    (void *) 0x0FA20000,
+    D_800755E4,
+    (void *) 0x09A20000,
+    D_800755F4,
+    (void *) 0x0BA20000,
+    D_80075604,
+    (void *) 0x0DA20000,
+    D_80075614,
+    (void *) 0x0BA20000,
+    D_80075624,
+    (void *) 0x0BA20000,
+    D_80075634,
+    (void *) 0x0BA20000,
+    D_80075644,
+    (void *) 0x12A20000,
+    D_80075654,
+    (void *) 0x0BA20000,
+    D_80075664,
+    (void *) 0x0BA20000,
+    D_80075674,
+    (void *) 0x0BA20000,
+    D_80075684,
+    (void *) 0x0BA20000,
+    D_80075694,
+    (void *) 0x0BA20000,
+    D_800756A4,
+    (void *) 0x0FA20000,
+    D_800756B4,
+    (void *) 0x0FA20000,
+    D_800756C4,
+    (void *) 0x0BA20000,
+    D_800756D4,
+    (void *) 0x09A20000,
+    D_800756F4,
+    (void *) 0x0DA20000,
+    D_80075708,
+    (void *) 0x0BA20000,
+    D_80075718,
+    (void *) 0x0BA20000,
+    D_80075728,
+    (void *) 0x0BA20000,
+    D_80075738,
+    (void *) 0x0BA20000,
+    D_80075748,
+    (void *) 0x0BA20000,
+    D_80075758,
+    (void *) 0x0BA20000,
+    D_80075768,
+    (void *) 0x12A20000,
+    D_80075778,
+    (void *) 0x0DA20000,
+    D_8007578C,
+    (void *) 0x0BA20000,
+    D_8007579C,
+    (void *) 0x0BA20000,
+    D_800757AC,
+    (void *) 0x0FA20000,
+    D_800757BC,
+    (void *) 0x0FA20000,
+    D_80075934,
+    (void *) 0x0FA20000,
+    D_80075944,
+    (void *) 0x0FA20000,
+    D_80075954,
+    (void *) 0x0BA20000,
+    D_80075974,
+    (void *) 0x0FA20000,
+    D_80075984,
+    (void *) 0x09A20000,
+    D_80075994,
+    (void *) 0x0DA20000,
+    D_800759A4,
+    (void *) 0x0AA20000,
+    D_800759B4,
+    (void *) 0x0BA20000,
+    D_800759C4,
+    (void *) 0x0BA20000,
+    D_800759D8,
+    (void *) 0x0DA20000,
+    D_800759E8,
+    (void *) 0x12A20000,
+    D_800759F8,
+    (void *) 0x0BA20000,
+    D_80075A08,
+    (void *) 0x0BA20000,
+    D_80075A18,
+    (void *) 0x0DA20000,
+    D_80075A28,
+    (void *) 0x0BA20000,
+    D_80075A38,
+    (void *) 0x0BA20000,
+    D_80075A48,
+    (void *) 0x0BA20000,
+    D_80075A58,
+    (void *) 0x0BA20000,
+    D_80075AA0,
+    (void *) 0x0BA20000,
+    D_80075AB0,
+    (void *) 0x0BA20000,
+    D_80075AC0,
+    (void *) 0x0FA20000,
+    D_80075AD0,
+    (void *) 0x0FA20000,
+    D_80075AE0,
+    (void *) 0x0FA20000,
+    D_80075AF0,
+    (void *) 0x0BA20000,
+    D_80075B10,
+    (void *) 0x09A20000,
+    D_80075B20,
+    (void *) 0x0DA20000,
+    D_80075B30,
+    (void *) 0x0BA20000,
+    D_80075B40,
+    (void *) 0x0BA20000,
+    D_80075B50,
+    (void *) 0x0BA20000,
+    D_80075B60,
+    (void *) 0x0BA20000,
+    D_80075B70,
+    (void *) 0x0BA20000,
+    D_80075B80,
+    (void *) 0x12A20000,
+    D_80075B90,
+    (void *) 0x0DA20000,
+    D_80075BA0,
+    (void *) 0x0BA20000,
+    D_80075BB0,
+    (void *) 0x0BA20000,
+    D_80075BC0,
+    (void *) 0x12A20000,
+    D_800756E4,
+    (void *) 0x12A20000,
+    D_800755A4,
+    (void *) 0x12A20000,
+    D_80075964,
+    (void *) 0x12A20000,
+    D_80075B00,
+    (void *) 0x0A010000,
+    D_80074F90,
+    (void *) 0x0A010000,
+    D_80074F90,
+};
+// clang-format on

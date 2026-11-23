@@ -1,38 +1,44 @@
 {
   "$schema": "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json",
-  "custom_make": "make",
-  "custom_args": [
-    "COMPRESSED=no"
-  ],
+  "custom_make": "ninja",
   "build_target": false,
   "build_base": true,
   "watch_patterns": [
     "src/**/*.c",
+    "src/**/*.h",
     "include/**/*.h"
   ],
   "units": [
-    {
-      "name": "3dboss/impact_battle",
-      "target_path": "expected/targets/3dboss/impact_battle.o",
-      "base_path": "build/usa/src/3dboss/impact_battle.c.o",
-      "metadata": {
-        "source_path": "src/3dboss/impact_battle.c"
-      }
-    },
-    {
-      "name": "konami/konami",
-      "target_path": "expected/targets/konami/konami.o",
-      "base_path": "build/usa/src/konami/konami.c.o",
-      "metadata": {
-        "source_path": "src/konami/konami.c"
-      }
-    },
     {
       "name": "system/anime",
       "target_path": "expected/targets/system/anime.o",
       "base_path": "build/usa/src/system/anime.c.o",
       "metadata": {
         "source_path": "src/system/anime.c"
+      }
+    },
+    {
+      "name": "system/atan2",
+      "target_path": "expected/targets/system/atan2.o",
+      "base_path": "build/usa/src/system/atan2.c.o",
+      "metadata": {
+        "source_path": "src/system/atan2.c"
+      }
+    },
+    {
+      "name": "system/audiomgr",
+      "target_path": "expected/targets/system/audiomgr.o",
+      "base_path": "build/usa/src/system/audiomgr.c.o",
+      "metadata": {
+        "source_path": "src/system/audiomgr.c"
+      }
+    },
+    {
+      "name": "system/bgm_tbl",
+      "target_path": "expected/targets/system/bgm_tbl.o",
+      "base_path": "build/usa/src/system/bgm_tbl.c.o",
+      "metadata": {
+        "source_path": "src/system/bgm_tbl.c"
       }
     },
     {
@@ -44,51 +50,75 @@
       }
     },
     {
-      "name": "system/collision",
-      "target_path": "expected/targets/system/collision.o",
-      "base_path": "build/usa/src/system/collision.c.o",
+      "name": "system/controller_pak",
+      "target_path": "expected/targets/system/controller_pak.o",
+      "base_path": "build/usa/src/system/controller_pak.c.o",
       "metadata": {
-        "source_path": "src/system/collision.c"
+        "source_path": "src/system/controller_pak.c"
       }
     },
     {
-      "name": "system/data_load",
-      "target_path": "expected/targets/system/data_load.o",
-      "base_path": "build/usa/src/system/data_load.c.o",
+      "name": "system/demo",
+      "target_path": "expected/targets/system/demo.o",
+      "base_path": "build/usa/src/system/demo.c.o",
       "metadata": {
-        "source_path": "src/system/data_load.c"
+        "source_path": "src/system/demo.c"
       }
     },
     {
-      "name": "system/file_request",
-      "target_path": "expected/targets/system/file_request.o",
-      "base_path": "build/usa/src/system/file_request.c.o",
+      "name": "system/douchu",
+      "target_path": "expected/targets/system/douchu.o",
+      "base_path": "build/usa/src/system/douchu.c.o",
       "metadata": {
-        "source_path": "src/system/file_request.c"
+        "source_path": "src/system/douchu.c"
       }
     },
     {
-      "name": "system/game_loop",
-      "target_path": "expected/targets/system/game_loop.o",
-      "base_path": "build/usa/src/system/game_loop.c.o",
+      "name": "system/fade",
+      "target_path": "expected/targets/system/fade.o",
+      "base_path": "build/usa/src/system/fade.c.o",
       "metadata": {
-        "source_path": "src/system/game_loop.c"
+        "source_path": "src/system/fade.c"
       }
     },
     {
-      "name": "system/is64",
-      "target_path": "expected/targets/system/is64.o",
-      "base_path": "build/usa/src/system/is64.c.o",
+      "name": "system/gbg",
+      "target_path": "expected/targets/system/gbg.o",
+      "base_path": "build/usa/src/system/gbg.c.o",
       "metadata": {
-        "source_path": "src/system/is64.c"
+        "source_path": "src/system/gbg.c"
       }
     },
     {
-      "name": "system/lzkn64",
-      "target_path": "expected/targets/system/lzkn64.o",
-      "base_path": "build/usa/src/system/lzkn64.c.o",
+      "name": "system/gfx_data",
+      "target_path": "expected/targets/system/gfx_data.o",
+      "base_path": "build/usa/src/system/gfx_data.c.o",
       "metadata": {
-        "source_path": "src/system/lzkn64.c"
+        "source_path": "src/system/gfx_data.c"
+      }
+    },
+    {
+      "name": "system/gfx_util",
+      "target_path": "expected/targets/system/gfx_util.o",
+      "base_path": "build/usa/src/system/gfx_util.c.o",
+      "metadata": {
+        "source_path": "src/system/gfx_util.c"
+      }
+    },
+    {
+      "name": "system/is_debug",
+      "target_path": "expected/targets/system/is_debug.o",
+      "base_path": "build/usa/src/system/is_debug.c.o",
+      "metadata": {
+        "source_path": "src/system/is_debug.c"
+      }
+    },
+    {
+      "name": "system/joypad",
+      "target_path": "expected/targets/system/joypad.o",
+      "base_path": "build/usa/src/system/joypad.c.o",
+      "metadata": {
+        "source_path": "src/system/joypad.c"
       }
     },
     {
@@ -100,11 +130,51 @@
       }
     },
     {
-      "name": "system/object",
-      "target_path": "expected/targets/system/object.o",
-      "base_path": "build/usa/src/system/object.c.o",
+      "name": "system/math",
+      "target_path": "expected/targets/system/math.o",
+      "base_path": "build/usa/src/system/math.c.o",
       "metadata": {
-        "source_path": "src/system/object.c"
+        "source_path": "src/system/math.c"
+      }
+    },
+    {
+      "name": "system/obj",
+      "target_path": "expected/targets/system/obj.o",
+      "base_path": "build/usa/src/system/obj.c.o",
+      "metadata": {
+        "source_path": "src/system/obj.c"
+      }
+    },
+    {
+      "name": "system/obj_alloc",
+      "target_path": "expected/targets/system/obj_alloc.o",
+      "base_path": "build/usa/src/system/obj_alloc.c.o",
+      "metadata": {
+        "source_path": "src/system/obj_alloc.c"
+      }
+    },
+    {
+      "name": "system/obj_sort",
+      "target_path": "expected/targets/system/obj_sort.o",
+      "base_path": "build/usa/src/system/obj_sort.c.o",
+      "metadata": {
+        "source_path": "src/system/obj_sort.c"
+      }
+    },
+    {
+      "name": "system/okutani",
+      "target_path": "expected/targets/system/okutani.o",
+      "base_path": "build/usa/src/system/okutani.c.o",
+      "metadata": {
+        "source_path": "src/system/okutani.c"
+      }
+    },
+    {
+      "name": "system/pal",
+      "target_path": "expected/targets/system/pal.o",
+      "base_path": "build/usa/src/system/pal.c.o",
+      "metadata": {
+        "source_path": "src/system/pal.c"
       }
     },
     {
@@ -116,14 +186,6 @@
       }
     },
     {
-      "name": "system/print_text",
-      "target_path": "expected/targets/system/print_text.o",
-      "base_path": "build/usa/src/system/print_text.c.o",
-      "metadata": {
-        "source_path": "src/system/print_text.c"
-      }
-    },
-    {
       "name": "system/profiler",
       "target_path": "expected/targets/system/profiler.o",
       "base_path": "build/usa/src/system/profiler.c.o",
@@ -132,11 +194,243 @@
       }
     },
     {
+      "name": "system/ripple",
+      "target_path": "expected/targets/system/ripple.o",
+      "base_path": "build/usa/src/system/ripple.c.o",
+      "metadata": {
+        "source_path": "src/system/ripple.c"
+      }
+    },
+    {
+      "name": "system/rom_decode",
+      "target_path": "expected/targets/system/rom_decode.o",
+      "base_path": "build/usa/src/system/rom_decode.c.o",
+      "metadata": {
+        "source_path": "src/system/rom_decode.c"
+      }
+    },
+    {
+      "name": "system/rom_queue",
+      "target_path": "expected/targets/system/rom_queue.o",
+      "base_path": "build/usa/src/system/rom_queue.c.o",
+      "metadata": {
+        "source_path": "src/system/rom_queue.c"
+      }
+    },
+    {
+      "name": "system/rom_trans",
+      "target_path": "expected/targets/system/rom_trans.o",
+      "base_path": "build/usa/src/system/rom_trans.c.o",
+      "metadata": {
+        "source_path": "src/system/rom_trans.c"
+      }
+    },
+    {
+      "name": "system/save_file",
+      "target_path": "expected/targets/system/save_file.o",
+      "base_path": "build/usa/src/system/save_file.c.o",
+      "metadata": {
+        "source_path": "src/system/save_file.c"
+      }
+    },
+    {
+      "name": "system/save_flags",
+      "target_path": "expected/targets/system/save_flags.o",
+      "base_path": "build/usa/src/system/save_flags.c.o",
+      "metadata": {
+        "source_path": "src/system/save_flags.c"
+      }
+    },
+    {
+      "name": "system/scenario",
+      "target_path": "expected/targets/system/scenario.o",
+      "base_path": "build/usa/src/system/scenario.c.o",
+      "metadata": {
+        "source_path": "src/system/scenario.c"
+      }
+    },
+    {
+      "name": "system/sched",
+      "target_path": "expected/targets/system/sched.o",
+      "base_path": "build/usa/src/system/sched.c.o",
+      "metadata": {
+        "source_path": "src/system/sched.c"
+      }
+    },
+    {
+      "name": "system/sd_main",
+      "target_path": "expected/targets/system/sd_main.o",
+      "base_path": "build/usa/src/system/sd_main.c.o",
+      "metadata": {
+        "source_path": "src/system/sd_main.c"
+      }
+    },
+    {
+      "name": "system/sd_sub1",
+      "target_path": "expected/targets/system/sd_sub1.o",
+      "base_path": "build/usa/src/system/sd_sub1.c.o",
+      "metadata": {
+        "source_path": "src/system/sd_sub1.c"
+      }
+    },
+    {
+      "name": "system/sd_sub2",
+      "target_path": "expected/targets/system/sd_sub2.o",
+      "base_path": "build/usa/src/system/sd_sub2.c.o",
+      "metadata": {
+        "source_path": "src/system/sd_sub2.c"
+      }
+    },
+    {
+      "name": "system/se_tbl1",
+      "target_path": "expected/targets/system/se_tbl1.o",
+      "base_path": "build/usa/src/system/se_tbl1.c.o",
+      "metadata": {
+        "source_path": "src/system/se_tbl1.c"
+      }
+    },
+    {
+      "name": "system/se_tbl2",
+      "target_path": "expected/targets/system/se_tbl2.o",
+      "base_path": "build/usa/src/system/se_tbl2.c.o",
+      "metadata": {
+        "source_path": "src/system/se_tbl2.c"
+      }
+    },
+    {
+      "name": "system/se_tbl3",
+      "target_path": "expected/targets/system/se_tbl3.o",
+      "base_path": "build/usa/src/system/se_tbl3.c.o",
+      "metadata": {
+        "source_path": "src/system/se_tbl3.c"
+      }
+    },
+    {
+      "name": "system/solid_atari",
+      "target_path": "expected/targets/system/solid_atari.o",
+      "base_path": "build/usa/src/system/solid_atari.c.o",
+      "metadata": {
+        "source_path": "src/system/solid_atari.c"
+      }
+    },
+    {
+      "name": "system/sprite",
+      "target_path": "expected/targets/system/sprite.o",
+      "base_path": "build/usa/src/system/sprite.c.o",
+      "metadata": {
+        "source_path": "src/system/sprite.c"
+      }
+    },
+    {
+      "name": "system/stage",
+      "target_path": "expected/targets/system/stage.o",
+      "base_path": "build/usa/src/system/stage.c.o",
+      "metadata": {
+        "source_path": "src/system/stage.c"
+      }
+    },
+    {
+      "name": "system/stage_select",
+      "target_path": "expected/targets/system/stage_select.o",
+      "base_path": "build/usa/src/system/stage_select.c.o",
+      "metadata": {
+        "source_path": "src/system/stage_select.c"
+      }
+    },
+    {
+      "name": "system/step",
+      "target_path": "expected/targets/system/step.o",
+      "base_path": "build/usa/src/system/step.c.o",
+      "metadata": {
+        "source_path": "src/system/step.c"
+      }
+    },
+    {
+      "name": "system/string",
+      "target_path": "expected/targets/system/string.o",
+      "base_path": "build/usa/src/system/string.c.o",
+      "metadata": {
+        "source_path": "src/system/string.c"
+      }
+    },
+    {
+      "name": "system/string_data",
+      "target_path": "expected/targets/system/string_data.o",
+      "base_path": "build/usa/src/system/string_data.c.o",
+      "metadata": {
+        "source_path": "src/system/string_data.c"
+      }
+    },
+    {
+      "name": "system/sys",
+      "target_path": "expected/targets/system/sys.o",
+      "base_path": "build/usa/src/system/sys.c.o",
+      "metadata": {
+        "source_path": "src/system/sys.c"
+      }
+    },
+    {
+      "name": "system/task",
+      "target_path": "expected/targets/system/task.o",
+      "base_path": "build/usa/src/system/task.c.o",
+      "metadata": {
+        "source_path": "src/system/task.c"
+      }
+    },
+    {
+      "name": "system/unk_data",
+      "target_path": "expected/targets/system/unk_data.o",
+      "base_path": "build/usa/src/system/unk_data.c.o",
+      "metadata": {
+        "source_path": "src/system/unk_data.c"
+      }
+    },
+    {
+      "name": "system/vibration_pak",
+      "target_path": "expected/targets/system/vibration_pak.o",
+      "base_path": "build/usa/src/system/vibration_pak.c.o",
+      "metadata": {
+        "source_path": "src/system/vibration_pak.c"
+      }
+    },
+    {
+      "name": "system/vram",
+      "target_path": "expected/targets/system/vram.o",
+      "base_path": "build/usa/src/system/vram.c.o",
+      "metadata": {
+        "source_path": "src/system/vram.c"
+      }
+    },
+    {
+      "name": "system/warp",
+      "target_path": "expected/targets/system/warp.o",
+      "base_path": "build/usa/src/system/warp.c.o",
+      "metadata": {
+        "source_path": "src/system/warp.c"
+      }
+    },
+    {
       "name": "system/wave_uty",
       "target_path": "expected/targets/system/wave_uty.o",
       "base_path": "build/usa/src/system/wave_uty.c.o",
       "metadata": {
         "source_path": "src/system/wave_uty.c"
+      }
+    },
+    {
+      "name": "system/window",
+      "target_path": "expected/targets/system/window.o",
+      "base_path": "build/usa/src/system/window.c.o",
+      "metadata": {
+        "source_path": "src/system/window.c"
+      }
+    },
+    {
+      "name": "system/yamamoto",
+      "target_path": "expected/targets/system/yamamoto.o",
+      "base_path": "build/usa/src/system/yamamoto.c.o",
+      "metadata": {
+        "source_path": "src/system/yamamoto.c"
       }
     }
   ]
