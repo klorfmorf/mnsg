@@ -53,18 +53,6 @@ sudo pacman -S base-devel
    uv run ninja
    ```
 
-The first time you run `ninja`, it downloads `ido` and `asm-processor` into `build/tools/`, decompresses the base ROM, splits it with `splat`, builds `build/usa/mnsg.z64`, and verifies its SHA-1 checksum. If you later modify `config/usa/splat.yaml`, `symbol_addrs.txt`, or `reloc_addrs.txt`, Ninja will automatically re-split the ROM on the next build.
-
-Here are the most common `configure.py` options (run `uv run configure.py --help` to view the full list):
-
-| Option | Description |
-| --- | --- |
-| `--compressed` | Build and verify the compressed version of the ROM. |
-| `--cross PREFIX` | Override the default prefix used for MIPS binutils. |
-| `--tool NAME=PATH` | Use a local executable instead of downloading the tool automatically (for example, `--tool ido=/path/to/cc`). |
-| `--host-cc CC` | Override the host C compiler used for syntax checks (`gcc` by default). |
-| `--no-check` | Disable host C syntax checking. |
-
 You can also use the following `ninja` commands for common build tasks:
 
 | Command | Description |
