@@ -1,5 +1,8 @@
 #include "common.h"
 #include "sys/save_file.h"
+#include "sys/sys.h"
+
+void func_8000B5D0(void);
 
 // clang-format off
 
@@ -25,27 +28,83 @@ EntryPoint D_8005BA30[18] = {
     { 571, 0, 0, 0, 0, 0 },
 };
 
-// <<<<< rodata >>>>>
-const char D_8007AB40[] =
-    "GST INT OK \n\0\0\0\0"
-    "SAVE INT OK \n\0\0\0"
-    "MANEKI NEKO CHECK \n\0"
-    "\0\0\0\0"
-    "\0\0\0\0"
-    "\0\0\0";
-
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B5D0.s")
+void func_8000B5D0(void)
+{
+    g_sys->unk_cf8a0        = 0;
+    D_8015C608.stats.unk_2c = 1;
+    func_80004208(&D_8015C608.stats, &D_8015C5D8, sizeof(SaveStats));
+    func_80004208(&D_8015C608, &D_8015C910, 0x304);
+    D_8015C5D8.unk_00 = 1;
+    PRINTF(("GST INT OK \n"));
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B640.s")
+void func_8000B640(void)
+{
+    func_800041E0(&D_8015C608, 0x304);
+    D_8015C608.stats.unk_00 = 1;
+    D_8015C608.stats.unk_14 = 3;
+    D_8015C608.stats.unk_0c = 0xA;
+    D_8015C608.stats.unk_08 = 0xA;
+    D_8015C608.stats.unk_10 = 0x64;
+    D_8015C608.stats.unk_2c = 1;
+    D_8015C608.unk_94       = 1;
+    D_8015C608.unk_98       = 1;
+    D_8015C608.unk_c4       = 1;
+    D_8015C608.unk_206      = 2;
+    D_8015C608.room_id      = 0x1D1;
+    D_8015C608.x            = -2;
+    D_8015C608.y            = -0x28;
+    D_8015C608.z            = 8;
+    D_8015C608.player_yaw   = 0;
+    func_80004208(&D_8015C608, &D_8015C910, 0x304);
+    PRINTF(("SAVE INT OK \n"));
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B6E0.s")
+void func_8000B6E0(void)
+{
+    func_80004208(&D_8015C910, &D_8015C608, 0x304);
+    func_8000B5D0();
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B718.s")
+void func_8000B718(void)
+{
+    D_8015C608.room_id    = D_8005BA30[D_8015C608.entry_id].room_id;
+    D_8015C608.x          = D_8005BA30[D_8015C608.entry_id].x;
+    D_8015C608.y          = D_8005BA30[D_8015C608.entry_id].y;
+    D_8015C608.z          = D_8005BA30[D_8015C608.entry_id].z;
+    D_8015C608.player_yaw = D_8005BA30[D_8015C608.entry_id].player_yaw;
+    D_8015C608.camera_yaw = D_8005BA30[D_8015C608.entry_id].camera_yaw;
+    func_80004208(&D_8015C5D8, &D_8015C608.stats, 0x30);
+    if (D_8015C608.stats.unk_14 < 3) {
+        D_8015C608.stats.unk_14 = 3;
+    }
+    if (D_8015C608.stats.unk_0c < 0xA) {
+        D_8015C608.stats.unk_0c = 0xA;
+    }
+    func_80004208(&D_8015C608, &D_8015C910, 0x304);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B7E4.s")
+void func_8000B7E4(void)
+{
+    if (g_sys_real.retrace_count >= 0x3C) {
+        g_sys_real.retrace_count -= 0x3C;
+        D_8015C608.unk_264++;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B824.s")
+void func_8000B824(void)
+{
+    if (D_8015C608.unk_fc >= 4) {
+        D_8015C608.unk_fc -= 4;
+        D_8015C5D8.unk_0c = D_8015C5D8.unk_08 += 2;
+        PRINTF(("MANEKI NEKO CHECK \n"));
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/save_file/func_8000B864.s")
+void func_8000B864(void)
+{
+    D_8015C608.unk_29c = 0x190;
+    D_8015C608.unk_2a0 = 0xC8;
+}

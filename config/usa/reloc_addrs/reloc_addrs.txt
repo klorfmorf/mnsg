@@ -1388,12 +1388,14 @@ rom:0x42B0C reloc:MIPS_HI16 symbol:D_801CA290 addend:4
 rom:0x42B10 reloc:MIPS_LO16 symbol:D_801CA290 addend:4
 
 // bss merge
-rom:0x38B64 reloc:MIPS_HI16 symbol:D_8016DB70 addend:8
-rom:0x38B6C reloc:MIPS_LO16 symbol:D_8016DB70 addend:8
-rom:0x38BB0 reloc:MIPS_HI16 symbol:D_8016DB70 addend:12
-rom:0x38BB4 reloc:MIPS_LO16 symbol:D_8016DB70 addend:12
-rom:0x38AEC reloc:MIPS_HI16 symbol:D_80171FC8 addend:20
-rom:0x38AF8 reloc:MIPS_LO16 symbol:D_80171FC8 addend:20
+rom:0x39D64 reloc:MIPS_HI16 symbol:D_801C0C28 addend:1760
+rom:0x39D68 reloc:MIPS_LO16 symbol:D_801C0C28 addend:1760
+rom:0x39E1C reloc:MIPS_HI16 symbol:D_801C0C28 addend:1760
+rom:0x39E20 reloc:MIPS_LO16 symbol:D_801C0C28 addend:1760
+rom:0x39F5C reloc:MIPS_HI16 symbol:D_801C0C28 addend:2464
+rom:0x39F68 reloc:MIPS_LO16 symbol:D_801C0C28 addend:2464
+rom:0x3A058 reloc:MIPS_HI16 symbol:D_801C0C28 addend:1764
+rom:0x3A064 reloc:MIPS_LO16 symbol:D_801C0C28 addend:1764
 rom:0x3A8F0 reloc:MIPS_HI16 symbol:D_801C09E0 addend:1
 rom:0x3A8F4 reloc:MIPS_LO16 symbol:D_801C09E0 addend:1
 rom:0x3A9B8 reloc:MIPS_LO16 symbol:D_801C09E0 addend:1
@@ -1409,8 +1411,6 @@ rom:0x3988C reloc:MIPS_HI16 symbol:D_801C09FC addend:1
 rom:0x39898 reloc:MIPS_LO16 symbol:D_801C09FC addend:1
 rom:0x39B70 reloc:MIPS_HI16 symbol:D_801C09FC addend:1
 rom:0x39B74 reloc:MIPS_LO16 symbol:D_801C09FC addend:1
-rom:0x3A058 reloc:MIPS_HI16 symbol:D_801C1308 addend:4
-rom:0x3A064 reloc:MIPS_LO16 symbol:D_801C1308 addend:4
 rom:0x3E1DC reloc:MIPS_HI16 symbol:D_801C7770 addend:4
 rom:0x3E1E0 reloc:MIPS_LO16 symbol:D_801C7770 addend:4
 rom:0x3E8AC reloc:MIPS_HI16 symbol:D_801C7770 addend:4

@@ -5,14 +5,16 @@
 #include "structs.h"
 
 void func_80004170(void);
-void func_800041E0(void *dst, int size);
-void func_80004208(void *src, void *dst, int size);
+void func_800041E0(unsigned char *dst, int size);
+void func_80004208(unsigned char *src, unsigned char *dst, int size);
 
 extern Sys                g_sys_real;
 extern Sys               *g_sys;
 extern Gfx               *D_8015C5CC;
 extern char               D_8015C5D4;
-extern unsigned short     D_8015C80C;
+extern SaveStats          D_8015C5D8;
+extern SaveFile           D_8015C608;
+extern SaveFile           D_8015C910;
 extern unsigned char      D_8015CC18[0x18];
 extern unsigned long long D_8015CDF0[];
 extern unsigned long long D_8015DDF0[];

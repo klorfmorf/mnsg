@@ -117,7 +117,7 @@ void func_80002138(void)
         case 1:
             func_80004240();
             func_80013940();
-            if (g_sys->controller[0].button_held_down & 0x1000) {
+            if (g_sys->controller[0].button_held_down & START_BUTTON) {
                 if (g_sys_real.is_controller_pak_connected == 0) {
                     if (func_801CB9C8() != 0) {
                         func_8000378C();
@@ -241,20 +241,20 @@ void func_80002518(void)
             func_8000383C();
             func_801CB6C0();
             g_sys->retraces_per_game_step = 0;
-            func_800369B4(D_8006D328);
+            func_800369B4(g_task_list.head);
             g_sys->step_sub++;
             return;
         case 2:
             g_sys->retraces_per_game_step = 0;
             func_80034734();
-            if (func_80036840(D_8006D328) == 0) {
+            if (func_80036840(g_task_list.head) == 0) {
                 g_sys->step_sub++;
             }
             return;
         default:
             return;
         case 3:
-            input = (g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & 0xD000;
+            input = (g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & (A_BUTTON | B_BUTTON | START_BUTTON);
             if (input != 0) {
                 g_sys_real.stepw_end = 2;
             }
@@ -357,7 +357,7 @@ void func_80002938(void)
             return;
         case 1:
             if (g_sys_real.disable_graphics_tasks == 0 &&
-                ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & 0xD000)) {
+                ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & (A_BUTTON | B_BUTTON | START_BUTTON))) {
                 g_sys->stepw_end++;
             }
             func_800038E4();
@@ -420,7 +420,7 @@ void func_80002AB8(void)
                     func_80003728(GAME_STEP_TITLE);
                 }
                 if (g_sys_real.stepw_end == 2) {
-                    if (D_8015C80C == 0x1D1) {
+                    if (D_8015C608.room_id == 0x1D1) {
                         func_80003728(GAME_STEP_INTRO);
                     } else {
                         func_80003728(GAME_STEP_WARP_SAVE);
@@ -445,7 +445,7 @@ void func_80002C7C(void)
             g_sys->step_sub++;
             return;
         case 1:
-            if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & 0x1000) {
+            if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & START_BUTTON) {
                 g_sys->stepw_end++;
             }
             func_800038E4();
@@ -524,7 +524,7 @@ void func_80002F54(void)
                 g_sys->intended_room_group       = 12;
                 g_sys->intended_room_group_index = 0;
                 func_80020440();
-                func_800369B4(D_8006D328);
+                func_800369B4(g_task_list.head);
                 g_sys->step_sub++;
                 return;
             }
@@ -532,7 +532,7 @@ void func_80002F54(void)
             return;
         case 2:
             g_sys_real.disable_graphics_tasks = 0;
-            func_80036840(D_8006D328);
+            func_80036840(g_task_list.head);
             func_800038E4();
             return;
         case 3:
@@ -756,7 +756,7 @@ void func_800038E4(void)
 {
     func_80034734();
     if (g_sys_real.stepw_end != 0) {
-        func_800369F0(D_8006D328);
+        func_800369F0(g_task_list.head);
         g_sys->step_sub++;
         func_80038BC8(7);
     }
@@ -765,7 +765,7 @@ void func_800038E4(void)
 void func_8000394C(void)
 {
     func_80034734();
-    if (func_80036908(D_8006D328) == 0) {
+    if (func_80036908(g_task_list.head) == 0) {
         g_sys_real.wait_frames            = 5;
         g_sys_real.disable_graphics_tasks = 1;
         func_80003880();

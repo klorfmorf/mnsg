@@ -1,5 +1,6 @@
 #include "sys/demo.h"
 #include "common.h"
+#include "sys/step.h"
 
 // clang-format off
 
@@ -20,7 +21,10 @@ unsigned short D_8005B1EC[34] = {
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/demo/func_80005EDC.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/demo/func_80005FDC.s")
+void func_80005FDC(void)
+{
+    func_80002EFC();
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/demo/func_80005FFC.s")
 

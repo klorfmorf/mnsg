@@ -1,5 +1,9 @@
 #include "sys/math.h"
 #include "common.h"
+#include "sys/atan2.h"
+#include "unk.h"
+
+#pragma intrinsic(sqrtf)
 
 // clang-format off
 
@@ -619,39 +623,200 @@ unsigned short D_8005B15C[66] = {
     0, 1200, 0, 0, 0, 0,
 };
 
-// <<<<< rodata >>>>>
-const char D_8007A8A0[] =
-    "fasin x=0 err!\n\0"
-    "DEBUG %f\n\0\0\0"
-    "\0\0\0";
-
-const double D_8007A8C0[] = { 1e-06 };
-const double D_8007A8C8[] = { 3.141592653589793 };
-const double D_8007A8D0[] = { 3.141592653589793 };
-const float  D_8007A8D8[] = { 1.5707964f };
-
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_800039C0.s")
+unsigned short func_800039C0(unsigned int idx)
+{
+    unsigned char i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003A94.s")
+    if (idx < 0xD42) {
+        for (i = 0; i < 16; i++) {
+            if (idx < D_8005B15C[i]) {
+                return D_80059158[idx] + i * 256;
+            }
+        }
+    }
+    for (i = 0x1F; i >= 16; i--) {
+        if (idx >= D_8005B15C[i]) {
+            return D_80059158[idx] + i * 256 + 0x100;
+        }
+    }
+    return D_80059158[idx] + 0x1000;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003CC8.s")
+unsigned short func_80003A94(float y, float x)
+{
+    float          ax;
+    float          ay;
+    float          len;
+    float          mag;
+    unsigned short ang;
+    int            idx;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003D28.s")
+    // clang-format off
+    if (x < 0.0f) { ax = -x; } else { ax = x; } if (y < 0.0f) { ay = -y; } else { ay = y; }
+    // clang-format on
+    mag = sqrtf(ax * ax + ay * ay);
+    if (mag < 0.0f) {
+        len = -mag;
+    } else {
+        len = mag;
+    }
+    if (!(len < 1e-06)) {
+        ax /= mag;
+        ay /= mag;
+    }
+    if (ay < ax) {
+        if (ax == 0.0f) {
+            return 0;
+        }
+        idx = ay * 8192.0f / ax;
+        if ((unsigned int) idx > 0x2000) {
+            idx = 0x2000;
+        }
+        ang = func_800039C0(idx);
+    } else if (ax < ay) {
+        if (ay == 0.0f) {
+            return 0;
+        }
+        idx = ax * 8192.0f / ay;
+        if ((unsigned int) idx > 0x2000) {
+            idx = 0x2000;
+        }
+        ang = 0x4000 - func_800039C0(idx);
+    } else if (ax == ay) {
+        ang = 0x2000;
+    }
+    if (x < 0.0f && y >= 0.0f) {
+        ang = 0x8000 - ang;
+    } else if (x < 0.0f && y < 0.0f) {
+        ang += 0x8000;
+    } else if (x >= 0.0f && y < 0.0f) {
+        ang = 0x10000 - ang;
+    }
+    return ang;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003D88.s")
+float func_80003CC8(unsigned short angle)
+{
+    float rad = angle / 32768.0f;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003DC0.s")
+    rad *= 3.141592653589793;
+    return __sinf(rad);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003E10.s")
+float func_80003D28(unsigned short angle)
+{
+    float rad = angle / 32768.0f;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003EA0.s")
+    rad *= 3.141592653589793;
+    return __cosf(rad);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80003F30.s")
+// clang-format off
+float func_80003D88(unsigned short angle, float *cos)
+{ *cos = func_80003D28(angle);
+    return func_80003CC8(angle);
+}
+// clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_80004058.s")
+float func_80003DC0(unsigned short angle)
+{
+    float sin;
+    float cos;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_800040A8.s")
+    sin = func_80003D88(angle, &cos);
+    if (cos == 0.0f) {
+        return 0.0f;
+    }
+    return sin / cos;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/math/func_800040D0.s")
+float func_80003E10(unsigned short angle)
+{
+    angle &= 0x3FF;
+    angle *= 2;
+    if (angle < 0x200) {
+        return D_80058950[angle];
+    }
+    if (angle < 0x400) {
+        return D_80058950[0x400 - angle];
+    }
+    if (angle < 0x600) {
+        return -D_80058950[angle - 0x400];
+    }
+    return -D_80058950[0x800 - angle];
+}
+
+float func_80003EA0(unsigned short angle)
+{
+    angle &= 0x3FF;
+    angle *= 2;
+    if (angle < 0x200) {
+        return D_80058950[angle + 1];
+    }
+    if (angle < 0x400) {
+        return -D_80058950[0x401 - angle];
+    }
+    if (angle < 0x600) {
+        return -D_80058950[angle - 0x3FF];
+    }
+    return D_80058950[0x801 - angle];
+}
+
+// clang-format off
+float func_80003F30(unsigned short angle, float *cos)
+{
+    angle &= 0x3FF;
+    angle *= 2;
+    if (angle < 0x200) { angle++; *cos = D_80058950[angle]; angle--; return D_80058950[angle]; }
+    if (angle < 0x400) { angle = 0x401 - angle; *cos = -D_80058950[angle]; angle--; return D_80058950[angle]; }
+    if (angle < 0x600) { angle = angle - 0x3FF; *cos = -D_80058950[angle]; angle--; return -D_80058950[angle]; }
+    angle = 0x801 - angle;
+    *cos = D_80058950[angle];
+    angle--;
+    return -D_80058950[angle];
+}
+// clang-format on
+
+float func_80004058(unsigned short angle)
+{
+    float sin;
+    float cos;
+
+    angle &= 0x3FF;
+    sin = func_80003F30(angle, &cos);
+    if (cos == 0.0f) {
+        return 0.0f;
+    }
+    return sin / cos;
+}
+
+unsigned short func_800040A8(float y, float x)
+{
+    return ((func_80003A94(y, x) + 0x20) >> 6) & 0x3FF;
+}
+
+float func_800040D0(float x)
+{
+    float  ax;
+    double y;
+
+    if (x < 0.0f) {
+        ax = -x;
+    } else {
+        ax = x;
+    }
+    if (ax > 1.0f) {
+        return 0.0f;
+    }
+    y = sqrtf(1.0f - x * x);
+    if (y != 0.0) {
+        return func_800166E0(x, y);
+    }
+    if (x > 0.0f) {
+        return 1.5707964f;
+    }
+    PRINTF(("fasin x=0 err!\n"));
+    PRINTF(("DEBUG %f\n", x));
+}

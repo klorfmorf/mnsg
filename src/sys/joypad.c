@@ -1,5 +1,8 @@
 #include "sys/joypad.h"
 #include "common.h"
+#include "sys/sys.h"
+#include "sys/math.h"
+#include "unk.h"
 
 // clang-format off
 
@@ -20,23 +23,169 @@ unsigned char  D_80167190[2];
 unsigned char  D_80167192[2];
 int            D_80167194;
 unsigned char  D_80167198[8];
-unsigned char  D_801671A0[24];
+OSContPad      D_801671A0[4];
 unsigned short D_801671B8;
 short          D_801671BA;
 unsigned char  D_801671BC;
 unsigned char  D_801671BD;
 unsigned char  D_801671BE;
 unsigned char  D_801671BF;
-unsigned char  D_801671C0[32];
-int            D_801671E0[4];
-unsigned char  D_801671F0[0x1B0];
+DemoKeyState  D_801671C0[4];
+DemoKey       *D_801671E0[4];
+OSPfs          D_801671F0[4];
+unsigned char  D_80167390[0x10];
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/joypad/func_80004910.s")
+void func_80004910(void)
+{
+    D_801671BD          = 0;
+    D_801671BC          = 0;
+    D_801671E0[0]       = NULL;
+    D_801671E0[1]       = NULL;
+    D_801671E0[2]       = NULL;
+    D_801671E0[3]       = NULL;
+    D_801671C0[0].index = 0;
+    D_801671C0[0].time  = 0;
+    D_801671C0[1].index = 0;
+    D_801671C0[1].time  = 0;
+    D_801671C0[2].index = 0;
+    D_801671C0[2].time  = 0;
+    D_801671C0[3].index = 0;
+    D_801671C0[3].time  = 0;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/joypad/func_80004964.s")
+void func_80004964(unsigned char arg0, DemoKey *arg1)
+{
+    DemoKeyState *state;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/joypad/func_800049D0.s")
+    D_801671E0[arg0] = arg1;
+    state            = &D_801671C0[arg0];
+    state->index     = 0;
+    if (g_sys->demo_mode == 2) {
+        state->time = arg1->time + 1;
+    } else {
+        state->time = arg1->time;
+    }
+}
 
+void func_800049D0(void)
+{
+    OSMesgQueue   queue;
+    OSMesg        msg;
+    short         i;
+    unsigned char bitpattern;
+
+    osCreateMesgQueue(&queue, &msg, 1);
+    osSetEventMesg(OS_EVENT_SI, &queue, (OSMesg) 1);
+    osContInit(&queue, &bitpattern, (OSContStatus *) D_80167190);
+    osCreateMesgQueue(&D_80167170, (OSMesg *) D_80167188, 1);
+    osSetEventMesg(OS_EVENT_SI, &D_80167170, 0);
+    for (i = 0; i < 4; i++) {
+        if ((bitpattern & (1 << i)) && !(D_80167190[i * 4 + 3] & 8)) {
+            g_sys->controller[i].status = 1;
+        } else {
+            g_sys->controller[i].status = 0;
+        }
+    }
+    func_80004910();
+    D_801671B8 = 0;
+    D_801671BA = 0;
+}
+
+#ifdef NON_MATCHING
+void func_80004AF8(void)
+{
+    Controller    *c;
+    Controller    *p;
+    OSContPad     *pad;
+    DemoKeyState  *st;
+    DemoKey       *key;
+    DemoKey       *k;
+    short          i;
+    float          zero = 0.0f;
+    unsigned short old;
+    unsigned short b;
+
+    osRecvMesg(&D_80167170, NULL, 1);
+    osContGetReadData(D_801671A0);
+    for (i = 0; i < 4; i++) {
+        if (g_sys->controller[i].status == 0) {
+            pad          = &D_801671A0[i];
+            pad->button  = 0;
+            pad->stick_x = 0;
+            pad->stick_y = 0;
+        }
+    }
+    D_801671B8 = D_801671A0[0].button;
+    c          = g_sys_real.controller;
+    p          = g_sys_real.player_controller;
+    D_801671BA = D_801671A0[1].button;
+    D_801671BD = D_801671BC != 0 ? 1 : 0;
+    for (i = 0; i < 4; i++, c++, p++) {
+        if (i != 0) {
+            pad          = &D_801671A0[i];
+            pad->button  = 0;
+            pad->stick_x = 0;
+            pad->stick_y = 0;
+        }
+        key = D_801671E0[i];
+        pad = &D_801671A0[i];
+        if (key != NULL) {
+            st           = &D_801671C0[i];
+            k            = &key[st->index];
+            pad->button  = k->button;
+            pad->stick_x = k->stick_x;
+            pad->stick_y = k->stick_y;
+            if (st->time != 0) {
+                st->time--;
+                if (st->time == 0) {
+                    st->index++;
+                    st->time = key[st->index].time;
+                }
+            } else {
+                D_801671E0[i] = NULL;
+            }
+        }
+        b                   = pad->button;
+        old                 = c->button_held_down;
+        c->button_held_down = b;
+        c->button_pressed   = (old ^ b) & b;
+        c->stick_raw_x      = pad->stick_x;
+        c->stick_raw_y      = pad->stick_y;
+        if (c->stick_raw_x < 0 ? (c->stick_raw_x += 7) > 0 : (c->stick_raw_x -= 7) < 0) {
+            c->stick_raw_x = 0;
+        }
+        if (c->stick_raw_y < 0 ? (c->stick_raw_y += 7) > 0 : (c->stick_raw_y -= 7) < 0) {
+            c->stick_raw_y = 0;
+        }
+        if (c->stick_raw_x == 0 && c->stick_raw_y == 0) {
+            c->stick_x = c->stick_y = c->stick_magnitude = zero;
+        } else {
+            c->stick_x         = func_80003E10(((unsigned int) (float) ((float) (-c->stick_raw_x + 180) * 1.4222222222222222) - 0x100) & 0x3FF);
+            c->stick_y         = func_80003E10(((unsigned int) (float) ((float) (-c->stick_raw_y + 180) * 1.4222222222222222) - 0x100) & 0x3FF);
+            c->stick_magnitude = _nsqrtf(c->stick_x * c->stick_x + c->stick_y * c->stick_y);
+        }
+        if (g_sys_real.player_input_locked == 0 && g_sys_real.unk_3ae22 == 0) {
+            *p = *c;
+        } else {
+            if (p->stick_raw_x < 0 ? (p->stick_raw_x += 7) > 0 : (p->stick_raw_x -= 7) < 0) {
+                p->stick_raw_x = 0;
+            }
+            if (p->stick_raw_y < 0 ? (p->stick_raw_y += 7) > 0 : (p->stick_raw_y -= 7) < 0) {
+                p->stick_raw_y = 0;
+            }
+            if (p->stick_raw_x == 0 && p->stick_raw_y == 0) {
+                p->stick_x = p->stick_y = p->stick_magnitude = zero;
+            } else {
+                p->stick_x         = func_80003E10(((unsigned int) (float) ((float) (-p->stick_raw_x + 180) * 1.4222222222222222) - 0x100) & 0x3FF);
+                p->stick_y         = func_80003E10(((unsigned int) (float) ((float) (-p->stick_raw_y + 180) * 1.4222222222222222) - 0x100) & 0x3FF);
+                p->stick_magnitude = _nsqrtf(p->stick_x * p->stick_x + p->stick_y * p->stick_y);
+            }
+        }
+    }
+    g_sys_real.player_controller[4] = g_sys_real.controller[0];
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/joypad/func_80004AF8.s")
+#endif

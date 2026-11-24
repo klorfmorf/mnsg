@@ -1,3 +1,4 @@
+#include "sys/sprite.h"
 #include "common.h"
 #include "sys/obj.h"
 #include "unk.h"

@@ -1,3 +1,4 @@
+#include "sys/bgm_tbl.h"
 #include "common.h"
 
 // clang-format off

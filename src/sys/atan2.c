@@ -1,4 +1,5 @@
-#include "common.h"
+#include "sys/atan2.h"
+#include "unk.h"
 
 // clang-format off
 
@@ -92,15 +93,64 @@ float D_8006ADE0[513] = {
     0.783441f, 0.784421f, 0.785398f,
 };
 
-// <<<<< rodata >>>>>
-
-const double D_8007B720[] = { 9.99999999999999955e-07 };
-const double D_8007B728[] = { 1.57079632679489656 };
-const float  D_8007B730[] = { 0.7853981853f };
-const double D_8007B738[] = { 3.14159265358979312 };
-const double D_8007B740[] = { 3.14159265358979312 };
-const double D_8007B748[] = { 6.28318530717958623 };
-
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/atan2/func_800166E0.s")
+float func_800166E0(float y, float x)
+{
+    float pad;
+    float ax;
+    float ay;
+    float ang;
+    float len;
+    int   idx;
+
+    if (x < 0.0f) {
+        ax = -x;
+    } else {
+        ax = x;
+    }
+    if (y < 0.0f) {
+        ay = -y;
+    } else {
+        ay = y;
+    }
+    ang = _nsqrtf(ax * ax + ay * ay);
+    if (ang < 0.0f) {
+        len = -ang;
+    } else {
+        len = ang;
+    }
+    if (!(len < 1e-6)) {
+        ax /= ang;
+        ay /= ang;
+    }
+    if (ay < ax) {
+        if (x == 0.0f) {
+            return 0.0f;
+        }
+        idx = (ay * 512.0) / ax;
+        if ((unsigned int) idx > 0x200) {
+            idx = 0x200;
+        }
+        ang = D_8006ADE0[idx];
+    } else if (ax < ay) {
+        if (y == 0.0f) {
+            return 0.0f;
+        }
+        idx = (ax * 512.0) / ay;
+        if ((unsigned int) idx > 0x200) {
+            idx = 0x200;
+        }
+        ang = 1.5707963267948966 - D_8006ADE0[idx];
+    } else if (ax == ay) {
+        ang = 0.7853982f;
+    }
+    if (x < 0.0f && y >= 0.0f) {
+        ang = 3.141592653589793 - ang;
+    } else if (x < 0.0f && y < 0.0f) {
+        ang += 3.141592653589793;
+    } else if (x >= 0.0f && y < 0.0f) {
+        ang = 6.283185307179586 - ang;
+    }
+    return ang;
+}

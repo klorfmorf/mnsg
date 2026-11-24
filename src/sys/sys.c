@@ -9,18 +9,9 @@ Sys               *g_sys;
 Gfx               *D_8015C5CC;
 int                D_8015C5D0;
 char               D_8015C5D4;
-int                D_8015C5D8;
-int                D_8015C5DC;
-unsigned char      D_8015C5E0[40];
-unsigned char      D_8015C608[100];
-int                D_8015C66C;
-unsigned char      D_8015C670[40];
-int                D_8015C698[93];
-unsigned short     D_8015C80C;
-unsigned short     D_8015C810[16];
-int                D_8015C830[4];
-int                D_8015C840[52];
-unsigned char      D_8015C910[0x308];
+SaveStats          D_8015C5D8;
+SaveFile           D_8015C608;
+SaveFile           D_8015C910;
 unsigned char      D_8015CC18[0x18];
 unsigned int       D_8015CC30[36];
 int                D_8015CCC0[6];
@@ -33,8 +24,25 @@ int                D_801602A8[0x1BB2];
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sys/func_80004170.s")
+void func_80004170(void)
+{
+    func_800041E0(&g_sys_real, sizeof(Sys));
+    g_sys                              = &g_sys_real;
+    D_8015C5D4                         = 0;
+    g_sys->fill_color_alpha            = 1;
+    g_sys->frame_buffer_bits_per_pixel = 2;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sys/func_800041E0.s")
+void func_800041E0(unsigned char *dst, int size)
+{
+    while (size--) {
+        *dst++ = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sys/func_80004208.s")
+void func_80004208(unsigned char *src, unsigned char *dst, int size)
+{
+    while (size--) {
+        *dst++ = *src++;
+    }
+}

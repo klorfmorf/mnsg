@@ -6,12 +6,15 @@
 #include "common.h"
 #include "structs.h"
 
-void func_801CB460(void);
-Gfx *func_801CB668(int pool, Gfx *dl);
-void func_801CB6C0(void);
-int  func_801CB9C8(void);
-int  func_801CBB70(Gfx **dl, unsigned int base);
-int  func_801D1580(void);
+float __cosf(float x);
+float __sinf(float x);
+float _nsqrtf(float x);
+void  func_801CB460(void);
+Gfx  *func_801CB668(int pool, Gfx *dl);
+void  func_801CB6C0(void);
+int   func_801CB9C8(void);
+int   func_801CBB70(Gfx **dl, unsigned int base);
+int   func_801D1580(void);
 
 extern char               D_2D1800[];
 extern char               D_2FFFFF[];
@@ -25,8 +28,12 @@ extern Gfx                D_90050F8[];
 extern Gfx                D_90056E8[];
 extern unsigned long long D_800525B0[];
 extern unsigned long long D_80052680[];
+extern unsigned long long D_80053AB0[];
+extern ALSynth           *D_8007A230;
 extern OSViMode           D_80079500[];
 extern unsigned long long D_8007D560[];
+extern unsigned long long D_8007DD60[];
+extern unsigned long long D_8007DD60[];
 extern char               D_801CCB7C[];
 extern ObjSolid          *D_801FC61C_5B852C;
 extern char               D_8020D2A0[];
@@ -37,6 +44,7 @@ extern unsigned char      D_80301000[];
 extern unsigned char      D_80304000[];
 
 // Addresses in the wave overlays (VRAM 0x08000000 based).
+extern void func_080026B8_71FE88(Task *task);
 extern char D_0800041C[];
 extern char D_08000430[];
 extern char D_08000610[];
@@ -65,5 +73,7 @@ extern struct {
     unsigned char unk_00[0x60];
     unsigned char unk_60;
 } *D_801FC604_5B8514;
+
+int func_801E5274(void *arg);
 
 #endif // UNK_H

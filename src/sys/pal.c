@@ -1,55 +1,62 @@
+#include "sys/pal.h"
 #include "common.h"
+#include "sys/sys.h"
 
-extern unsigned char D_80167860[];
-extern unsigned char D_801678A0[];
-extern unsigned char D_801678E0[];
-extern unsigned char D_80167920[];
-extern unsigned char D_80167960[];
-extern unsigned char D_801679A0[];
-extern unsigned char D_801679E0[];
-extern unsigned char D_80167A20[];
+int  func_80007C90(ObjSprite *sprite);
+void func_80007EA0(unsigned short idx);
+void func_80008068(unsigned char bank, unsigned char entry, unsigned char slot);
+void func_80008330(unsigned char moji, unsigned char bank, unsigned char entry, unsigned char row, unsigned char range);
+
+extern unsigned short *D_80167860[16];
+extern unsigned short *D_801678A0[16];
+extern unsigned short *D_801678E0[16];
+extern unsigned short *D_80167920[16];
+extern unsigned short *D_80167960[16];
+extern unsigned short *D_801679A0[16];
+extern unsigned short *D_801679E0[16];
+extern unsigned short *D_80167A20[16];
 
 // clang-format off
 
 // <<<<< data >>>>>
-unsigned int D_8005B3F0[14] = {
-    0xFFFEF89B, 0xF91DF99F, 0xFA21FAA3, 0xFB27FBA9, 0xFC2BFCAD, 0xFCEFFD71, 0xFDF32001, 0x00010001,
-    0x00000001, 0x00010001, 0x00010001, 0x00010000, 0xB8000000, 0x00000000,
+unsigned short D_8005B3F0[28] = {
+    0xFFFE, 0xF89B, 0xF91D, 0xF99F, 0xFA21, 0xFAA3, 0xFB27, 0xFBA9, 0xFC2B, 0xFCAD, 0xFCEF, 0xFD71, 0xFDF3, 0x2001, 0x0001, 0x0001,
+    0x0000, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0000, 0xB800, 0x0000, 0x0000, 0x0000,
 };
 
-unsigned int D_8005B428[128] = {
-    0x04FF0023, 0xFFC1FB41, 0xF8013D0D, 0x79417001, 0x80019001, 0xA001B001, 0xC001D001, 0xE001F7FF,
-    0x00811081, 0x20813081, 0x40815081, 0x60817081, 0x80819081, 0xA081B081, 0xC081D081, 0xE081F081,
-    0x01011101, 0x21013101, 0x41015101, 0x61017101, 0x81019101, 0xA101B101, 0xC101D101, 0xE101F101,
-    0x01811181, 0x21813181, 0x41815181, 0x61817181, 0x81819181, 0xA181B181, 0xC181D181, 0xE181F181,
-    0x02011201, 0x22013201, 0x42015201, 0x62017201, 0x82019201, 0xA201B201, 0xC201D201, 0xE201F201,
-    0x02811281, 0x22813281, 0x42815281, 0x62817281, 0x82819281, 0xA281B281, 0xC281D281, 0xE281F281,
-    0x03011301, 0x23013301, 0x43015301, 0x63017301, 0x83019301, 0xA301B301, 0xC301D301, 0xE301F301,
-    0x03811381, 0x23813381, 0x43815381, 0x63817381, 0x83819381, 0xA381B381, 0xC381D381, 0xE381F381,
-    0x04011401, 0x24013401, 0x44015401, 0x64017401, 0x84019401, 0xA401B401, 0xC401D401, 0xE401F401,
-    0x04811481, 0x24813481, 0x44815481, 0x64817481, 0x84819481, 0xA481B481, 0xC481D481, 0xE481F481,
-    0x05011501, 0x25013501, 0x45015501, 0x65017501, 0x85019501, 0xA501B501, 0xC501D501, 0xE501F501,
-    0x05811581, 0x25813581, 0x45815581, 0x65817581, 0x85819581, 0xA581B581, 0xC581D581, 0xE581F581,
-    0x06011601, 0x26013601, 0x46015601, 0x66017601, 0x86019601, 0xA601B601, 0xC601D601, 0xE601F601,
-    0x06811681, 0x26813681, 0x46815681, 0x66817681, 0x86819681, 0xA681B681, 0xC681D681, 0xE681F681,
-    0x07011701, 0x27013701, 0x47015701, 0x67017701, 0x87019701, 0xA701B701, 0xC701D701, 0xE701F701,
-    0x07811781, 0x27813781, 0x47815781, 0x67817781, 0x87819781, 0xA781B781, 0xC781D781, 0xE781F781,
+unsigned short D_8005B428[256] = {
+    0x04FF, 0x0023, 0xFFC1, 0xFB41, 0xF801, 0x3D0D, 0x7941, 0x7001, 0x8001, 0x9001, 0xA001, 0xB001, 0xC001, 0xD001, 0xE001, 0xF7FF,
+    0x0081, 0x1081, 0x2081, 0x3081, 0x4081, 0x5081, 0x6081, 0x7081, 0x8081, 0x9081, 0xA081, 0xB081, 0xC081, 0xD081, 0xE081, 0xF081,
+    0x0101, 0x1101, 0x2101, 0x3101, 0x4101, 0x5101, 0x6101, 0x7101, 0x8101, 0x9101, 0xA101, 0xB101, 0xC101, 0xD101, 0xE101, 0xF101,
+    0x0181, 0x1181, 0x2181, 0x3181, 0x4181, 0x5181, 0x6181, 0x7181, 0x8181, 0x9181, 0xA181, 0xB181, 0xC181, 0xD181, 0xE181, 0xF181,
+    0x0201, 0x1201, 0x2201, 0x3201, 0x4201, 0x5201, 0x6201, 0x7201, 0x8201, 0x9201, 0xA201, 0xB201, 0xC201, 0xD201, 0xE201, 0xF201,
+    0x0281, 0x1281, 0x2281, 0x3281, 0x4281, 0x5281, 0x6281, 0x7281, 0x8281, 0x9281, 0xA281, 0xB281, 0xC281, 0xD281, 0xE281, 0xF281,
+    0x0301, 0x1301, 0x2301, 0x3301, 0x4301, 0x5301, 0x6301, 0x7301, 0x8301, 0x9301, 0xA301, 0xB301, 0xC301, 0xD301, 0xE301, 0xF301,
+    0x0381, 0x1381, 0x2381, 0x3381, 0x4381, 0x5381, 0x6381, 0x7381, 0x8381, 0x9381, 0xA381, 0xB381, 0xC381, 0xD381, 0xE381, 0xF381,
+    0x0401, 0x1401, 0x2401, 0x3401, 0x4401, 0x5401, 0x6401, 0x7401, 0x8401, 0x9401, 0xA401, 0xB401, 0xC401, 0xD401, 0xE401, 0xF401,
+    0x0481, 0x1481, 0x2481, 0x3481, 0x4481, 0x5481, 0x6481, 0x7481, 0x8481, 0x9481, 0xA481, 0xB481, 0xC481, 0xD481, 0xE481, 0xF481,
+    0x0501, 0x1501, 0x2501, 0x3501, 0x4501, 0x5501, 0x6501, 0x7501, 0x8501, 0x9501, 0xA501, 0xB501, 0xC501, 0xD501, 0xE501, 0xF501,
+    0x0581, 0x1581, 0x2581, 0x3581, 0x4581, 0x5581, 0x6581, 0x7581, 0x8581, 0x9581, 0xA581, 0xB581, 0xC581, 0xD581, 0xE581, 0xF581,
+    0x0601, 0x1601, 0x2601, 0x3601, 0x4601, 0x5601, 0x6601, 0x7601, 0x8601, 0x9601, 0xA601, 0xB601, 0xC601, 0xD601, 0xE601, 0xF601,
+    0x0681, 0x1681, 0x2681, 0x3681, 0x4681, 0x5681, 0x6681, 0x7681, 0x8681, 0x9681, 0xA681, 0xB681, 0xC681, 0xD681, 0xE681, 0xF681,
+    0x0701, 0x1701, 0x2701, 0x3701, 0x4701, 0x5701, 0x6701, 0x7701, 0x8701, 0x9701, 0xA701, 0xB701, 0xC701, 0xD701, 0xE701, 0xF701,
+    0x0781, 0x1781, 0x2781, 0x3781, 0x4781, 0x5781, 0x6781, 0x7781, 0x8781, 0x9781, 0xA781, 0xB781, 0xC781, 0xD781, 0xE781, 0xF781,
 };
 
-unsigned int D_8005B628[18] = {
-    0xFFFEDF7F, 0xC6BDB63B, 0xA57994F7, 0x7C356BB3, 0x5B314A6F, 0x31ED212B, 0x10A90027, 0x0007FFFF,
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000102, 0x03040506, 0x0708090A,
-    0x0B0C0D0E, 0x0F000000,
+unsigned short D_8005B628[36] = {
+    0xFFFE, 0xDF7F, 0xC6BD, 0xB63B, 0xA579, 0x94F7, 0x7C35, 0x6BB3, 0x5B31, 0x4A6F, 0x31ED, 0x212B, 0x10A9, 0x0027, 0x0007, 0xFFFF,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0102, 0x0304, 0x0506, 0x0708, 0x090A,
+    0x0B0C, 0x0D0E, 0x0F00, 0x0000,
 };
 
-void *D_8005B670[16] = {
+unsigned short *D_8005B670[16] = {
     D_8005B3F0, D_8005B3F0, D_8005B428, D_8005B3F0,
     D_8005B628, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL,
 };
 
-void *D_8005B6B0[12] = {
+unsigned short **D_8005B6B0[12] = {
     D_8005B670, D_80167860, D_801678A0, D_801678E0,
     D_80167920, D_80167960, D_801679A0, D_801679E0,
     D_80167A20, NULL, NULL, NULL,
@@ -68,57 +75,224 @@ const char D_8007A9E0[] =
     "\0\0\0";
 
 // <<<<< bss >>>>>
-unsigned char D_80167860[64];
-unsigned char D_801678A0[64];
-unsigned char D_801678E0[64];
-unsigned char D_80167920[64];
-unsigned char D_80167960[64];
-unsigned char D_801679A0[64];
-unsigned char D_801679E0[64];
-unsigned char D_80167A20[64];
+unsigned short *D_80167860[16];
+unsigned short *D_801678A0[16];
+unsigned short *D_801678E0[16];
+unsigned short *D_80167920[16];
+unsigned short *D_80167960[16];
+unsigned short *D_801679A0[16];
+unsigned short *D_801679E0[16];
+unsigned short *D_80167A20[16];
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007970.s")
+int func_80007970(unsigned short *src, unsigned short *dst, unsigned short n)
+{
+    short i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_800079C0.s")
+    if (n > 0x100) {
+        return 0;
+    }
+    for (i = 0; i < n; i++) {
+        *dst++ = *src++;
+    }
+    return 1;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007B3C.s")
+int func_800079C0(ObjSprite *sprite, unsigned short *data)
+{
+    short           i;
+    unsigned short *pal;
+    ObjSpriteTex   *tex;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007B5C.s")
+    pal = g_sys_real.unknown_rgba16_buffer;
+    tex = sprite->unk_14;
+    if (sprite->unk_18 & 0x8000) {
+        func_80007C90(sprite);
+    }
+    switch (tex->fmt & 0x18) {
+        case 0:
+            for (i = 0; i < 15; i++, pal += 16) {
+                if (g_sys_real.unk_c5f18[i] == 0 || data == g_sys_real.unk_c5f38[i]) {
+                    if (data != g_sys_real.unk_c5f38[i]) {
+                        func_80007970(data, pal, 16);
+                    }
+                    g_sys_real.unk_c5f18[i]++;
+                    g_sys_real.unk_c5f38[i] = data;
+                    sprite->unk_c           = i;
+                    sprite->unk_38          = data;
+                    sprite->unk_18 |= 0x8000;
+                    return 1;
+                }
+            }
+            g_sys_real.unk_c5f18[15]++;
+            g_sys_real.unk_c5f38[15] = data;
+            sprite->unk_c            = 15;
+            sprite->unk_38           = data;
+            return 1;
+        case 8:
+            sprite->unk_c  = 0;
+            sprite->unk_38 = data;
+            sprite->unk_18 |= 0x8000;
+            return 1;
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007B84.s")
+void func_80007B3C(ObjSprite *sprite)
+{
+    func_800079C0(sprite, sprite->unk_38);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007C90.s")
+void func_80007B5C(ObjSprite *src, ObjSprite *dst)
+{
+    func_800079C0(dst, src->unk_38);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007D40.s")
+int func_80007B84(ObjSprite *src, ObjSprite *dst)
+{
+    ObjSpriteTex *tex;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007DA8.s")
+    tex = src->unk_14;
+    if (src->unk_18 & 0x8000) {
+        if (dst->unk_18 & 0x8000) {
+            func_80007C90(dst);
+        }
+        switch (tex->fmt & 0x18) {
+            case 0:
+                dst->unk_c = src->unk_c;
+                g_sys_real.unk_c5f18[src->unk_c]++;
+                dst->unk_38 = g_sys_real.unk_c5f38[dst->unk_c] = src->unk_38;
+                dst->unk_18 |= 0x8000;
+                return 1;
+            case 8:
+                dst->unk_c  = src->unk_c;
+                dst->unk_38 = src->unk_38;
+                dst->unk_18 |= 0x8000;
+                return 1;
+        }
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007E00.s")
+int func_80007C90(ObjSprite *sprite)
+{
+    ObjSpriteTex *tex;
+    unsigned char idx;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007E28.s")
+    tex = sprite->unk_14;
+    if (sprite->unk_18 & 0x8000) {
+        switch (tex->fmt & 0x18) {
+            case 0:
+                if (sprite->unk_c >= 16) {
+                    idx = tex->pal;
+                } else {
+                    idx = sprite->unk_c;
+                }
+                if (g_sys_real.unk_c5f18[idx] > 0) {
+                    g_sys_real.unk_c5f18[idx] -= 1;
+                }
+                sprite->unk_c = 0xFF;
+                sprite->unk_18 &= 0x7FFF;
+                return 1;
+            case 8:
+                sprite->unk_c = 0xFF;
+                sprite->unk_18 &= 0x7FFF;
+                return 1;
+        }
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007E5C.s")
+void func_80007D40(unsigned short *src)
+{
+    unsigned short *base;
+    short           i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007EA0.s")
+    base = src;
+    for (i = 0; i < 16; i++, src += 16) {
+        g_sys_real.unk_c5f38[i] = src;
+    }
+    func_80007970(base, g_sys_real.unknown_rgba16_buffer, 0x100);
+}
+
+void func_80007DA8(unsigned short *src, unsigned short idx)
+{
+    g_sys_real.unk_c5f38[idx] = src;
+    func_80007970(src, &g_sys_real.unknown_rgba16_buffer[idx * 16], 16);
+}
+
+void func_80007E00(unsigned short *src)
+{
+    func_80007E5C();
+    func_80007D40(src);
+}
+
+void func_80007E28(unsigned short *src, unsigned short idx)
+{
+    func_80007EA0(idx);
+    func_80007DA8(src, idx);
+}
+
+void func_80007E5C(void)
+{
+    short i;
+
+    for (i = 0; i < 16; i++) {
+        func_80007EA0(i);
+    }
+}
+
+void func_80007EA0(unsigned short idx)
+{
+    g_sys_real.unk_c5f18[idx] = 0;
+    g_sys_real.unk_c5f38[idx] = 0;
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007ED8.s")
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008068.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_8000814C.s")
+void func_8000814C(unsigned char *tbl)
+{
+    unsigned char i;
+
+    for (i = 0; i < 16; i++) {
+        func_80008068(tbl[0], tbl[i + 1], i);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_800081AC.s")
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008258.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_800082B4.s")
+void func_800082B4(unsigned char idx, unsigned short *src, unsigned short n)
+{
+    func_80007970(src, g_sys_real.mojis[idx].palette, n);
+    g_sys_real.mojis[idx].unk_28 = src;
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008330.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_800084F4.s")
+void func_800084F4(unsigned char moji, unsigned char bank, unsigned char entry, unsigned char row)
+{
+    func_80008330(moji, bank, entry, row, 0xF0);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008548.s")
+void func_80008548(unsigned char moji, unsigned char *tbl)
+{
+    unsigned char i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_800085BC.s")
+    for (i = 0; i < 16; i++) {
+        func_800084F4(moji, tbl[0], tbl[i + 1], i);
+    }
+}
+
+void func_800085BC(unsigned char moji, unsigned char bank, unsigned char entry)
+{
+    unsigned char i;
+
+    for (i = 0; i < 16; i++) {
+        func_800084F4(moji, bank, entry + i, i);
+    }
+}

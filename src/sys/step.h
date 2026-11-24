@@ -5,6 +5,8 @@
 #include "structs.h"
 
 void func_80002040(void);
+void func_80002EFC(void);
+void func_80003478(void);
 void func_80003728(unsigned char step);
 
 #endif // STEP_H

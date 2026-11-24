@@ -296,14 +296,6 @@ D_08001C50_707A40 = 0x08001C50; // defined:true segment:file_47
 g_sys = 0x8015C5C8;
 g_sys_real = 0x8008CCC0; // size:0xCF908
 
-// atan2.c
-D_8007B720 = 0x8007B720; // type:f64 force_not_migration:True
-D_8007B728 = 0x8007B728; // type:f64 force_not_migration:True
-D_8007B730 = 0x8007B730; // type:f32 force_not_migration:True
-D_8007B738 = 0x8007B738; // type:f64 force_not_migration:True
-D_8007B740 = 0x8007B740; // type:f64 force_not_migration:True
-D_8007B748 = 0x8007B748; // type:f64 force_not_migration:True
-
 // gfx_util.c
 D_8007B8D0 = 0x8007B8D0; // type:f64 force_not_migration:True
 D_8007B8D8 = 0x8007B8D8; // type:f64 force_not_migration:True
@@ -316,12 +308,6 @@ D_8007B908 = 0x8007B908; // type:f64 force_not_migration:True
 
 // joypad.c
 D_8007A970 = 0x8007A970; // type:f64 force_not_migration:True
-
-// math.c
-D_8007A8C0 = 0x8007A8C0; // type:f64 force_not_migration:True
-D_8007A8C8 = 0x8007A8C8; // type:f64 force_not_migration:True
-D_8007A8D0 = 0x8007A8D0; // type:f64 force_not_migration:True
-D_8007A8D8 = 0x8007A8D8; // type:f32 force_not_migration:True
 
 // okutani.c
 D_8007AC78 = 0x8007AC78; // type:f64 force_not_migration:True
@@ -580,3 +566,27 @@ D_0800C330_file_646 = 0x0800C330; // segment:file_646
 D_08004CD0_file_704 = 0x08004CD0; // segment:file_704
 D_08001390_file_709 = 0x08001390; // segment:file_709
 D_08002090_1179A20 = 0x08002090; // segment:file_633
+
+// sys.c
+D_8015C5D8 = 0x8015C5D8; // size:0x30
+D_8015C608 = 0x8015C608; // size:0x308
+D_8015C910 = 0x8015C910; // size:0x308
+
+// vibration_pak.c
+D_8016DAF0 = 0x8016DAF0; // size:0x80
+
+// joypad.c
+D_801671F0 = 0x801671F0; // size:0x1A0
+D_80167390 = 0x80167390; // size:0x10
+
+// sd_main.c
+sptr = 0x801C1728; // size:0x4
+mptr = 0x801C172C; // size:0x4
+D_801C0A68 = 0x801C0A68; // size:0x1C0
+
+// audiomgr.c
+amCreateAudioMgr = 0x80037DC0; // type:func
+
+// task.c
+g_task_list = 0x8006D328; // size:0x14
+g_task_list_init = 0x8006D33C; // size:0x14

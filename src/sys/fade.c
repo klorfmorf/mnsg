@@ -2,6 +2,10 @@
 #include "common.h"
 #include "sys/obj.h"
 
+int  func_80036860(void *arg0, int arg1);
+int  func_80036928(void *arg0, int arg1);
+void func_80036E2C(void *arg0);
+
 // clang-format off
 
 // <<<<< data >>>>>
@@ -34,11 +38,17 @@ const char D_8007C840[] =
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036840.s")
+int func_80036840(void *arg0)
+{
+    return func_80036860(arg0, 0x10);
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036860.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036908.s")
+int func_80036908(void *arg0)
+{
+    return func_80036928(arg0, 0x10);
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036928.s")
 
@@ -52,7 +62,10 @@ const char D_8007C840[] =
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036CB4.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036D0C.s")
+void func_80036D0C(void *arg0)
+{
+    func_80036E2C(arg0);
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/fade/func_80036D2C.s")
 

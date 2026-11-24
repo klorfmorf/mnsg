@@ -91,4 +91,7 @@
 #define GAME_STEP_STAFF_ROLL_START 0x10
 #define GAME_STEP_STAFF_ROLL       0x11
 
+// ===== audiomgr =====
+#define AUDIO_STACKSIZE 0x4000
+
 #endif // MACROS_H

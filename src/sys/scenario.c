@@ -749,9 +749,9 @@ unsigned short D_80078C3C[1018] = {
 };
 
 // <<<<< bss >>>>>
-unsigned short D_801C7740[2];
-unsigned char  D_801C7744[4];
-unsigned char  D_801C7748[4];
+int            D_801C7740;
+int            D_801C7744;
+int            D_801C7748;
 int            D_801C774C;
 int            D_801C7750;
 int            D_801C7754;
@@ -778,7 +778,7 @@ int            D_801C77FC;
 int            D_801C7800[2];
 unsigned char  D_801C7808[0xC8];
 int            D_801C78D0[6];
-unsigned short D_801C78E8[2];
+int            D_801C78E8;
 int            D_801C78EC;
 int            D_801C78F0;
 int            D_801C78F4;

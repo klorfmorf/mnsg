@@ -5,5 +5,6 @@
 #include "structs.h"
 
 void func_8000B6E0(void);
+void func_8000B7E4(void);
 
 #endif // SAVE_FILE_H

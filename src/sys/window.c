@@ -1,5 +1,11 @@
 #include "common.h"
 #include "sys/window.h"
+#include "sys/sys.h"
+#include "sys/wave_uty.h"
+
+void func_8000B8F0(int arg0);
+void func_8000D33C(int arg0, int arg1);
+void func_8000D2C0(int arg0);
 
 // clang-format off
 
@@ -2043,40 +2049,133 @@ Gfx D_80063678[] = {
 
 // <<<<< bss >>>>>
 int          D_80167C40[2];
-int          D_80167C48[3];
+Window      *D_80167C48[3];
 WindowStyle *D_80167C54;
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B880.s")
+void func_8000B880(void)
+{
+    int i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B8A4.s")
+    for (i = 0; i < 3; i++) {
+        D_80167C48[i] = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B8B0.s")
+void func_8000B8A4(WindowStyle *arg0)
+{
+    D_80167C54 = arg0;
+}
+
+void func_8000B8B0(void)
+{
+    int i;
+
+    for (i = 0; i < 3; i++) {
+        func_8000B8F0(i);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B8F0.s")
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C260.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C314.s")
+int func_8000C314(int arg0)
+{
+    Window *win = D_80167C48[arg0];
+    int     state;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C3A0.s")
+    if (win != NULL) {
+        state = win->state;
+        if (state == 1) {
+            return 1;
+        }
+        if (win->state == 2) {
+            return 1;
+        }
+        if (win->state == 3) {
+            return 1;
+        }
+        if (win->state == 5) {
+            return 2;
+        }
+        if (win->state == 6) {
+            return 2;
+        }
+    }
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C3EC.s")
+void func_8000C3A0(int arg0)
+{
+    Window *w = D_80167C48[arg0];
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C430.s")
+    if (w != NULL && w->state == 4) {
+        w->state = 5;
+        w->unk_010 |= 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C454.s")
+void func_8000C3EC(int arg0)
+{
+    Window *w = D_80167C48[arg0];
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C488.s")
+    if (w != NULL) {
+        w->unk_06e = 0;
+        w->unk_074 += w->unk_076;
+        w->unk_06c = 0;
+        w->unk_072++;
+    }
+}
+
+void func_8000C430(int arg0, int arg1)
+{
+    Window *w = D_80167C48[arg0];
+
+    if (w != NULL) {
+        w->unk_070 = arg1;
+    }
+}
+
+void func_8000C454(int arg0)
+{
+    Window *w = D_80167C48[arg0];
+
+    if (w != NULL) {
+        w->unk_018 |= 2;
+    }
+}
+
+void func_8000C488(int arg0)
+{
+    Window *w = D_80167C48[arg0];
+
+    if (w != NULL) {
+        w->unk_018 &= ~2ULL;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C4C8.s")
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C4FC.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C53C.s")
+void func_8000C53C(int arg0, int arg1)
+{
+    Window *w = D_80167C48[arg0];
 
+    if (w != NULL) {
+        w->unk_024 = arg1;
+    }
+}
+
+#ifdef NON_MATCHING
+void func_8000C560(float arg0, int arg1)
+{
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C560.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C568.s")
 
@@ -2084,7 +2183,14 @@ WindowStyle *D_80167C54;
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C5A4.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C5E4.s")
+void func_8000C5E4(int arg0, float arg1)
+{
+    Window *w = D_80167C48[arg0];
+
+    if (w != NULL) {
+        w->unk_088 = arg1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C60C.s")
 
@@ -2094,24 +2200,179 @@ WindowStyle *D_80167C54;
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/D_8007AB80.s")
 
+#ifdef NON_MATCHING
+void func_8000C6A8(int idx, int arg1, int arg2, long long arg4, int s1, int s2, int s3, int s4, int s5, int s6, int s7, int s8, int s9)
+{
+    Window *win = amemAlloc(g_sys->memory_blocks, 0x1818);
+
+    if (win == NULL) {
+        rmonPrintf("MOJI WINDOW MALLOC Booooooo!\n");
+        return;
+    }
+    win->unk_000    = 1;
+    win->unk_004    = arg1;
+    win->unk_008    = arg2;
+    win->unk_010    = arg4;
+    win->unk_018    = 0;
+    win->unk_020    = idx;
+    win->unk_024    = 0;
+    win->state      = 1;
+    win->unk_028    = s8;
+    win->unk_032    = s1;
+    win->unk_034    = s2;
+    win->unk_02c    = s9;
+    win->unk_036    = s1;
+    win->unk_038    = s2;
+    win->unk_03a    = s3;
+    win->unk_050    = 10;
+    win->unk_054    = 7;
+    win->unk_058    = 0;
+    win->unk_05c    = 0;
+    win->unk_060    = 0;
+    win->unk_064    = 0;
+    win->unk_066    = 0;
+    win->unk_06a    = s6 * s7;
+    win->unk_06c    = 0;
+    win->unk_06e    = 0;
+    win->unk_070    = 8;
+    win->unk_072    = 0;
+    win->unk_074    = 0;
+    win->unk_076    = 16;
+    win->unk_078    = 0;
+    win->unk_07c    = 0;
+    win->unk_08c    = 0;
+    win->unk_090    = 0;
+    win->unk_044    = 1.0f;
+    win->unk_048    = 1.0f;
+    win->unk_088    = 1.0f;
+    win->unk_04c    = 0.0f;
+    win->unk_042    = s7;
+    win->unk_040    = s6;
+    win->unk_03e    = s5;
+    win->unk_068    = s5;
+    win->unk_03c    = s4;
+    D_80167C48[idx] = win;
+    func_8000D2C0(idx);
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C6A8.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C838.s")
 
+#ifdef NON_MATCHING
+void func_8000C878(int arg0)
+{
+    if (D_80167C48[arg0] != 0) {
+        PRINTF(("window_clear: free: %08x\n", D_80167C48[arg0]));
+        amemFree(g_sys->memory_blocks, D_80167C48[arg0]);
+        D_80167C48[arg0] = 0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C878.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C8D0.s")
+void func_8000C8D0(int arg0, int arg1, int arg2, int arg3, int arg4)
+{
+    Window *w = D_80167C48[arg0];
+
+    if (w != NULL) {
+        w->unk_064 = arg1;
+        w->unk_066 = arg2;
+        w->unk_068 = arg3;
+        w->unk_06a = arg4;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C904.s")
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D060.s")
 
+#ifdef NON_MATCHING
+void func_8000D180(int arg0, int arg1, void *arg2, long long arg4, int arg5, int arg6, int arg7, float arg8)
+{
+    Window      *win = D_80167C48[arg0];
+    WindowEntry *e;
+
+    if (win != NULL) {
+        e = win->entries;
+        e += arg1;
+        e->unk_04 = 1;
+        e->unk_00 = arg2;
+        e->unk_28 = arg4;
+        e->unk_06 = arg5;
+        e->unk_08 = arg6 + 4;
+        e->unk_0c = 10;
+        e->unk_0e = 0;
+        e->unk_0a = arg7 + 6;
+        e->unk_10 = 0;
+        e->unk_12 = 0;
+        e->unk_14 = arg8;
+        e->unk_18 = arg8;
+        e->unk_20 = 0;
+        e->unk_22 = 0;
+        e->unk_1c = 1.0f;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D180.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D220.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D2C0.s")
+void func_8000D2C0(int arg0)
+{
+    Window *w;
+    int     i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D33C.s")
+    if (D_80167C48[arg0] != NULL) {
+        w = D_80167C48[arg0];
+        for (i = 0; i < 0x78; i++) {
+            func_8000D33C(arg0, i);
+            w->unk_06e = 0;
+            w->unk_074 = 0;
+            w->unk_06c = 0;
+            w->unk_072 = 0;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D3B8.s")
+void func_8000D33C(int arg0, int arg1)
+{
+    Window      *win = D_80167C48[arg0];
+    WindowEntry *e;
+
+    if (win != NULL) {
+        e = win->entries;
+        e += arg1;
+        e->unk_04 = 0;
+        e->unk_00 = NULL;
+        e->unk_28 = 0;
+        e->unk_06 = 0;
+        e->unk_08 = 0;
+        e->unk_0a = 0;
+        e->unk_0c = 0;
+        e->unk_0e = 0;
+        e->unk_10 = 0;
+        e->unk_12 = 0;
+        e->unk_20 = 0;
+        e->unk_22 = 0;
+        e->unk_14 = 0.0f;
+        e->unk_18 = 0.0f;
+        e->unk_1c = 0.0f;
+    }
+}
+
+int func_8000D3B8(void)
+{
+    int i;
+    int ret = 0;
+
+    for (i = 0; i < 3; i++) {
+        if (D_80167C48[i] != 0) {
+            ret |= 1 << i;
+        }
+    }
+    return ret;
+}

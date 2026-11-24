@@ -1,5 +1,6 @@
 #include "common.h"
 #include "sys/stage.h"
+#include "sys/step.h"
 
 // clang-format off
 
@@ -33,7 +34,10 @@ EntryPoint D_8006D410[16] = {
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037080.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037090.s")
+void func_80037090(void)
+{
+    func_80003728(0xF);
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800370B0.s")
 

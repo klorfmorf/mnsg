@@ -60,8 +60,12 @@ CFLAGS = [
 OPTFLAGS = ["-O2"]
 MIPSISA = ["-mips2"]
 OPTFLAGS_OVERRIDES = {
+    "src/sys/audiomgr.c": ["-O2", "-g3"],
     "src/sys/bit.c": ["-O2", "-g3"],
     "src/sys/is_debug.c": ["-O2", "-g3"],
+    "src/sys/sd_main.c": ["-O2", "-g3"],
+    "src/sys/sd_sub1.c": ["-O2", "-g3"],
+    "src/sys/sd_sub2.c": ["-O2", "-g3"],
 }
 CHECK_FLAGS = [
     "-m32",
