@@ -6,6 +6,9 @@
 
 void anime_init_frame(void);
 int  anime_draw(ObjSolid *solid);
+float anime_frame_count(ObjSolid *solid);
+int  anime_locate_joint(ObjSolid *out, ObjSolid *solid, int target);
+int  anime_swap_models(ObjSolid *target_solid, unsigned int model, unsigned int *table);
 
 extern Vp             g_anime_default_vp;
 extern ObjSolid      *g_anime_solid;

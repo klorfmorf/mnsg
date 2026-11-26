@@ -5,6 +5,11 @@
 #include "structs.h"
 
 void func_8001C970(ObjSolid *dst, ObjSolid *src);
+int func_8001DA08(unsigned short n);
+void func_8001DB04(unsigned short *rot, float *vec, unsigned short arg2, unsigned short arg3, int arg4);
+void func_8001D460(float *base, float *out, float *dir);
+void func_8001D5B8(float *a, float *b, float *c);
+void func_8001D718(float *src, float *dst, float *vec);
 void func_8001E2BC(float (*mf)[4], ObjSolid *solid);
 void func_8001E380(float (*mf)[4], ObjSolid *solid);
 void func_8001E444(float (*mf)[4], float x, float y, float z);

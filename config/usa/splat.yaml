@@ -532,57 +532,62 @@ segments:
     subsegments:
     - [0x5872D0, databin]
 
+  # Player
   - name: file_11
     type: code
     start: 0x587370
     vram: 0x801CB460
     bss_size: 0xA40
-    subalign: 16
+    subalign: 8
     overlay: yes
     exclusive_ram_id: ram_801CB460
     subsegments:
-    - [0x587370, asm, file_11]
-    - [0x587B50, asm, 587B50]
-    - [0x58B870, asm, 58B870]
-    - [0x5907F0, asm, 5907F0]
-    - [0x5913D0, asm, 5913D0]
-    - [0x5944C0, asm, 5944C0]
-    - [0x598540, asm, 598540]
-    - [0x5995F0, asm, 5995F0]
-    - [0x5997A0, asm, 5997A0]
-    - [0x59D4E0, asm, 59D4E0]
-    - [0x5A12F0, asm, 5A12F0]
-    - [0x5A4730, asm, 5A4730]
-    - [0x5A6F30, asm, 5A6F30]
-    - [0x5AA6B0, asm, 5AA6B0]
-    - [0x5AE300, asm, 5AE300]
-    - [0x5AEBE0, asm, 5AEBE0]
-    - [0x5AFA40, asm, 5AFA40]
-    - [0x5B03F0, asm, 5B03F0]
-    - [0x5B13D0, asm, 5B13D0]
-    - [0x5B20B0, asm, 5B20B0]
-    - [0x5B71E0, asm, 5B71E0]
-    - [0x5B8500, data, file_11]
-    - [0x5C65D0, rodata, file_11]
-    - [0x5C6AB0, rodata, 58B870]
-    - [0x5C6B60, rodata, 5907F0]
-    - [0x5C6B90, rodata, 5913D0]
-    - [0x5C6C00, rodata, 5944C0]
-    - [0x5C6E70, rodata, 5997A0]
-    - [0x5C7100, rodata, 59D4E0]
-    - [0x5C72F0, rodata, 5A12F0]
-    - [0x5C74F0, rodata, 5A4730]
-    - [0x5C77B0, rodata, 5A6F30]
-    - [0x5C79A0, rodata, 5AA6B0]
-    - [0x5C7E60, rodata, 5AE300]
-    - [0x5C7E90, rodata, 5AEBE0]
-    - [0x5C8060, rodata, 5AFA40]
-    - [0x5C8110, rodata, 5B03F0]
-    - [0x5C81D0, rodata, 5B13D0]
-    - [0x5C81E0, rodata, 5B20B0]
-    - [0x5C85B0, rodata, 5B71E0]
-    - { start: 0x5C8770, name: file_11, type: bss, vram: 0x8020C860 }
+    - [0x587370, c, file_11]
+    - [0x587B50, c, 587B50]
+    - [0x5883D0, c, 5883D0]
+    - [0x58B870, c, 58B870]
+    - [0x5907F0, c, 5907F0]
+    - [0x5913D0, c, 5913D0]
+    - [0x5944C0, c, 5944C0]
+    - [0x598540, c, 598540]
+    - [0x5995F0, c, 5995F0]
+    - [0x5997A0, c, 5997A0]
+    - [0x59D4E0, c, 59D4E0]
+    - [0x5A12F0, c, 5A12F0]
+    - [0x5A4730, c, 5A4730]
+    - [0x5A6F30, c, 5A6F30]
+    - [0x5AA6B0, c, 5AA6B0]
+    - [0x5AE300, c, 5AE300]
+    - [0x5AEBE0, c, 5AEBE0]
+    - [0x5AFA40, c, 5AFA40]
+    - [0x5B03F0, c, 5B03F0]
+    - [0x5B13D0, c, 5B13D0]
+    - [0x5B20B0, c, 5B20B0]
+    - [0x5B71E0, c, 5B71E0]
+    - [0x5B8500, data, unmigrated/file_11]
+    - [0x5C65D0, rodata, unmigrated/file_11]
+    - [0x5C6700, .rodata, 5883D0]
+    - [0x5C6900, rodata, unmigrated/file_11_b]
+    - [0x5C6AB0, .rodata, 58B870]
+    - [0x5C6B60, .rodata, 5907F0]
+    - [0x5C6B90, rodata, unmigrated/5913D0]
+    - [0x5C6C00, .rodata, 5944C0]
+    - [0x5C6E70, .rodata, 5997A0]
+    - [0x5C7100, .rodata, 59D4E0]
+    - [0x5C72F0, .rodata, 5A12F0]
+    - [0x5C74F0, .rodata, 5A4730]
+    - [0x5C77B0, .rodata, 5A6F30]
+    - [0x5C79A0, rodata, unmigrated/5AA6B0]
+    - [0x5C7E60, .rodata, 5AE300]
+    - [0x5C7E90, .rodata, 5AEBE0]
+    - [0x5C8060, .rodata, 5AFA40]
+    - [0x5C8110, .rodata, 5B03F0]
+    - [0x5C81D0, .rodata, 5B13D0]
+    - [0x5C81E0, .rodata, 5B20B0]
+    - [0x5C85B0, .rodata, 5B71E0]
+    - { start: 0x5C8770, name: unmigrated/file_11, type: bss, vram: 0x8020C860 }
 
+  # Enemy
   - name: file_12
     type: code
     start: 0x5C8770
@@ -592,14 +597,14 @@ segments:
     overlay: yes
     exclusive_ram_id: ram_8020D2A0
     subsegments:
-    - [0x5C8770, asm, file_12]
+    - [0x5C8770, c, file_12]
     - [0x5C9310, asm, 5C9310]
     - [0x5CC7B0, asm, 5CC7B0]
     - [0x5D0060, asm, 5D0060]
     - [0x5D0490, asm, 5D0490]
     - [0x5D04A0, asm, 5D04A0]
     - [0x5D06B0, asm, 5D06B0]
-    - [0x5D1B10, asm, 5D1B10]
+    - [0x5D1B10, c, 5D1B10]
     - [0x5D62A0, asm, 5D62A0]
     - [0x5DC440, asm, 5DC440]
     - [0x5DEE80, asm, 5DEE80]
@@ -607,19 +612,21 @@ segments:
     - [0x5E02F0, asm, 5E02F0]
     - [0x5E1330, asm, 5E1330]
     - [0x5E1D10, asm, 5E1D10]
-    - [0x5E3C90, data, file_12]
-    - [0x5F4F60, rodata, file_12]
+    - [0x5E3C90, data, unmigrated/file_12]
+    - [0x5F4F60, rodata, unmigrated/file_12]
     - [0x5F4FD0, rodata, 5CC7B0]
     - [0x5F55F0, rodata, 5D04A0]
     - [0x5F5600, rodata, 5D06B0]
-    - [0x5F5950, rodata, 5D1B10]
+    - [0x5F5950, .rodata, 5D1B10]
+    - [0x5F5A90, rodata, unmigrated/5D1B10]
     - [0x5F5B70, rodata, 5D62A0]
     - [0x5F5E80, rodata, 5DC440]
     - [0x5F5F90, rodata, 5DF1B0]
     - [0x5F6060, rodata, 5E02F0]
     - [0x5F6510, rodata, 5E1D10]
-    - { start: 0x5F6840, name: file_12, type: bss, vram: 0x8023B370 }
+    - { start: 0x5F6840, name: unmigrated/file_12, type: bss, vram: 0x8023B370 }
 
+  # Impact 3D Boss
   - name: file_13
     dir: 3dboss
     type: code
@@ -653,6 +660,7 @@ segments:
     - [0x63A1A0, rodata, 62FAD0]
     - { start: 0x63A2B0, name: file_13, type: bss, vram: 0x8020EED0 }
 
+  # Impact Bomber
   - name: file_14
     type: code
     start: 0x63A2B0
@@ -739,6 +747,7 @@ segments:
     - [0x65E2B0, rodata, 651D20]
     - [0x65E2D0, rodata, 652110]
 
+  # Adventure Diary (File Select and Options)
   - name: file_15
     type: code
     start: 0x65E310
@@ -767,6 +776,7 @@ segments:
     - [0x6679A0, rodata, 664880]
     - { start: 0x667B90, name: file_15, type: bss, vram: 0x801D4CE0 }
 
+  # Game Over Sequence
   - name: file_16
     type: code
     start: 0x667B90
@@ -781,6 +791,7 @@ segments:
     - [0x66BF90, rodata, file_16]
     - { start: 0x66C250, name: file_16, type: bss, vram: 0x801CFB20 }
 
+  # Pause and Atlas (Map of Japan or Map of Castle)
   - name: file_17
     type: code
     start: 0x66C250
@@ -809,6 +820,7 @@ segments:
     - [0x676B80, rodata, 6755A0]
     - { start: 0x676C80, name: file_17, type: bss, vram: 0x80217CD0 }
 
+  # Cutscenes (Opening, Call Goemon Impact, Ending)
   - name: file_18
     type: code
     start: 0x676C80
@@ -836,6 +848,7 @@ segments:
     - [0x694B10, rodata, 690820]
     - { start: 0x694CA0, name: file_18, type: bss, vram: 0x8022B2C0 }
 
+  # Title Screen and Theme of Ganbare Goemon Sequence
   - name: file_19
     type: code
     start: 0x694CA0
@@ -850,6 +863,7 @@ segments:
     - [0x69C5A0, rodata, file_19]
     - { start: 0x69CBD0, name: file_19, type: bss, vram: 0x802151D0 }
 
+  # Goemon Team Logo
   - name: file_20
     type: code
     start: 0x69CBD0
@@ -863,6 +877,7 @@ segments:
     - [0x69D420, rodata, file_20]
     - { start: 0x69D4E0, name: file_20, type: bss, vram: 0x801CBD70 }
 
+  # Unused Title Screen
   - name: file_21
     type: code
     start: 0x69D4E0
@@ -875,6 +890,7 @@ segments:
     - [0x69DA20, asm, 69DA20]
     - [0x69DA50, data, file_21]
 
+  # Konami Logo
   - name: file_22
     dir: konami
     type: code
@@ -890,6 +906,7 @@ segments:
     - [0x6A9900, rodata, konami]
     - { start: 0x6A9920, name: file_22, type: bss, vram: 0x801D6D00 }
 
+  # Controller Pak Manager
   - name: file_23
     type: code
     start: 0x6A9920
@@ -904,6 +921,7 @@ segments:
     - [0x6AC520, rodata, file_23]
     - { start: 0x6AC550, name: file_23, type: bss, vram: 0x801CE090 }
 
+  # 
   - name: file_24
     type: code
     start: 0x6AC550
@@ -917,6 +935,7 @@ segments:
     - [0x6AD260, rodata, file_24]
     - { start: 0x6AD3C0, name: file_24, type: bss, vram: 0x8000E70 }
 
+  # Rippling Water
   - name: file_25
     type: code
     start: 0x6AD3C0
@@ -929,6 +948,7 @@ segments:
     - [0x6AE630, data, file_25]
     - [0x6AE640, rodata, file_25]
 
+  # Collectibles
   - name: file_26
     type: code
     start: 0x6AE7E0
@@ -940,6 +960,7 @@ segments:
     - [0x6AE7E0, asm, file_26]
     - [0x6AF2A0, rodata, file_26]
 
+  # NPCs and Shops
   - name: file_27
     type: code
     start: 0x6AF410
@@ -952,6 +973,7 @@ segments:
     - [0x6B2C70, data, file_27]
     - [0x6B2CC0, rodata, file_27]
 
+  # Pot
   - name: file_28
     type: code
     start: 0x6B2FA0
@@ -960,9 +982,10 @@ segments:
     overlay: yes
     exclusive_ram_id: ram_08000000
     subsegments:
-    - [0x6B2FA0, asm, file_28]
-    - [0x6B3250, rodata, file_28]
+    - [0x6B2FA0, c, file_28]
+    - [0x6B3250, .rodata, file_28]
 
+  # Congo Boss, Tsurami Boss, Cutscenes
   - name: file_29
     type: code
     start: 0x6B32A0
@@ -974,6 +997,7 @@ segments:
     - [0x6B32A0, asm, file_29]
     - [0x6BEC60, rodata, file_29]
 
+  # Castle "Gimmicks" and Collectibles
   - name: file_30
     type: code
     start: 0x6BF750
@@ -986,6 +1010,7 @@ segments:
     - [0x6C7380, data, file_30]
     - [0x6C7410, rodata, file_30]
 
+  # Otsuki-tai, Kakashi Hōdai, Kubideko Hōdai, Shishigashira, Shishi-odori enemies
   - name: file_31
     type: code
     start: 0x6C8210
@@ -997,6 +1022,7 @@ segments:
     - [0x6C8210, asm, file_31]
     - [0x6CE900, rodata, file_31]
 
+  # Hanataba Otsuki-tai enemies
   - name: file_32
     type: code
     start: 0x6CF0E0
@@ -1008,7 +1034,8 @@ segments:
     - [0x6CF0E0, asm, file_32]
     - [0x6D3800, data, file_32]
     - [0x6D38C0, rodata, file_32]
-
+  
+  # Shakutori Fūkin, Boulder, Barrel enemies
   - name: file_33
     type: code
     start: 0x6D3A90
@@ -1032,6 +1059,7 @@ segments:
     - [0x6D4340, asm, file_34]
     - [0x6D5DE0, rodata, file_34]
 
+  # Burikin, Wagashi Shōgun, Hannya Daiku
   - name: file_35
     type: code
     start: 0x6D5F50
@@ -1502,6 +1530,7 @@ segments:
     - [0x732F30, asm, file_73]
     - [0x734670, rodata, file_73]
 
+  # Gorgeous My Stage Sequence
   - name: file_74
     type: code
     start: 0x734790

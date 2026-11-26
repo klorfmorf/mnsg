@@ -78,7 +78,7 @@ typedef struct ObjSprite {
     /* 0x13 */ unsigned char  unk_13;
     /* 0x14 */ ObjSpriteTex  *unk_14;
     /* 0x18 */ unsigned short unk_18;
-    /* 0x1A */ unsigned char  unk_1a;
+    /* 0x1A */ unsigned char  unk_1a; // respawn delay
     /* 0x1B */ unsigned char  unk_1b;
     /* 0x1C */ union {
         int   unk_1c_word;
@@ -120,7 +120,11 @@ typedef struct ObjSolid {
     /* 0x78 */ struct ObjSolid *child;
     /* 0x7C */ unsigned char    param;
     /* 0x7E */ unsigned short   param_fx8;
-    /* 0x80 */ unsigned char    work[20];
+    /* 0x80 */ union {
+        unsigned char work[20];
+        float         work_f[5];
+        unsigned int  work_w[5];
+    };
     /* 0x94 */ struct ObjSolid *parent;
 } ObjSolid; // size = 0x98
 
@@ -402,8 +406,8 @@ typedef struct Task {
     /* 0x4D */ unsigned char  unk_4d;
     /* 0x4E */ unsigned short unk_4e;
     /* 0x50 */ unsigned short unk_50;
-    /* 0x52 */ unsigned short unk_52;
-    /* 0x54 */ unsigned int   unk_54;
+    /* 0x52 */ short          unk_52;
+    /* 0x54 */ void         *unk_54;
     /* 0x58 */ unsigned int   unk_58;
     /* 0x5C */ unsigned int   work[0x25]; // Task-specific data; see the `*_WORK` macros.
 } Task;                                   // size = 0xF0
@@ -637,7 +641,9 @@ typedef struct SaveFile {
     /* 0x064 */ SaveStats      stats;
     /* 0x094 */ int            unk_94;
     /* 0x098 */ int            unk_98;
-    /* 0x09C */ unsigned char  unk_9c[0x28];
+    /* 0x09C */ unsigned char  unk_9c[8];
+    /* 0x0A4 */ int            unk_a4[4];
+    /* 0x0B4 */ unsigned char  unk_b4[0x10];
     /* 0x0C4 */ int            unk_c4;
     /* 0x0C8 */ unsigned char  unk_c8[0x34];
     /* 0x0FC */ int            unk_fc;
@@ -1058,7 +1064,7 @@ typedef struct Sys {
     /* 0xCF8E4 */ void           *skybox_manager_task;
     /* 0xCF8E8 */ void           *room_lighting_task;
     /* 0xCF8EC */ void           *unk_cf8ec;
-    /* 0xCF8F0 */ void           *hud_graphics_task;
+    /* 0xCF8F0 */ Task           *hud_graphics_task;
     /* 0xCF8F4 */ void           *room_graphics_task;
     /* 0xCF8F8 */ void           *unk_cf8f8;
     /* 0xCF8FC */ unsigned int    unk_cf8fc;
@@ -1327,5 +1333,368 @@ typedef struct {
     /* 0x02F8 */ OSMesg        audioReplyMsgBuf[64];
     /* 0x03F8 */ ALGlobals     g;
 } AMAudioMgr; // size = 0x448
+
+// ===== file_12 =====
+// Entry of the room table D_80231300_5EC7D0, indexed by Sys.intended_room_id.
+typedef struct RoomDef {
+    /* 0x00 */ unsigned char pad_00[0x18];
+    /* 0x18 */ void         *load_files_function;
+} RoomDef;
+
+// One spawn point; EnemyMgr.cells holds a list of these per grid cell.
+typedef struct EnemySpawn {
+    /* 0x00 */ short          x, y, z;
+    /* 0x06 */ unsigned short rx, ry, rz;
+    /* 0x0C */ int            def; // EnemyDef, still wave relative (func_80014840)
+    /* 0x10 */ unsigned char  spawned;
+} EnemySpawn; // size = 0x14
+
+typedef struct EnemyDef {
+    /* 0x00 */ unsigned short type; // 1-based index into the enemy tables (D_802287C0_5E3C90, ...)
+    /* 0x04 */ unsigned int   ebuf[3]; // initial EnemyWork.ebuf[0..2]
+} EnemyDef; // size = 0x10
+
+// One generic enemy work slot; the debug strings name them EbufNN with a type suffix ("Ebuf02U", "Ebuf07U").
+typedef union EnemyBuf {
+    unsigned int   u;
+    int            s;
+    float          f;
+    unsigned short h[2];
+    unsigned char  b[4];
+} EnemyBuf; // size = 0x4
+
+// Enemy manager at D_8015CC30 in the sys bss (a view over the D_8015CC30, D_8015CCC0 and D_8015CCD8 arrays of
+// sys.c; see ENEMY_MGR). The size is not known yet.
+typedef struct EnemyMgr {
+    /* 0x00 */ unsigned short frame; // counts calls of func_8020DD78_5C9248
+    /* 0x04 */ float          cell_x; // cell size
+    /* 0x08 */ float          cell_y;
+    /* 0x0C */ float          cell_z;
+    /* 0x10 */ float          center_x; // world position of the grid center
+    /* 0x14 */ float          center_y;
+    /* 0x18 */ float          center_z;
+    /* 0x1C */ int            size_x; // grid size in cells
+    /* 0x20 */ int            size_y;
+    /* 0x24 */ int            size_z;
+    /* 0x28 */ unsigned char  unk_28[0x10];
+    /* 0x38 */ int           *cells; // size_x * size_y * size_z wave-relative EnemySpawn lists
+    /* 0x3C */ unsigned int   unk_3c;
+    /* 0x40 */ unsigned short wave_no;
+    /* 0x44 */ int            radius; // spawn radius in cells
+    /* 0x48 */ unsigned char  unk_48[0x44];
+    /* 0x8C */ Task          *parents[9]; // parent tasks of the enemy categories (func_80219CA0_5D5170)
+    /* 0xB0 */ int            limits[5];  // most enemies of a capped category under one parent
+    /* 0xC4 */ unsigned int   unk_c4;
+    /* 0xC8 */ unsigned int   unk_c8;
+    /* 0xCC */ unsigned int   unk_cc; // no enemy spawns while this is below unk_c4 or unk_c8
+    /* 0xD0 */ unsigned char  category; // of the last func_80219CA0_5D5170 call
+    /* 0xD1 */ unsigned char  unk_d1[7];
+    /* 0xD8 */ unsigned char  next_id;
+    /* 0xD9 */ unsigned char  unk_d9[0x2B];
+    /* 0x104 */ float         unk_104; // set to 1.0f by the init
+    /* 0x108 */ unsigned char unk_108; // enemy id candidate of func_8020DC78_5C9148
+    /* 0x109 */ unsigned char unk_109;
+    /* 0x10A */ unsigned short unk_10a;
+    /* 0x10C */ unsigned char unk_10c[0x20];
+    /* 0x12C */ void         *unk_12c; // D_801FC604_5B8514 of the player overlay
+    /* 0x130 */ ObjSolid     *player; // D_801FC60C_5B851C of the player overlay
+    /* 0x134 */ unsigned char unk_134[0x24];
+    /* 0x158 */ int           unk_158;
+    /* 0x15C */ int           unk_15c;
+} EnemyMgr;
+
+// The work area of every enemy task (Task.work). Enemy specific state lives in the ebuf slots.
+typedef struct EnemyWork {
+    /* 0x00 */ unsigned short type; // EnemyDef.type
+    /* 0x02 */ unsigned short type2;
+    /* 0x04 */ unsigned int   flags_04;
+    /* 0x08 */ unsigned int   flags_08;
+    /* 0x0C */ unsigned int   flags_0c; // bit 0: hit, bit 1: dead (func_80218F30_5D4400 then queues a respawn)
+    /* 0x10 */ unsigned char  unk_10;
+    /* 0x11 */ unsigned char  unk_11[3];
+    /* 0x14 */ EnemySpawn    *spawn;
+    /* 0x18 */ unsigned char  id; // from EnemyMgr.next_id
+    /* 0x19 */ unsigned char  unk_19;
+    /* 0x1A */ unsigned char  unk_1a; // respawn delay
+    /* 0x1B */ unsigned char  category; // D_80229FE4_5E54B4; selects the parent task (func_80219CA0_5D5170)
+    /* 0x1C */ float          unk_1c[3];
+    /* 0x28 */ ObjSolid      *player; // EnemyMgr.player
+    /* 0x2C */ unsigned char  unk_2c[5];
+    /* 0x31 */ unsigned char  unk_31;
+    /* 0x32 */ unsigned char  unk_32[8];
+    /* 0x3A */ unsigned short unk_3a;
+    /* 0x3C */ unsigned char  unk_3c;
+    /* 0x3D */ unsigned char  unk_3d;
+    /* 0x3E */ unsigned char  unk_3e;
+    /* 0x3F */ unsigned char  unk_3f;
+    /* 0x40 */ unsigned char  unk_40[8];
+    /* 0x48 */ unsigned short unk_48;
+    /* 0x4A */ unsigned char  unk_4a[0x2A];
+    /* 0x74 */ EnemyBuf       ebuf[8]; // Ebuf00..Ebuf07; each enemy decides what they hold
+} EnemyWork; // size = 0x94 (all of Task.work)
+
+// ===== file_11 =====
+typedef struct PlayerWaveList {
+    /* 0x00 */ unsigned short wave[2];
+} PlayerWaveList; // size = 0x4
+
+typedef struct PlayerByteTable {
+    /* 0x00 */ unsigned char byte[4];
+} PlayerByteTable; // size = 0x4
+
+typedef struct PlayerModeTable {
+    /* 0x00 */ void (*funcs[3])(void);
+} PlayerModeTable; // size = 0xC
+
+typedef struct PlayerPhysics {
+    /* 0x00 */ unsigned short unk_00;
+    /* 0x02 */ unsigned short unk_02;
+    /* 0x04 */ float          unk_04;
+    /* 0x08 */ unsigned short unk_08;
+    /* 0x0A */ unsigned char  pad_0a[2];
+    /* 0x0C */ float          unk_0c;
+    /* 0x10 */ float          unk_10;
+    /* 0x14 */ float          unk_14;
+    /* 0x18 */ unsigned char  unk_18;
+    /* 0x19 */ unsigned char  unk_19;
+    /* 0x1A */ unsigned short angle;
+    /* 0x1C */ float          unk_1c;
+    /* 0x20 */ float          speed;
+    /* 0x24 */ float          speed_prev;
+    /* 0x28 */ float          speed_prev2;
+    /* 0x2C */ unsigned char  unk_2c;
+    /* 0x2D */ unsigned char  unk_2d;
+    /* 0x2E */ unsigned char  unk_2e;
+    /* 0x2F */ unsigned char  unk_2f;
+    /* 0x30 */ unsigned short unk_30;
+    /* 0x32 */ unsigned short unk_32;
+    /* 0x34 */ unsigned short unk_34;
+    /* 0x36 */ unsigned short unk_36;
+    /* 0x38 */ int            unk_38;
+    /* 0x3C */ float          unk_3c;
+    /* 0x40 */ float          unk_40;
+    /* 0x44 */ float          unk_44;
+    /* 0x48 */ float          unk_48;
+    /* 0x4C */ int            unk_4c;
+    /* 0x50 */ float          unk_50;
+    /* 0x54 */ float          unk_54;
+    /* 0x58 */ unsigned char  unk_58;
+    /* 0x59 */ unsigned char  unk_59;
+    /* 0x5A */ unsigned char  pad_5a[2];
+    /* 0x5C */ float          unk_5c;
+    /* 0x60 */ float          unk_60;
+    /* 0x64 */ float          unk_64;
+    /* 0x68 */ unsigned char  unk_68;
+    /* 0x69 */ unsigned char  unk_69;
+    /* 0x6A */ unsigned short unk_6a;
+    /* 0x6C */ float          unk_6c;
+    /* 0x70 */ float          unk_70;
+    /* 0x74 */ float          unk_74;
+    /* 0x78 */ unsigned char  unk_78;
+    /* 0x79 */ unsigned char  pad_79[3];
+    /* 0x7C */ void          *unk_7c;
+    /* 0x80 */ int            unk_80;
+    /* 0x84 */ unsigned char  unk_84;
+    /* 0x85 */ unsigned char  unk_85;
+    /* 0x86 */ unsigned short unk_86;
+    /* 0x88 */ Task         *unk_88;
+    /* 0x8C */ int            unk_8c;
+    /* 0x90 */ int            unk_90;
+    /* 0x94 */ int            unk_94;
+    /* 0x98 */ int            unk_98;
+    /* 0x9C */ int            unk_9c;
+    /* 0xA0 */ int            unk_a0;
+    /* 0xA4 */ unsigned short unk_a4;
+    /* 0xA6 */ unsigned short unk_a6;
+    /* 0xA8 */ unsigned short unk_a8;
+    /* 0xAA */ unsigned char  unk_aa;
+    /* 0xAB */ unsigned char  pad_ab;
+    /* 0xAC */ float          unk_ac;
+    /* 0xB0 */ float          unk_b0;
+    /* 0xB4 */ Task          *afterline;
+    /* 0xB8 */ float          unk_b8[3];
+} PlayerPhysics; // size = 0xC4
+
+// Task.work of the player task.
+typedef struct PlayerWork {
+    /* 0x00 */ PlayerPhysics *physics;
+    /* 0x04 */ unsigned char  character;
+    /* 0x05 */ unsigned char  unk_05;
+    /* 0x06 */ unsigned char  unk_06;
+    /* 0x07 */ unsigned char  unk_07;
+    /* 0x08 */ Task          *camera;
+    /* 0x0C */ float          unk_0c;
+    /* 0x10 */ float          unk_10;
+    /* 0x14 */ float          unk_14;
+    /* 0x18 */ float          unk_18;
+    /* 0x1C */ float          unk_1c;
+    /* 0x20 */ float          unk_20;
+    /* 0x24 */ unsigned short unk_24;
+    /* 0x26 */ unsigned short unk_26;
+    /* 0x28 */ float          unk_28;
+    /* 0x2C */ float          unk_2c;
+    /* 0x30 */ float          unk_30;
+    /* 0x34 */ unsigned char  controller;
+    /* 0x35 */ unsigned char  unk_35;
+    /* 0x36 */ unsigned char  unk_36;
+    /* 0x37 */ unsigned char  pad_37;
+    /* 0x38 */ unsigned short angle;
+    /* 0x3A */ unsigned short unk_3a;
+    /* 0x3C */ unsigned short unk_3c;
+    /* 0x3E */ unsigned short unk_3e;
+    /* 0x40 */ int            unk_40;
+    /* 0x44 */ int            unk_44;
+    /* 0x48 */ float          unk_48;
+    /* 0x4C */ float          unk_4c;
+    /* 0x50 */ float          unk_50;
+    /* 0x54 */ float          unk_54;
+    /* 0x58 */ float          unk_58;
+    /* 0x5C */ float          unk_5c;
+    /* 0x60 */ float          unk_60;
+    /* 0x64 */ float          unk_64;
+    /* 0x68 */ float          unk_68;
+    /* 0x6C */ float          unk_6c;
+    /* 0x70 */ unsigned char  state;
+    /* 0x71 */ unsigned char  unk_71;
+    /* 0x72 */ unsigned short unk_72;
+    /* 0x74 */ float          unk_74;
+    /* 0x78 */ unsigned char  unk_78;
+    /* 0x79 */ unsigned char  pad_79[6];
+    /* 0x7F */ unsigned char  unk_7f;
+    /* 0x80 */ Task          *fx_mgr;
+    /* 0x84 */ int            unk_84;
+    /* 0x88 */ float          unk_88;
+    /* 0x8C */ float          unk_8c;
+    /* 0x90 */ unsigned char  unk_90;
+    /* 0x91 */ unsigned char  unk_91;
+    /* 0x92 */ unsigned short unk_92;
+} PlayerWork; // size = 0x94
+
+// Task.work of the player effects manager.
+typedef struct PlayerFxWork {
+    /* 0x00 */ Task *player;
+} PlayerFxWork;
+
+// ===== 5907F0 =====
+// Position of the player model (ObjSolid.AModel without the flag bits), followed by the previous position.
+typedef struct PlayerMotion {
+    /* 0x00 */ float          x, y, z;
+    /* 0x0C */ float          prev_x, prev_y, prev_z;
+    /* 0x18 */ unsigned char  pad_18[2];
+    /* 0x1A */ unsigned short angle;
+} PlayerMotion;
+
+// Task.work of the camera task that follows the player.
+typedef struct CameraWork {
+    /* 0x00 */ unsigned short unk_00;
+    /* 0x02 */ unsigned char  unk_02;
+    /* 0x03 */ unsigned char  unk_03;
+    /* 0x04 */ unsigned char  pad_04[2];
+    /* 0x06 */ unsigned char  unk_06;
+    /* 0x07 */ unsigned char  unk_07;
+    /* 0x08 */ unsigned short unk_08;
+    /* 0x0A */ unsigned short unk_0a;
+    /* 0x0C */ unsigned short unk_0c;
+    /* 0x0E */ unsigned char  pad_0e[4];
+    /* 0x12 */ unsigned short unk_12;
+    /* 0x14 */ unsigned char  unk_14;
+    /* 0x15 */ unsigned char  unk_15;
+    /* 0x16 */ unsigned char  pad_16;
+    /* 0x17 */ unsigned char  unk_17;
+    /* 0x18 */ unsigned char  pad_18[0x24];
+    /* 0x3C */ union {
+        unsigned char  unk_3c;
+        unsigned short unk_3c_h;
+    };
+    /* 0x3E */ unsigned char  pad_3e[0x16];
+    /* 0x54 */ unsigned short unk_54;
+    /* 0x56 */ unsigned short unk_56;
+    /* 0x58 */ unsigned char  pad_58[0x1C];
+    /* 0x74 */ unsigned char  unk_74;
+    /* 0x75 */ unsigned char  unk_75;
+    /* 0x76 */ unsigned char  unk_76;
+    /* 0x77 */ unsigned char  pad_77[0x15];
+    /* 0x8C */ unsigned char  unk_8c;
+    /* 0x8D */ unsigned char  pad_8d[7];
+} CameraWork; // size = 0x94
+
+// ===== 5AE300 =====
+// Colour and exec of one kind of player effect.
+typedef struct PlayerEffectTemplate {
+    /* 0x00 */ void (*exec)(struct Task *, struct Obj *);
+    /* 0x04 */ unsigned char unk_4;
+    /* 0x05 */ unsigned char unk_5;
+    /* 0x06 */ unsigned char unk_6;
+    /* 0x07 */ unsigned char unk_7;
+    /* 0x08 */ unsigned char unk_8;
+    /* 0x09 */ unsigned char unk_9;
+    /* 0x0A */ unsigned char unk_a;
+} PlayerEffectTemplate;
+
+typedef struct PlayerEffectAnim {
+    /* 0x0 */ signed char state;
+    /* 0x2 */ short       counter;
+    /* 0x4 */ float       speed;
+} PlayerEffectAnim; // size = 0x8
+
+// Frame table of a player effect: entry, index into it and frames left on the entry.
+typedef struct PlayerEffectSeq {
+    /* 0x0 */ unsigned int  *tbl;
+    /* 0x4 */ unsigned char  idx;
+    /* 0x5 */ unsigned char  pad_5;
+    /* 0x6 */ short          timer;
+} PlayerEffectSeq; // size = 0x8
+
+// Task.work of a player effect.
+typedef struct PlayerEffectWork {
+    /* 0x00 */ union {
+        PlayerPhysics *physics;
+        Task          *player_task;
+    };
+    /* 0x04 */ unsigned char  state;
+    /* 0x05 */ unsigned char  unk_05;
+    /* 0x06 */ unsigned short unk_06;
+    /* 0x08 */ unsigned char  kind;
+    /* 0x09 */ unsigned char  done;
+    /* 0x0A */ unsigned char  unk_0a;
+    /* 0x0B */ unsigned char  unk_0b;
+    /* 0x0C */ unsigned short unk_0c;
+    /* 0x0E */ unsigned char  pad_0e[2];
+    /* 0x10 */ float          vel[3];
+    /* 0x1C */ unsigned char  pad_1c[0xC];
+    /* 0x28 */ Task          *player;
+    /* 0x2C */ union {
+        int   dir;
+        float step;
+    };
+    /* 0x30 */ union {
+        int   frames;
+        float life;
+    };
+    /* 0x34 */ float          growth;
+    /* 0x38 */ PlayerEffectSeq seq;
+    /* 0x40 */ unsigned char  pad_40[4];
+    /* 0x44 */ unsigned short angle;
+    /* 0x46 */ unsigned char  pad_46[4];
+    /* 0x4A */ unsigned char  count;
+    /* 0x4B */ unsigned char  pad_4b;
+    /* 0x4C */ unsigned int   model;
+    /* 0x50 */ unsigned char  pad_50[0xC];
+    /* 0x5C */ unsigned int  dl[6];
+    /* 0x74 */ unsigned char  pad_74[0xC];
+    /* 0x80 */ PlayerEffectAnim anim;
+} PlayerEffectWork;
+
+// ===== 5AFA40 =====
+typedef struct AfterlineJoints {
+    /* 0x00 */ unsigned int target[6];
+} AfterlineJoints; // size = 0x18
+
+// ===== 5B71E0 =====
+typedef struct RoomIdleType {
+    /* 0x0 */ unsigned short room_id;
+    /* 0x2 */ unsigned char  type;
+    /* 0x3 */ unsigned char  pad_3;
+} RoomIdleType; // size = 0x4
 
 #endif // STRUCTS_H

@@ -590,3 +590,22 @@ amCreateAudioMgr = 0x80037DC0; // type:func
 // task.c
 g_task_list = 0x8006D328; // size:0x14
 g_task_list_init = 0x8006D33C; // size:0x14
+
+// 587B50.c / 5883D0.c
+D_8020A7E8_5C66F8 = 0x8020A7E8; // size:0x4 segment:file_11
+D_8020A7F0_5C6700 = 0x8020A7F0; // type:asciz segment:file_11
+D_8020A814_5C6724 = 0x8020A814; // type:asciz segment:file_11
+D_8020A9E0_5C68F0 = 0x8020A9E0; // size:0x8 force_migration:True segment:file_11
+
+// 5944C0.c
+D_8020ACF0_5C6C00 = 0x8020ACF0; // force_not_migration:True segment:file_11
+D_8020ACF8_5C6C08 = 0x8020ACF8; // force_not_migration:True segment:file_11
+D_8020ACFC_5C6C0C = 0x8020ACFC; // force_not_migration:True segment:file_11
+D_8020AD00_5C6C10 = 0x8020AD00; // force_not_migration:True segment:file_11
+
+// 5B71E0.c
+jtbl_8020C7F8_5C8708 = 0x8020C7F8; // force_not_migration:True segment:file_11
+D_8020C820_5C8730 = 0x8020C820; // force_not_migration:True segment:file_11
+D_8020C824_5C8734 = 0x8020C824; // force_not_migration:True segment:file_11
+D_8020C828_5C8738 = 0x8020C828; // force_not_migration:True segment:file_11
+D_8020C858_5C8768 = 0x8020C858; // force_not_migration:True segment:file_11

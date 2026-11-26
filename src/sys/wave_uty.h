@@ -5,10 +5,12 @@
 #include "structs.h"
 
 void  func_80013940(void);
+int   func_80013AC4(unsigned short *wave_no_list);
 int   func_80013B14(unsigned short wave_no);
 int   func_800141C4(unsigned int wave_no);
 int   func_80014218(ObjSolid *solid);
 void  func_8001481C(Task *task);
+int   func_80014840(int arg0, unsigned int wave_no);
 void  func_800148C0(AmemBlock *arg0, char *arg1, unsigned int arg2);
 void *amemAlloc(AmemBlock *arg0, int size);
 void *amemFree(AmemBlock *arg0, void *arg1);

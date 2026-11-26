@@ -15,8 +15,12 @@ extern Gfx D_8006D708[];
 extern Gfx D_8006D738[];
 extern Gfx D_8006D798[];
 extern Gfx D_8006D7C8[];
+extern Gfx D_8006D920[];
+extern Gfx D_8006DDE8[];
 extern Gfx D_8006DFF8[];
 extern Gfx D_8006E020[];
 extern Gfx D_8006E030[];
+extern Gfx D_8006E170[];
+extern Gfx D_8006E1C8[];
 
 #endif // GFX_DATA_H

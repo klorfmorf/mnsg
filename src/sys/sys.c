@@ -15,7 +15,11 @@ SaveFile           D_8015C910;
 unsigned char      D_8015CC18[0x18];
 unsigned int       D_8015CC30[36];
 int                D_8015CCC0[6];
-unsigned char      D_8015CCD8[0x118];
+unsigned char      D_8015CCD8[0x104];
+EnemySpawn        *D_8015CDDC; // current spawn point (func_8020D36C_5C883C)
+EnemyDef          *D_8015CDE0; // its EnemyDef
+int                D_8015CDE4;
+int                D_8015CDE8[2];
 unsigned long long D_8015CDF0[512];
 unsigned long long D_8015DDF0[1173];
 int                D_80160298[3];

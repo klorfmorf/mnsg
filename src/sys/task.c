@@ -22,7 +22,6 @@ void  func_80035430(Task *task, Obj *obj);
 void  func_80035490(Task *task);
 void  func_800354B4(Task *task, Obj *obj);
 Task *func_8003555C(Task *prev, void (*exec)(Task *, Obj *), unsigned int model, unsigned int glist, float tx, float ty, float tz, unsigned short rx, unsigned short ry, unsigned short rz, float sx, float sy, float sz, unsigned short wave0, unsigned short wave1, unsigned short priority);
-Task *func_80035690(Task *prev, void (*exec)(Task *, Obj *), unsigned int model, unsigned int glist, float tx, float ty, float tz, unsigned short rx, unsigned short ry, unsigned short rz, float sx, float sy, float sz, unsigned short wave0, unsigned short wave1, unsigned short priority);
 Task *func_800357BC(Task *prev, void (*exec)(Task *, Obj *), unsigned int model, unsigned int glist, float tx, float ty, float tz, unsigned short rx, unsigned short ry, unsigned short rz, float sx, float sy, float sz, unsigned short wave0, unsigned short wave1);
 Task *func_800358E8(Task *prev, void (*exec)(Task *, Obj *), unsigned int model, unsigned int glist, float tx, float ty, float tz, unsigned short rx, unsigned short ry, unsigned short rz, float sx, float sy, float sz, unsigned short wave0, unsigned short wave1);
 Task *func_80035964(Task *task, unsigned int model, unsigned int glist, float tx, float ty, float tz, unsigned short rx, unsigned short ry, unsigned short rz, float sx, float sy, float sz, unsigned short wave0, unsigned short wave1);

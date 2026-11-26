@@ -5,6 +5,7 @@
 #include "structs.h"
 
 void func_800386E0(void);
+void func_80038B98(unsigned short arg0);
 void func_80038BC8(unsigned short arg0);
 void func_80039D60(void);
 void func_80039DE4(void);

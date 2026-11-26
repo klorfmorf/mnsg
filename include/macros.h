@@ -94,4 +94,18 @@
 // ===== audiomgr =====
 #define AUDIO_STACKSIZE 0x4000
 
+// ===== file_12 =====
+#define ENEMY_MGR        ((EnemyMgr *) D_8015CC30)
+#define ENEMY_WORK(task) ((EnemyWork *) (task)->work)
+
+// ===== file_11 =====
+#define PLAYER_WORK(task)    ((PlayerWork *) (task)->work)
+#define PLAYER_FX_WORK(task) ((PlayerFxWork *) (task)->work)
+
+// ===== 5907F0 =====
+#define CAMERA_WORK(task) ((CameraWork *) (task)->work)
+
+// ===== 5AE300 =====
+#define PLAYER_EFFECT_WORK(task) ((PlayerEffectWork *) (task)->work)
+
 #endif // MACROS_H

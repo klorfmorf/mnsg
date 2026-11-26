@@ -1082,9 +1082,9 @@ void anime_model(unsigned int dlist)
     } else if (s_anime_mtx_top > s_anime_mtx_stack) {
         scale = 1.0f;
 
-        if ((D_801FC61C_5B852C == g_anime_solid && D_801FC604_5B8514 != NULL && ((D_801FC604_5B8514->unk_60 == 0 && dlist == (unsigned int) D_90050F8) || (D_801FC604_5B8514->unk_60 == 1 && dlist == (unsigned int) D_90056E8) || (D_801FC604_5B8514->unk_60 == 2 && dlist == (unsigned int) D_9004AA8) || (D_801FC604_5B8514->unk_60 == 3 && dlist == (unsigned int) D_9004A88))) || (g_anime_solid->SegWave[0].wave_no == 0x4D9 && dlist == (unsigned int) D_8005588) || dlist == (unsigned int) D_8006DFF8) {
+        if ((D_801FC61C_5B852C == g_anime_solid && D_801FC604_5B8514 != NULL && ((PLAYER_WORK(D_801FC604_5B8514)->character == 0 && dlist == (unsigned int) D_90050F8) || (PLAYER_WORK(D_801FC604_5B8514)->character == 1 && dlist == (unsigned int) D_90056E8) || (PLAYER_WORK(D_801FC604_5B8514)->character == 2 && dlist == (unsigned int) D_9004AA8) || (PLAYER_WORK(D_801FC604_5B8514)->character == 3 && dlist == (unsigned int) D_9004A88))) || (g_anime_solid->SegWave[0].wave_no == 0x4D9 && dlist == (unsigned int) D_8005588) || dlist == (unsigned int) D_8006DFF8) {
             scale = 2.5f;
-        } else if ((D_801FC61C_5B852C == g_anime_solid && D_801FC604_5B8514 != NULL && D_801FC604_5B8514->unk_60 == 3 && dlist == (unsigned int) D_9004958) || dlist == (unsigned int) D_8006E020) {
+        } else if ((D_801FC61C_5B852C == g_anime_solid && D_801FC604_5B8514 != NULL && PLAYER_WORK(D_801FC604_5B8514)->character == 3 && dlist == (unsigned int) D_9004958) || dlist == (unsigned int) D_8006E020) {
             scale = 2.0f;
         }
 
