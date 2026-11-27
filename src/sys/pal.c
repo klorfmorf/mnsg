@@ -2,7 +2,6 @@
 #include "common.h"
 #include "sys/sys.h"
 
-int  func_80007C90(ObjSprite *sprite);
 void func_80007EA0(unsigned short idx);
 void func_80008068(unsigned char bank, unsigned char entry, unsigned char slot);
 void func_80008330(unsigned char moji, unsigned char bank, unsigned char entry, unsigned char row, unsigned char range);
@@ -62,18 +61,6 @@ unsigned short **D_8005B6B0[12] = {
     D_80167A20, NULL, NULL, NULL,
 };
 
-// <<<<< rodata >>>>>
-const char D_8007A9E0[] =
-    " basp, ldp, size = %x, %x, %x\n\0\0"
-    "pal: autoLoadPalW 256 set.\n\0"
-    "pal: autoLoadPalW erorr!!\n\0\0"
-    "pal: autoCpItiPalW erorr!!\n\0"
-    "pal: autoDelPalW erorr!!\n\0\0\0"
-    "tblPalDefBG(%x,%x,%x,%x);\n\0\0"
-    "(%x, %x);\n\0\0"
-    "\0\0\0\0"
-    "\0\0\0";
-
 // <<<<< bss >>>>>
 unsigned short *D_80167860[16];
 unsigned short *D_801678A0[16];
@@ -90,7 +77,8 @@ int func_80007970(unsigned short *src, unsigned short *dst, unsigned short n)
 {
     short i;
 
-    if (n > 0x100) {
+    if (n > 256) {
+        PRINTF((" basp, ldp, size = %x, %x, %x\n", src, dst, n));
         return 0;
     }
     for (i = 0; i < n; i++) {
@@ -105,73 +93,76 @@ int func_800079C0(ObjSprite *sprite, unsigned short *data)
     unsigned short *pal;
     ObjSpriteTex   *tex;
 
-    pal = g_sys_real.unknown_rgba16_buffer;
-    tex = sprite->unk_14;
-    if (sprite->unk_18 & 0x8000) {
+    pal = g_sys_real.tlut_buffer;
+    tex = sprite->textures;
+    if (sprite->attr & SPRITE_ATTR_PALETTE) {
         func_80007C90(sprite);
     }
-    switch (tex->fmt & 0x18) {
-        case 0:
+    switch (tex->fmt & SPRITE_FMT_SIZE_MASK) {
+        case SPRITE_FMT_4B:
             for (i = 0; i < 15; i++, pal += 16) {
-                if (g_sys_real.unk_c5f18[i] == 0 || data == g_sys_real.unk_c5f38[i]) {
-                    if (data != g_sys_real.unk_c5f38[i]) {
+                if (g_sys_real.palette_slot_refs[i] == 0 || data == g_sys_real.palette_slot_srcs[i]) {
+                    if (data != g_sys_real.palette_slot_srcs[i]) {
                         func_80007970(data, pal, 16);
                     }
-                    g_sys_real.unk_c5f18[i]++;
-                    g_sys_real.unk_c5f38[i] = data;
-                    sprite->unk_c           = i;
-                    sprite->unk_38          = data;
-                    sprite->unk_18 |= 0x8000;
+                    g_sys_real.palette_slot_refs[i]++;
+                    g_sys_real.palette_slot_srcs[i] = data;
+                    sprite->palette_slot            = i;
+                    sprite->palette                 = data;
+                    sprite->attr |= SPRITE_ATTR_PALETTE;
                     return 1;
                 }
             }
-            g_sys_real.unk_c5f18[15]++;
-            g_sys_real.unk_c5f38[15] = data;
-            sprite->unk_c            = 15;
-            sprite->unk_38           = data;
+            g_sys_real.palette_slot_refs[15]++;
+            g_sys_real.palette_slot_srcs[15] = data;
+            sprite->palette_slot             = 15;
+            sprite->palette                  = data;
             return 1;
-        case 8:
-            sprite->unk_c  = 0;
-            sprite->unk_38 = data;
-            sprite->unk_18 |= 0x8000;
+        case SPRITE_FMT_8B:
+            PRINTF(("pal: autoLoadPalW 256 set.\n"));
+            sprite->palette_slot = 0;
+            sprite->palette      = data;
+            sprite->attr |= SPRITE_ATTR_PALETTE;
             return 1;
     }
+    PRINTF(("pal: autoLoadPalW erorr!!\n"));
     return 0;
 }
 
 void func_80007B3C(ObjSprite *sprite)
 {
-    func_800079C0(sprite, sprite->unk_38);
+    func_800079C0(sprite, sprite->palette);
 }
 
 void func_80007B5C(ObjSprite *src, ObjSprite *dst)
 {
-    func_800079C0(dst, src->unk_38);
+    func_800079C0(dst, src->palette);
 }
 
 int func_80007B84(ObjSprite *src, ObjSprite *dst)
 {
     ObjSpriteTex *tex;
 
-    tex = src->unk_14;
-    if (src->unk_18 & 0x8000) {
-        if (dst->unk_18 & 0x8000) {
+    tex = src->textures;
+    if (src->attr & SPRITE_ATTR_PALETTE) {
+        if (dst->attr & SPRITE_ATTR_PALETTE) {
             func_80007C90(dst);
         }
-        switch (tex->fmt & 0x18) {
-            case 0:
-                dst->unk_c = src->unk_c;
-                g_sys_real.unk_c5f18[src->unk_c]++;
-                dst->unk_38 = g_sys_real.unk_c5f38[dst->unk_c] = src->unk_38;
-                dst->unk_18 |= 0x8000;
+        switch (tex->fmt & SPRITE_FMT_SIZE_MASK) {
+            case SPRITE_FMT_4B:
+                dst->palette_slot = src->palette_slot;
+                g_sys_real.palette_slot_refs[src->palette_slot]++;
+                dst->palette = g_sys_real.palette_slot_srcs[dst->palette_slot] = src->palette;
+                dst->attr |= SPRITE_ATTR_PALETTE;
                 return 1;
-            case 8:
-                dst->unk_c  = src->unk_c;
-                dst->unk_38 = src->unk_38;
-                dst->unk_18 |= 0x8000;
+            case SPRITE_FMT_8B:
+                dst->palette_slot = src->palette_slot;
+                dst->palette      = src->palette;
+                dst->attr |= SPRITE_ATTR_PALETTE;
                 return 1;
         }
     }
+    PRINTF(("pal: autoCpItiPalW erorr!!\n"));
     return 0;
 }
 
@@ -180,27 +171,28 @@ int func_80007C90(ObjSprite *sprite)
     ObjSpriteTex *tex;
     unsigned char idx;
 
-    tex = sprite->unk_14;
-    if (sprite->unk_18 & 0x8000) {
-        switch (tex->fmt & 0x18) {
-            case 0:
-                if (sprite->unk_c >= 16) {
+    tex = sprite->textures;
+    if (sprite->attr & SPRITE_ATTR_PALETTE) {
+        switch (tex->fmt & SPRITE_FMT_SIZE_MASK) {
+            case SPRITE_FMT_4B:
+                if (sprite->palette_slot >= 16) {
                     idx = tex->pal;
                 } else {
-                    idx = sprite->unk_c;
+                    idx = sprite->palette_slot;
                 }
-                if (g_sys_real.unk_c5f18[idx] > 0) {
-                    g_sys_real.unk_c5f18[idx] -= 1;
+                if (g_sys_real.palette_slot_refs[idx] > 0) {
+                    g_sys_real.palette_slot_refs[idx] -= 1;
                 }
-                sprite->unk_c = 0xFF;
-                sprite->unk_18 &= 0x7FFF;
+                sprite->palette_slot = SPRITE_PALETTE_NONE;
+                sprite->attr &= ~SPRITE_ATTR_PALETTE;
                 return 1;
-            case 8:
-                sprite->unk_c = 0xFF;
-                sprite->unk_18 &= 0x7FFF;
+            case SPRITE_FMT_8B:
+                sprite->palette_slot = SPRITE_PALETTE_NONE;
+                sprite->attr &= ~SPRITE_ATTR_PALETTE;
                 return 1;
         }
     }
+    PRINTF(("pal: autoDelPalW erorr!!\n"));
     return 0;
 }
 
@@ -211,15 +203,15 @@ void func_80007D40(unsigned short *src)
 
     base = src;
     for (i = 0; i < 16; i++, src += 16) {
-        g_sys_real.unk_c5f38[i] = src;
+        g_sys_real.palette_slot_srcs[i] = src;
     }
-    func_80007970(base, g_sys_real.unknown_rgba16_buffer, 0x100);
+    func_80007970(base, g_sys_real.tlut_buffer, 0x100);
 }
 
 void func_80007DA8(unsigned short *src, unsigned short idx)
 {
-    g_sys_real.unk_c5f38[idx] = src;
-    func_80007970(src, &g_sys_real.unknown_rgba16_buffer[idx * 16], 16);
+    g_sys_real.palette_slot_srcs[idx] = src;
+    func_80007970(src, &g_sys_real.tlut_buffer[idx * 16], 16);
 }
 
 void func_80007E00(unsigned short *src)
@@ -245,13 +237,58 @@ void func_80007E5C(void)
 
 void func_80007EA0(unsigned short idx)
 {
-    g_sys_real.unk_c5f18[idx] = 0;
-    g_sys_real.unk_c5f38[idx] = 0;
+    g_sys_real.palette_slot_refs[idx] = 0;
+    g_sys_real.palette_slot_srcs[idx] = 0;
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80007ED8.s")
+void func_80007ED8(unsigned char bank, unsigned char entry, unsigned char slot, unsigned char range)
+{
+    unsigned char i;
+    unsigned char first;
+    unsigned char last;
+    unsigned char table;
+    unsigned char offset;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008068.s")
+    PRINTF(("tblPalDefBG(%x,%x,%x,%x);\n", bank, entry, slot, range));
+    first = range & 0xF;
+    last  = (range & 0xF0) >> 4;
+    switch (entry) {
+        case PAL_ENTRY_CLEAR:
+            for (i = first; i <= last; i++) {
+                (&g_sys_real.tlut_buffer[slot * 16])[i] = 0;
+            }
+            break;
+        case PAL_ENTRY_KEEP:
+            break;
+        default:
+            table  = (entry & 0xF0) >> 4;
+            offset = (entry & 0xF) * 16;
+            PRINTF(("(%x, %x);\n", table, offset));
+            for (i = first; i <= last; i++) {
+                func_80007970(D_8005B6B0[bank][table] + offset + i, &(&g_sys_real.tlut_buffer[slot * 16])[i], 1);
+            }
+            break;
+    }
+}
+
+void func_80008068(unsigned char bank, unsigned char entry, unsigned char slot)
+{
+    unsigned char i;
+
+    switch (entry) {
+        case PAL_ENTRY_CLEAR:
+            g_sys_real.palette_slot_srcs[slot] = NULL;
+            for (i = 0; i < 16; i++) {
+                (&g_sys_real.tlut_buffer[slot * 16])[i] = 0;
+            }
+            break;
+        case PAL_ENTRY_KEEP:
+            break;
+        default:
+            func_80007DA8(&D_8005B6B0[bank][(unsigned char) ((entry & 0xF0) >> 4)][(unsigned char) ((entry & 0xF) * 16)], slot);
+            break;
+    }
+}
 
 void func_8000814C(unsigned char *tbl)
 {
@@ -262,17 +299,61 @@ void func_8000814C(unsigned char *tbl)
     }
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_800081AC.s")
+void func_800081AC(ObjSprite *sprite, unsigned char bank, unsigned char entry)
+{
+    unsigned char i;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008258.s")
+    switch (entry) {
+        case PAL_ENTRY_CLEAR:
+            for (i = 0; i < 16; i++) {
+                sprite->palette[i] = 0;
+            }
+            break;
+        case PAL_ENTRY_KEEP:
+            break;
+        default:
+            func_800079C0(sprite, &D_8005B6B0[bank][(unsigned char) ((entry & 0xF0) >> 4)][(unsigned char) ((entry & 0xF) * 16)]);
+            break;
+    }
+}
+
+void func_80008258(ObjSprite *sprite, unsigned char bank, unsigned char entry)
+{
+    sprite->palette_slot = 0;
+    sprite->palette      = &D_8005B6B0[bank][(unsigned char) ((entry & 0xF0) >> 4)][(unsigned char) ((entry & 0xF) * 16)];
+    sprite->attr |= SPRITE_ATTR_PALETTE;
+}
 
 void func_800082B4(unsigned char idx, unsigned short *src, unsigned short n)
 {
     func_80007970(src, g_sys_real.mojis[idx].palette, n);
-    g_sys_real.mojis[idx].unk_28 = src;
+    g_sys_real.mojis[idx].palette_src = src;
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/pal/func_80008330.s")
+void func_80008330(unsigned char moji, unsigned char bank, unsigned char entry, unsigned char row, unsigned char range)
+{
+    unsigned char i;
+    unsigned char first;
+    unsigned char last;
+
+    first = range & 0xF;
+    last  = (range & 0xF0) >> 4;
+    switch (entry) {
+        case PAL_ENTRY_CLEAR:
+            for (i = first; i <= last; i++) {
+                (&g_sys_real.mojis[moji].palette[row * 16])[i] = 0;
+            }
+            break;
+        case PAL_ENTRY_KEEP:
+            break;
+        default:
+            g_sys_real.mojis[moji].palette_src = &D_8005B6B0[bank][(unsigned char) ((entry & 0xF0) >> 4)][(unsigned char) ((entry & 0xF) * 16)];
+            for (i = first; i <= last; i++) {
+                func_80007970(&g_sys_real.mojis[moji].palette_src[i], &(&g_sys_real.mojis[moji].palette[row * 16])[i], 1);
+            }
+            break;
+    }
+}
 
 void func_800084F4(unsigned char moji, unsigned char bank, unsigned char entry, unsigned char row)
 {

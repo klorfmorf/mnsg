@@ -671,8 +671,8 @@ unsigned short func_80003A94(float y, float x)
             return 0;
         }
         idx = ay * 8192.0f / ax;
-        if ((unsigned int) idx > 0x2000) {
-            idx = 0x2000;
+        if ((unsigned int) idx > 8192) {
+            idx = 8192;
         }
         ang = func_800039C0(idx);
     } else if (ax < ay) {
@@ -680,8 +680,8 @@ unsigned short func_80003A94(float y, float x)
             return 0;
         }
         idx = ax * 8192.0f / ay;
-        if ((unsigned int) idx > 0x2000) {
-            idx = 0x2000;
+        if ((unsigned int) idx > 8192) {
+            idx = 8192;
         }
         ang = 0x4000 - func_800039C0(idx);
     } else if (ax == ay) {
@@ -714,10 +714,7 @@ float func_80003D28(unsigned short angle)
 }
 
 // clang-format off
-float func_80003D88(unsigned short angle, float *cos)
-{ *cos = func_80003D28(angle);
-    return func_80003CC8(angle);
-}
+float func_80003D88(unsigned short angle, float *cos) { *cos = func_80003D28(angle); return func_80003CC8(angle); }
 // clang-format on
 
 float func_80003DC0(unsigned short angle)
@@ -734,7 +731,7 @@ float func_80003DC0(unsigned short angle)
 
 float func_80003E10(unsigned short angle)
 {
-    angle &= 0x3FF;
+    angle &= ANGLE_MASK;
     angle *= 2;
     if (angle < 0x200) {
         return D_80058950[angle];
@@ -750,7 +747,7 @@ float func_80003E10(unsigned short angle)
 
 float func_80003EA0(unsigned short angle)
 {
-    angle &= 0x3FF;
+    angle &= ANGLE_MASK;
     angle *= 2;
     if (angle < 0x200) {
         return D_80058950[angle + 1];
@@ -767,7 +764,7 @@ float func_80003EA0(unsigned short angle)
 // clang-format off
 float func_80003F30(unsigned short angle, float *cos)
 {
-    angle &= 0x3FF;
+    angle &= ANGLE_MASK;
     angle *= 2;
     if (angle < 0x200) { angle++; *cos = D_80058950[angle]; angle--; return D_80058950[angle]; }
     if (angle < 0x400) { angle = 0x401 - angle; *cos = -D_80058950[angle]; angle--; return D_80058950[angle]; }
@@ -784,7 +781,7 @@ float func_80004058(unsigned short angle)
     float sin;
     float cos;
 
-    angle &= 0x3FF;
+    angle &= ANGLE_MASK;
     sin = func_80003F30(angle, &cos);
     if (cos == 0.0f) {
         return 0.0f;
@@ -792,9 +789,12 @@ float func_80004058(unsigned short angle)
     return sin / cos;
 }
 
-unsigned short func_800040A8(float y, float x)
+int func_800040A8(float y, float x)
 {
-    return ((func_80003A94(y, x) + 0x20) >> 6) & 0x3FF;
+    unsigned short angle;
+
+    angle = (func_80003A94(y, x) + 0x20) >> 6;
+    return angle & ANGLE_MASK;
 }
 
 float func_800040D0(float x)

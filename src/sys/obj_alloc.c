@@ -4,9 +4,8 @@
 #include "sys/obj.h"
 #include "sys/pal.h"
 
-Obj *func_80035FDC(ObjSolid *solid);
+Obj *func_80035FDC(Obj *obj);
 void func_80036308(Obj *obj);
-void func_800367E4(ObjSolid *solid);
 Obj *func_80035D8C(short kind);
 Obj *func_80036058(Task *task, unsigned char count);
 void func_80035B88(void);
@@ -18,7 +17,6 @@ void func_80035D00(void);
 
 // <<<<< data >>>>>
 
-// Capacity of each object kind, indexed by kind.
 unsigned short D_8006D350[8] = {
     0, 24, 192, 2, 64, 2, 0, 0,
 };
@@ -57,7 +55,7 @@ void func_80035BF8(void)
     for (i = 0; i < 192; i++) {
         g_sys_real.solids[i].header.next = &g_sys_real.solids[i + 1].header;
     }
-    D_8016DAD8[2]                      = 0;
+    D_8016DAD8[OBJ_KIND_SOLID]         = 0;
     g_sys_real.solids[191].header.next = NULL;
 }
 
@@ -90,25 +88,21 @@ void func_80035D84(void)
 {
 }
 
-#ifdef NON_MATCHING
-Obj *func_80035D8C(short kind)
+Obj *func_80035D8C(short type)
 {
-    Obj  *obj;
-    Obj **head = &D_8016DAC0[kind];
+    Obj **head = &D_8016DAC0[type];
+    Obj  *node;
 
-    obj = *head;
-    if (obj != NULL) {
-        *head     = obj->next;
-        obj->next = NULL;
-        obj->kind &= 0x7F;
-        D_8016DAD8[kind]++;
-        return obj;
+    if (*head != NULL) {
+        node       = *head;
+        *head      = node->next;
+        node->next = NULL;
+        node->kind &= OBJ_KIND_MASK;
+        D_8016DAD8[type]++;
+        return node;
     }
     return NULL;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_alloc/func_80035D8C.s")
-#endif
 
 void *func_80035DFC(Task *task, short kind, unsigned char count)
 {
@@ -167,72 +161,64 @@ void *func_80035EEC(Task *task, short kind, unsigned char count)
     return first;
 }
 
-Obj *func_80035FDC(ObjSolid *solid)
+Obj *func_80035FDC(Obj *obj)
 {
     Obj  *old;
-    short kind = solid->header.kind & 0x7F;
+    short kind = obj->kind & OBJ_KIND_MASK;
 
-    old                = solid->header.next;
-    solid->header.next = D_8016DAC0[kind];
-    D_8016DAC0[kind]   = &solid->header;
+    old              = obj->next;
+    obj->next        = D_8016DAC0[kind];
+    D_8016DAC0[kind] = obj;
     D_8016DAD8[kind]--;
-    if (kind == 2) {
-        func_800364FC(solid);
+    if (kind == OBJ_KIND_SOLID) {
+        func_800364FC((ObjSolid *) obj);
     }
     return old;
 }
 
-#ifdef NON_MATCHING
 Obj *func_80036058(Task *task, unsigned char count)
 {
-    Obj           *obj;
+    Obj           *node;
     unsigned short i;
 
     if (task->obj_head == NULL) {
         return NULL;
     }
-    obj = task->obj_head;
-    if (obj == NULL) {
+    if (task->obj_head == NULL) {
         return NULL;
     }
-    task->obj_head = func_80035FDC(obj);
+    task->obj_head = func_80035FDC(node = task->obj_head);
     if (task->obj_head == NULL) {
         task->obj_tail = NULL;
-        func_80036308(obj);
+        func_80036308(node);
         if (count != 1) {
             return NULL;
         }
-        return obj;
+        return node;
     }
-    func_80036308(obj);
+    func_80036308(node);
     for (i = 1; i < count; i++) {
-        obj            = task->obj_head;
-        task->obj_head = func_80035FDC(obj);
+        task->obj_head = func_80035FDC(node = task->obj_head);
         if (task->obj_head == NULL) {
             task->obj_tail = NULL;
-            func_80036308(obj);
+            func_80036308(node);
             return NULL;
         }
-        func_80036308(obj);
+        func_80036308(node);
     }
-    return obj;
+    return node;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_alloc/func_80036058.s")
-#endif
 
-#ifdef NON_MATCHING
-Obj *func_80036158(Task *task, Obj *target, unsigned char count)
+Obj *func_80036158(Task *task, Obj *node, unsigned char count)
 {
     Obj *prev = task->obj_head;
     Obj *next;
-    Obj *obj;
 
     if (prev == NULL) {
         return NULL;
     }
-    if (prev != target) {
-        while (prev != NULL && prev->next != target) {
+    if (prev != node) {
+        while (prev != NULL && prev->next != node) {
             prev = prev->next;
         }
         if (prev == NULL) {
@@ -241,11 +227,9 @@ Obj *func_80036158(Task *task, Obj *target, unsigned char count)
     } else {
         prev = NULL;
     }
-    obj = target;
     while (count--) {
-        next = func_80035FDC(obj);
-        func_80036308(obj);
-        obj = next;
+        next = func_80035FDC(node);
+        func_80036308(node);
         if (prev != NULL) {
             prev->next = next;
         } else {
@@ -257,12 +241,10 @@ Obj *func_80036158(Task *task, Obj *target, unsigned char count)
                 return NULL;
             }
         }
+        node = next;
     }
-    return obj;
+    return node;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_alloc/func_80036158.s")
-#endif
 
 int func_80036260(Task *task)
 {
@@ -289,7 +271,7 @@ Obj *func_800362DC(Task *task)
     Obj *obj;
 
     for (obj = task->obj_head; obj != NULL; obj = obj->next) {
-        obj->kind |= 0x80;
+        obj->kind |= OBJ_HIDDEN;
     }
     return obj;
 }
@@ -297,18 +279,18 @@ Obj *func_800362DC(Task *task)
 void func_80036308(Obj *obj)
 {
     if (obj != NULL) {
-        switch (obj->kind & 0x7F) {
-            case 1:
-                func_80007C90(obj);
-                func_8000A228(obj);
+        switch (obj->kind & OBJ_KIND_MASK) {
+            case OBJ_KIND_2D:
+                func_80007C90((ObjSprite *) obj);
+                func_8000A228((ObjSprite *) obj);
                 break;
-            case 2:
-                func_8000A5C4(obj);
+            case OBJ_KIND_SOLID:
+                func_8000A5C4((ObjSolid *) obj);
                 break;
-            case 3:
-                func_8000A394(obj);
+            case OBJ_KIND_MOJI:
+                func_8000A394((ObjMoji *) obj);
                 break;
-            case 4:
+            case OBJ_KIND_BG:
                 break;
         }
     }
@@ -366,68 +348,64 @@ ObjSolid *func_80036448(ObjSolid *solid)
     }
     if (D_8006D320 != NULL) {
         if (func_80036058(D_8006D320, 1) == NULL) {
-            // A stripped debug message was probably here.
+            PRINTF(("JCHR_tcb[%x] Net_sld_req OVER!!\n", solid));
         }
-    } else if (D_8006D350[2] - D_8016DAD8[2] <= 0) {
+    } else if (D_8006D350[OBJ_KIND_SOLID] - D_8016DAD8[OBJ_KIND_SOLID] <= 0) {
+        PRINTF(("JCHR_tcb[%x] Net_sld_req OVER!!\n", solid));
         return NULL;
     }
-    obj = func_80035D8C(2);
+    obj = (ObjSolid *) func_80035D8C(OBJ_KIND_SOLID);
     if (obj != NULL) {
         return obj;
     }
     return NULL;
 }
 
-#ifdef NON_MATCHING
-int func_800364FC(ObjSolid *solid)
+int func_800364FC(ObjSolid *obj)
 {
-    ObjSolid      *cur = solid;
-    ObjSolid      *old;
-    unsigned short depth = 0;
+    ObjSolid      *node;
+    ObjSolid      *prev;
     int            i;
     ObjSolid      *stack[32];
+    unsigned short depth;
 
-    if (solid == NULL) {
+    node  = obj;
+    depth = 0;
+    if (obj == NULL) {
         return 0;
     }
-    i = 0;
-    while (i < 32) {
-        stack[i] = NULL;
-        i++;
-    }
-    while (cur != NULL) {
+
+    for (i = 0; i < 32; i++) { stack[i] = NULL; }
+    while (node != NULL) {
         if (depth < 0 || depth >= 32) {
             return 0;
         }
-        if (cur->child == NULL && cur->sibling == NULL) {
-            if (cur == solid) {
+        if (node->child == NULL && node->sibling == NULL) {
+            if (node == obj) {
                 break;
             }
-            func_800367E4(cur);
-            old = cur;
-            cur = stack[--depth];
-            if (old == cur->child) {
-                cur->child = NULL;
+            func_800367E4(node);
+            prev = node;
+            node = stack[--depth];
+            if (node->child == prev) {
+                node->child = NULL;
             }
-            if (old == cur->sibling) {
-                cur->sibling = NULL;
+            if (node->sibling == prev) {
+                node->sibling = NULL;
             }
-        } else if (cur->sibling == NULL) {
-            stack[depth++] = cur;
-            cur            = cur->child;
-        } else if (cur->child == NULL) {
-            stack[depth++] = cur;
-            cur            = cur->sibling;
+        } else if (node->sibling == NULL) {
+            stack[depth++] = node;
+            node           = node->child;
+        } else if (node->child == NULL) {
+            stack[depth++] = node;
+            node           = node->sibling;
         } else {
-            stack[depth++] = cur;
-            cur            = cur->child;
+            stack[depth++] = node;
+            node           = node->child;
         }
     }
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_alloc/func_800364FC.s")
-#endif
 
 void func_80036660(ObjSolid *solid)
 {
@@ -436,17 +414,17 @@ void func_80036660(ObjSolid *solid)
 
     while (obj != NULL) {
         solid->header.next = obj->next;
-        kind               = obj->kind & 0x7F;
+        kind               = obj->kind & OBJ_KIND_MASK;
         obj->next          = D_8016DAC0[kind];
         D_8016DAC0[kind]   = obj;
         D_8016DAD8[kind]--;
         func_80036308(obj);
         obj = solid->header.next;
     }
-    kind               = solid->header.kind & 0x7F;
+    kind               = solid->header.kind & OBJ_KIND_MASK;
     solid->header.next = D_8016DAC0[kind];
     D_8016DAC0[kind]   = &solid->header;
-    D_8016DAD8[2]--;
+    D_8016DAD8[OBJ_KIND_SOLID]--;
     func_80036308(&solid->header);
 }
 
@@ -484,7 +462,7 @@ void func_800367E4(ObjSolid *solid)
         func_80036660(solid);
         D_8016DAB0--;
         if (D_8006D320 != NULL) {
-            func_80035DFC(D_8006D320, 2, 1);
+            func_80035DFC(D_8006D320, OBJ_KIND_SOLID, 1);
         }
     }
 }

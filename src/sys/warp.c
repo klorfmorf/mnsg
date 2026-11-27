@@ -1,6 +1,11 @@
+#include "sys/warp.h"
 #include "common.h"
 #include "sys/stage.h"
 #include "sys/step.h"
+#include "sys/sys.h"
+#include "douchu/5B6060.h"
+#include "douchu/587B50.h"
+#include "unk.h"
 
 // clang-format off
 
@@ -26,43 +31,167 @@ EntryPoint D_8006D410[16] = {
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037000.s")
+void func_80037000(void)
+{
+    if (g_sys->intended_stage_id >= 0x263) {
+        g_sys->next_stage_id = 0x25F;
+    } else {
+        g_sys->next_stage_id = g_sys->intended_stage_id + 1;
+    }
+    func_80003728(GAME_STEP_WARP_NEXT);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037060.s")
+void func_80037060(void)
+{
+    g_sys_real.stepw_end = 2;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037070.s")
+void func_80037070(void)
+{
+    g_sys_real.stepw_end = 1;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037080.s")
+void func_80037080(void)
+{
+    g_sys_real.stepw_end = 3;
+}
 
 void func_80037090(void)
 {
-    func_80003728(0xF);
+    func_80003728(GAME_STEP_OPTIONS);
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800370B0.s")
+void func_800370B0(void)
+{
+    g_sys->next_stage_id = 0x260;
+    func_80003728(GAME_STEP_WARP_NEXT);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800370E8.s")
+void func_800370E8(void)
+{
+    g_sys->entry.x      = D_801FC60C_5B851C->tx;
+    g_sys->entry.y      = D_801FC60C_5B851C->ty;
+    g_sys->entry.z      = D_801FC60C_5B851C->tz;
+    g_sys->entry.facing = PLAYER_WORK(D_801FC604_5B8514)->angle;
+    func_801FA4FC_5B640C(0x1E0, 0, 25, 0, 0, 1);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800371B4.s")
+void func_800371B4(void)
+{
+    g_sys->entry.x      = D_801FC60C_5B851C->tx;
+    g_sys->entry.y      = D_801FC60C_5B851C->ty;
+    g_sys->entry.z      = D_801FC60C_5B851C->tz;
+    g_sys->entry.facing = PLAYER_WORK(D_801FC604_5B8514)->angle;
+    func_801FA4FC_5B640C(0x1E2, -213, 0, -357, 0x60, 1);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037284.s")
+int func_80037284(void)
+{
+    if (g_sys->intended_stage_group != 1 && g_sys->intended_stage_group != 2) {
+        return 0;
+    }
+    g_sys->stage_change_flags = 0x80;
+    g_sys->next_stage_id      = 0x226;
+    return 1;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800372E8.s")
+void func_800372E8(void)
+{
+    g_sys->stage_change_flags = 0x80;
+    g_sys->next_stage_id      = 0x226;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_8003731C.s")
+void func_8003731C(unsigned char index)
+{
+    EntryPoint *params = &D_8006D410[index];
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800373DC.s")
+    g_sys->next_stage_id              = params->stage_id;
+    g_sys->next_entry.x               = params->x;
+    g_sys->next_entry.y               = params->y;
+    g_sys->next_entry.z               = params->z;
+    g_sys->next_entry.facing          = params->player_yaw;
+    g_sys->next_entry.camera_yaw_step = params->camera_yaw;
+    func_80003728(GAME_STEP_WARP_NEXT);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037414.s")
+void func_800373DC(void)
+{
+    g_sys->next_stage_id = 0x240;
+    func_80003728(GAME_STEP_WARP_NEXT);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037448.s")
+void func_80037414(void)
+{
+    g_sys->stage_change_flags = 0x80;
+    g_sys->next_stage_id      = 0x221;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037470.s")
+void func_80037448(void)
+{
+    func_8000383C();
+    func_80003728(GAME_STEP_KONAMI_LOGO);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800374AC.s")
+void func_80037470(unsigned char index)
+{
+    g_sys->stage_change_flags = 0x80;
+    g_sys->next_stage_id      = index + 0x239;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_800374EC.s")
+void func_800374AC(unsigned char index)
+{
+    g_sys->next_stage_id = index + 0x21C;
+    func_80003728(GAME_STEP_WARP_NEXT);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_80037548.s")
+void func_800374EC(void)
+{
+    if (func_8000B578() == 0) {
+        func_80003728(GAME_STEP_GAME_OVER);
+    } else {
+        g_sys->next_stage_id = g_sys->intended_stage_id;
+        func_80003728(GAME_STEP_WARP_NEXT);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/warp/func_8003767C.s")
+void func_80037548(void)
+{
+    func_80003728(GAME_STEP_WARP_NEXT);
+    if (g_sys->intended_stage_group == 4) {
+        D_8015C608.group4_reached[g_sys->intended_stage_group_index] = 1;
+        g_sys->next_stage_id                                         = g_sys->intended_stage_group_index + 0x221;
+    } else {
+        D_8015C608.stage_reached[g_sys->intended_stage_group_index] = 1;
+        switch (g_sys->intended_stage_group_index) {
+            case 0:
+                break;
+            case 1:
+                g_sys_real.next_stage_id              = 0x132;
+                g_sys_real.next_entry.camera_yaw_step = 0;
+                g_sys_real.next_entry.x               = 0x6C4;
+                g_sys_real.next_entry.y               = 0x1B2;
+                g_sys_real.next_entry.z               = 5;
+                g_sys_real.next_entry.facing          = ANGLE_HALF;
+                break;
+            case 2:
+                g_sys_real.bgm                        = 0x49;
+                g_sys_real.next_stage_id              = 0x14D;
+                g_sys_real.next_entry.camera_yaw_step = 0;
+                g_sys_real.next_entry.x               = 0xE1;
+                g_sys_real.next_entry.y               = 0x202;
+                g_sys_real.next_entry.z               = -0x1F3;
+                g_sys_real.next_entry.facing          = ANGLE_HALF;
+                break;
+            case 3:
+                break;
+        }
+    }
+}
+
+int func_8003767C(void)
+{
+    if (g_sys_real.prev_stage_id == g_sys_real.intended_stage_id) {
+        return 1;
+    }
+    return 0;
+}

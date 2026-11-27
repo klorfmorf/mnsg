@@ -1,23 +1,14 @@
 #define NO_PROTO_func_80001DF4
 
 #include "sys/wave_uty.h"
+#include "sys/amem.h"
 #include "sys/rom_trans.h"
 #include "sys/main.h"
 #include "sys/pic.h"
-#include "sys/task.h"
-#include "unk.h"
 #include "sys/sys.h"
+#include "unk.h"
 
-int            func_80013B14(unsigned short arg0);
-void          *func_80013C90(unsigned short *, char);
-int            func_800142BC(unsigned short, int);
-unsigned char *func_800145B4(unsigned int id, unsigned char *data);
-short          func_80014698(unsigned int id, int *rom);
-extern Wave    D_80167FC0[WAVE_DECODE_MAX];
-
-extern char D_8007B470[];
-extern char D_8007B478[];
-extern char D_8007B47C[];
+int func_800142BC(unsigned int id, unsigned int addr);
 
 // clang-format off
 
@@ -2835,27 +2826,8 @@ void *D_80069920[1311] = {
     &D_80065798, &D_80065798, &D_80065798, &D_80065798,
 };
 
-void *D_8006AD9C = D_80167FC0;
-
-unsigned int D_8006ADA0 = 0;
-
-unsigned int D_8006ADA4 = 0;
-
-unsigned short D_8006ADA8 = 0;
-
-char *D_8006ADAC[3] = {
-    D_8007B470, D_8007B478, D_8007B47C,
-};
-
 // <<<<< bss >>>>>
 Wave           D_80167FC0[WAVE_DECODE_MAX];
-unsigned char  D_80168140[4];
-int            D_80168144;
-int            D_80168148;
-int            D_8016814C;
-unsigned short D_80168150;
-int            D_80168154;
-int            D_80168158;
 
 // clang-format on
 
@@ -2899,6 +2871,7 @@ int func_80013AC4(unsigned short *wave_no_list)
 {
     int sp24;
 
+    PRINTF(("* ------------ %p --------------- * \n", wave_no_list));
     while (*wave_no_list != 0) {
         sp24 = func_80013B14(*wave_no_list++);
     }
@@ -2924,6 +2897,7 @@ int func_80013B14(unsigned short arg0)
         var_s0++;
 
         if (var_s0 >= &D_80167FC0[WAVE_DECODE_MAX]) {
+            PRINTF(("wave_uty.c in WaveMem[WAVE_DECODE_MAX] over!\n"));
             return 0;
         }
     }
@@ -2932,14 +2906,19 @@ int func_80013B14(unsigned short arg0)
     var_s0->wave_no = arg0;
 
     if (func_80001DF4(arg0) != 0) {
+        PRINTF(("DEBUG TLB *"));
         var_a1       = (var_a1 + 0xFFF) & ~0xFFF;
-        var_s0->data = var_a1 | 0x40000000;
+        var_s0->data = var_a1 | WAVE_DATA_TLB;
     }
 
-    sp24 = func_80001C00(var_s0->wave_no, var_a1);
+    PRINTF(("DEBUG WAVE READ NO [%08x]%08x\n", var_s0->wave_no, var_a1));
+    sp24 = func_80001C00(var_s0->wave_no, (void *) var_a1);
     sp24 = (sp24 + 0x3F) & ~0x3F;
 
     func_800142BC(var_s0->wave_no, var_a1);
+    PRINTF(("DEBUG2 WAVE READ END %08x\n", sp24));
+    // The test around this print is not known.
+    PRINTF(("[%x] SegDecode_buffer over error!!", arg0));
 
     var_s0++;
     var_s0->wave_no = 0;
@@ -2954,8 +2933,9 @@ void func_80013C0C(unsigned short arg0)
     int   temp_t8;
 
     temp_v0 = &D_80167FC0[arg0];
-    temp_t8 = temp_v0->data & 0xBFFFFFFF;
-    func_80001C00(temp_v0->wave_no, temp_t8);
+    temp_t8 = temp_v0->data & ~WAVE_DATA_TLB;
+    PRINTF(("REDECODE %d,%08x \n", temp_v0->wave_no, temp_t8));
+    func_80001C00(temp_v0->wave_no, (void *) temp_t8);
     func_800142BC(temp_v0->wave_no, temp_t8);
 }
 
@@ -2964,7 +2944,125 @@ void func_80013C70(unsigned short *arg0)
     func_80013C90(arg0, 4);
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/wave_uty/func_80013C90.s")
+int func_80013C90(unsigned short *ids, unsigned char steps)
+{
+    static Wave           *D_8006AD9C = D_80167FC0;
+    static unsigned short *D_8006ADA0 = 0;
+    static unsigned char  *D_8006ADA4 = 0;
+    static short           D_8006ADA8 = 0;
+    static unsigned int    D_80168140;
+    static unsigned int    D_80168144;
+    static unsigned int    D_80168148;
+    static unsigned short *D_8016814C;
+    static unsigned short  D_80168150;
+    static WaveResource   *D_80168154;
+    static unsigned int    D_80168158;
+    int                    i;
+
+    if (D_8006ADA0 != ids) {
+        g_sys_real.wave_load_state = 0;
+        D_8006ADA8                 = g_sys_real.disable_graphics_tasks;
+    }
+    switch (g_sys_real.wave_load_state) {
+        case 0:
+            D_8006ADA0 = ids;
+            D_80168150 = *ids;
+            PRINTF(("DEBUG WAVE SUB IN [%d]\n", D_80168150));
+            PRINTF(("DEBUG STAGE NO [%d] ============************\n", g_sys->intended_stage_id));
+            // clang-format off
+            D_8016814C = ids + 1; if (D_80168150 == 0) {
+                break;
+            }
+            // clang-format on
+            g_sys_real.wave_load_state++;
+            D_8006AD9C = D_80167FC0;
+        case 1:
+            while (D_8006AD9C->wave_no) {
+                if (D_80168150 == D_8006AD9C->wave_no) {
+                    D_8006AD9C++;
+                    D_80168148                 = D_8006AD9C->data;
+                    g_sys_real.wave_load_state = 3;
+                    return 0;
+                }
+                D_8006AD9C++;
+                if (D_8006AD9C >= &D_80167FC0[WAVE_DECODE_MAX]) {
+                    PRINTF(("wave_uty.c in WaveMem[WAVE_DECODE_MAX] over!\n"));
+                    return -1;
+                }
+            }
+            D_8006AD9C->wave_no = D_80168150;
+            D_80168144          = D_8006AD9C->data;
+            if (func_80001DF4(D_8006AD9C->wave_no)) {
+                PRINTF(("DEBUG TLB *"));
+                D_80168144       = (D_80168144 + 0xFFF) & ~0xFFF;
+                D_8006AD9C->data = D_80168144 | WAVE_DATA_TLB;
+            }
+            PRINTF(("DEBUG WAVE READ NO [%08x]%08x\n", D_8006AD9C->wave_no, D_80168144));
+            D_80168140 = func_80001C00(D_8006AD9C->wave_no, (void *) D_80168144) + 0x3F;
+            D_80168140 &= ~0x3F;
+            D_80168148 = D_80168140;
+            D_80168154 = (WaveResource *) D_80069920[D_8006AD9C->wave_no - 1];
+            i          = 0;
+            while (D_8006AD9C->wave_no >= D_80054910[i]) {
+                i += 2;
+                if (D_80054910[i] == 0) {
+                    PRINTF(("[%x] Wave No over setting error!!", D_8006AD9C->wave_no));
+                    return -1;
+                }
+            }
+            D_80168158 = D_80168144 - (D_80054910[i + 1] << 24);
+            PRINTF(("DEBUG2 WAVE READ END %08x\n", D_80168140));
+            // The test around this print is not known.
+            PRINTF(("[%x] SegDecode_buffer over error!!", D_8006AD9C->wave_no));
+            g_sys_real.wave_load_state++;
+            break;
+        case 2:
+            while (steps--) {
+                if (D_80168154->file_id != 0) {
+                    if (func_80014698(D_80168154->file_id, NULL) <= 0x2000) {
+                        if (D_8006ADA4 == NULL || D_8006ADA4 < D_802F7000) {
+                            D_8006ADA4 = amemAlloc(g_sys->memory_blocks, 0x2000);
+                        }
+                        func_800144E8(D_80168154->file_id, D_8006ADA4,
+                            (unsigned char *) (D_80168154->dest_addr + D_80168158));
+                        D_80168154++;
+                        continue;
+                    }
+                    if (D_8006ADA4 != NULL && D_8006ADA4 >= D_802F7000) {
+                        amemFree(g_sys->memory_blocks, D_8006ADA4);
+                    }
+                    g_sys->disable_graphics_tasks = 1;
+                    D_8006ADA4                    = (unsigned char *) g_frame_buffers[g_sys->current_frame_buffer];
+                    steps                         = 0;
+                    func_800144E8(D_80168154->file_id, D_8006ADA4,
+                        (unsigned char *) (D_80168154->dest_addr + D_80168158));
+                    g_sys->disable_graphics_tasks = D_8006ADA8;
+                    D_80168154++;
+                } else {
+                    if (D_8006ADA4 != NULL && D_8006ADA4 >= D_802F7000) {
+                        amemFree(g_sys->memory_blocks, D_8006ADA4);
+                        D_8006ADA4 = NULL;
+                    }
+                    g_sys_real.wave_load_state++;
+                    D_8006AD9C++;
+                    D_8006AD9C->wave_no = 0;
+                    D_8006AD9C->data    = D_80168140;
+                    PRINTF_DEAD(("DEBUG WAVE SUB OUT [%d]\n", D_80168150));
+                    break;
+                }
+            }
+            break;
+        case 3:
+            g_sys_real.wave_load_state = 0;
+            D_80168150                 = *D_8016814C++;
+            if (D_80168150 == 0) {
+                break;
+            }
+            g_sys_real.wave_load_state++;
+            break;
+    }
+    return g_sys_real.wave_load_state ? 0 : D_80168148;
+}
 
 int func_800141C4(unsigned int wave_no)
 {
@@ -2990,13 +3088,18 @@ int func_80014218(ObjSolid *solid)
     int result = 0;
     int i;
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < WAVE_SEGMENT_COUNT; i++) {
         if (solid->SegWave[i].wave_no == 0) { continue; }
 
-        if (i + 8 == func_80001E50(solid->SegWave[i].wave_no)) {
-            solid->SegWave[i].data = func_800141C4(solid->SegWave[i].wave_no) & 0xBFFFFFFF;
+        if (i + WAVE_SEGMENT == func_80001E50(solid->SegWave[i].wave_no)) {
+            solid->SegWave[i].data = func_800141C4(solid->SegWave[i].wave_no) & ~WAVE_DATA_TLB;
         } else {
-            func_80001E50(solid->SegWave[i].wave_no);
+            // "Error sld=%p: Wave No 0x%x is assigned to sld->SegWave[%d]."
+            PRINTF(("Error sld=%p, sld->SegWave[%d] に Wave No 0x%x を代入しています。\n", solid, i, solid->SegWave[i].wave_no));
+            // "Wave No 0x%x is SEGMENT_NO 0x%x."
+            PRINTF(("Wave No 0x%x は SEGMENT_NO 0x%x です。\n", solid->SegWave[i].wave_no, func_80001E50(solid->SegWave[i].wave_no)));
+            // "Put a Wave No of SEGMENT_NO 0x%x in sld->SegWave[%d]."
+            PRINTF(("sld->SegWave[%d] には SEGMENT_NO 0x%x の Wave No をいれて下さい。\n", i, i + WAVE_SEGMENT));
             result = -1;
         }
     }
@@ -3004,42 +3107,83 @@ int func_80014218(ObjSolid *solid)
     return result;
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/wave_uty/func_800142BC.s")
+int func_800142BC(unsigned int id, unsigned int addr)
+{
+    int            i;
+    unsigned char *buf;
+    WaveResource  *res;
+    unsigned int   offset;
+    short          saved;
 
-#ifdef NON_MATCHING
+    i     = 0;
+    buf   = NULL;
+    saved = g_sys_real.disable_graphics_tasks;
+    res   = (WaveResource *) D_80069920[id - 1];
+
+    while (id >= D_80054910[i]) {
+        i += 2;
+        if (D_80054910[i] == 0) {
+            PRINTF(("[%x] Wave No over setting error!!", id));
+            return 0;
+        }
+    }
+    offset = addr - (D_80054910[i + 1] << 24);
+    while (res->file_id != 0) {
+        if (func_80014698(res->file_id, NULL) <= 0x2000) {
+            if (buf == NULL || buf < D_802F7000) {
+                buf = amemAlloc(g_sys->memory_blocks, 0x2000);
+            }
+            func_800144E8(res->file_id, buf, (unsigned char *) (res->dest_addr + offset));
+            res++;
+            continue;
+        }
+        if (buf != NULL && buf >= D_802F7000) {
+            amemFree(g_sys->memory_blocks, buf);
+        }
+        g_sys->disable_graphics_tasks = 1;
+        buf                           = (unsigned char *) g_frame_buffers[g_sys->current_frame_buffer];
+        func_800144E8(res->file_id, buf, (unsigned char *) (res->dest_addr + offset));
+        g_sys->disable_graphics_tasks = saved;
+        res++;
+    }
+    if (buf != NULL && buf >= D_802F7000) {
+        amemFree(g_sys->memory_blocks, buf);
+    }
+    return 1;
+}
+
+char *D_8006ADAC[3] = {
+    "RGBA",
+    "CI",
+    "IA",
+};
+
 unsigned char *func_800144E8(unsigned int id, unsigned char *src, unsigned char *dst)
 {
     unsigned char *end;
     Pic            pic;
-    unsigned char *buf = dst;
-    unsigned int   i;
-    unsigned char *p;
+    unsigned char *buf;
+    int            i;
 
+    buf = dst;
     end = func_800145B4(id, src);
 
     if (src[0] == 'P' && src[1] == 'I' && src[2] == 'C') {
         picOpen(src, &pic);
+        PRINTF(("\tDEBUG TEXTURE\t[%x]%x, ", id, src));
+        PRINTF(("%s%d, %dx%d\n", D_8006ADAC[pic.type], pic.bits, pic.width, pic.height));
         picDecode(src, dst, &pic);
         dst += pic.size;
     } else {
-        if (end != src) {
-            p = src;
-            i = 0;
-            do {
-                i += 1;
-                p += 1;
-                dst += 1;
-                dst[-1] = p[-1];
-            } while (i < end - src);
+        PRINTF(("NON PIC\n"));
+        for (i = 0; i < (unsigned int) (end - src); i++) {
+            *dst++ = src[i];
         }
     }
 
     osWritebackDCache(buf, dst - buf);
     return dst;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/wave_uty/func_800144E8.s")
-#endif
 
 unsigned char *func_800145B4(unsigned int id, unsigned char *data)
 {
@@ -3049,64 +3193,82 @@ unsigned char *func_800145B4(unsigned int id, unsigned char *data)
     unsigned char *end;
     unsigned short i;
 
-    if (id >= 0x8770) { return data; }
+    if (id >= 0x8770) {
+        PRINTF(("can't Read romUnpress NO [%04x] over _ENDPTXSegmentRomNo\n", id));
+        return data;
+    }
 
     if (id >= 0x8000) {
         size = func_80014698(id, &rom);
         end  = data + size;
 
         if (size != 0) {
+            PRINTF(("DEBUG ROMCOPY %04x[%p,%p,%p]\n", id, rom, data, end));
             busy       = D_8015C5D4;
             D_8015C5D4 = 1;
             func_80001640(rom, data, size);
             D_8015C5D4 = busy;
 
             if (id == 0x818D) {
-                for (i = 0; i < size; i++) {}
+                for (i = 0; i < size; i++) {
+                    if (i % 16 == 0) {
+                        PRINTF(("\nDEBUG [%03x] ", i));
+                    }
+                    PRINTF(("%02x ", data[i]));
+                }
+                PRINTF(("\n\n"));
             }
         }
         return end;
     }
 
-    return (unsigned char *) func_80001C00(id, (int) data);
+    return (unsigned char *) func_80001C00(id, data);
 }
 
-#ifdef NON_MATCHING
-short func_80014698(unsigned int id, int *rom)
+unsigned int func_80014698(unsigned int id, int *rom)
 {
-    int          i;
-    int          start;
-    int          end;
-    int          size;
-    unsigned int first;
-    unsigned int next;
+    unsigned int  start;
+    unsigned int  size;
+    unsigned int  file_start;
+    int           i;
+    unsigned int *item;
+    unsigned int  file_end;
 
+#ifdef JAPAN_0
+    if (id >= 0x8769) {
+#else
     if (id >= 0x8770) {
-        if (rom != 0) { *rom = 0; }
+#endif
+        PRINTF(("can't Read romUnpress NO [%04x] over _ENDPTXSegmentRomNo\n", id));
+        if (rom != NULL) {
+            *rom = 0;
+        }
         return 0;
     }
-
     if (id >= 0x8000) {
-        for (i = 0; D_80063940[i] != 0 && id >= D_80063940[i]; i += 2) {}
+        for (i = 0; D_80063940[i] != 0 && id >= D_80063940[i]; i += 2) {
+        }
         i -= 2;
-
-        start = func_80001D68(D_80063940[i + 1]);
-        end   = func_80001D94(D_80063940[i + 1]);
-        first = D_800639D4[id - 0x8000];
-        next  = D_800639D4[id - 0x8000 + 1];
-
-        size = (next != 0 && (D_80063940[i + 2] == 0 || id + 1 < D_80063940[i + 2])) ? next - first : end - ((first & 0xFFFFFF) + start);
-
-        if (rom != 0) { *rom = (first & 0xFFFFFF) + start; }
+        file_start = func_80001D68(D_80063940[i + 1]);
+        file_end   = func_80001D94(D_80063940[i + 1]);
+        item       = &D_800639D4[id - 0x8000];
+        start      = (item[0] & 0xFFFFFF) + file_start;
+        if (item[1] != 0 && (D_80063940[i + 2] == 0 || id + 1 < D_80063940[i + 2])) {
+            size = item[1] - item[0];
+        } else {
+            size = file_end - start;
+        }
+        if (rom != NULL) {
+            *rom = start;
+        }
         return size;
     }
-
-    if (rom != 0) { *rom = func_80001D68(id & 0xFFFF); }
-    return func_80001D94(id & 0xFFFF) - func_80001D68(id & 0xFFFF);
+    if (rom != NULL) {
+        *rom = func_80001D68(id);
+    }
+    file_end = func_80001D94(id);
+    return file_end - func_80001D68(id);
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/wave_uty/func_80014698.s")
-#endif
 
 void func_8001481C(struct Task *task)
 {
@@ -3123,210 +3285,14 @@ int func_80014840(int arg0, unsigned int wave_no)
         data = func_800141C4(wave_no);
 
         if (data == -1) {
+            PRINTF(("GetAddress: undecoded wave %d", wave_no));
             *(int *) -1 = 0;
         }
 
-        data = data & 0xBFFFFFFF;
+        data = data & ~WAVE_DATA_TLB;
 
         return (arg0 - (func_80001E50(wave_no) << 24)) + data;
     }
 
     return arg0;
-}
-
-void func_800148C0(AmemBlock *arg0, char *arg1, unsigned int arg2)
-{
-    char        *data;
-    unsigned int i;
-
-    i = 0;
-
-    if (arg2 != 0) {
-        data = arg1;
-
-        do {
-            i += 1;
-            *data = 0;
-            data += 1;
-        } while (i < arg2);
-    }
-
-    arg0->pt   = arg1;
-    arg0->size = arg2;
-    arg0->next = 0;
-}
-
-void *amemAlloc(AmemBlock *arg0, int size)
-{
-    AmemBlock   *cur;
-    AmemBlock   *prev;
-    AmemBlock   *last;
-    char        *start;
-    char        *heap;
-    unsigned int heap_size;
-    char        *p;
-    unsigned int n;
-
-    heap      = arg0->pt;
-    heap_size = arg0->size;
-    start     = heap;
-    prev      = 0;
-    cur       = arg0->next;
-    last      = 0;
-
-    if (cur != 0) {
-        do {
-            last = cur;
-            if ((unsigned int) (cur->pt - start) >= ((unsigned int) (size + 0x4F) >> 6 << 6)) { break; }
-            prev  = cur;
-            start = (char *) (cur + 1);
-            cur   = cur->next;
-        } while (cur != 0);
-    }
-
-    n = (unsigned int) (size + 0x4F) >> 6 << 6;
-
-    if (cur == 0) {
-        cur = (AmemBlock *) (start + n - 0x10);
-        if (arg0->next != 0) {
-            start = (char *) (prev + 1);
-        } else {
-            start = heap;
-        }
-        if ((unsigned int) (heap + heap_size - start) < n) { return 0; }
-        cur->pt   = start;
-        cur->size = n;
-    } else {
-        cur       = (AmemBlock *) (start + n - 0x10);
-        cur->pt   = start;
-        cur->size = n;
-        last->up  = cur;
-    }
-
-    if (prev == 0) {
-        cur->next  = arg0->next;
-        cur->up    = 0;
-        arg0->next = cur;
-    } else {
-        cur->next  = prev->next;
-        cur->up    = prev;
-        prev->next = cur;
-    }
-
-    p = start;
-    while (p < (char *) cur) { *p++ = 0; }
-
-    return cur->pt;
-}
-
-void *func_80014A28(AmemBlock *arg0, int size)
-{
-    AmemBlock   *cur;
-    AmemBlock   *last;
-    AmemBlock   *blk;
-    char        *start;
-    char        *heap;
-    unsigned int heap_size;
-    char        *p;
-    unsigned int n;
-
-    heap      = arg0->pt;
-    heap_size = arg0->size;
-    start     = heap;
-    last      = 0;
-
-    for (cur = arg0->next; cur != 0; cur = cur->next) {
-        last  = cur;
-        start = (char *) (cur + 1);
-    }
-
-    n = (unsigned int) (size + 0x4F) >> 6 << 6;
-
-    if ((unsigned int) heap + heap_size - (unsigned int) start >= n) {
-        cur       = (AmemBlock *) (heap + heap_size - 0x10);
-        start     = heap + heap_size - n;
-        cur->pt   = start;
-        cur->size = n;
-    } else {
-        if (last == 0) { return 0; }
-
-        blk = last;
-        while (blk != 0) {
-            last = blk->up;
-            if (last == 0) {
-                start = heap;
-            } else {
-                start = (char *) (last + 1);
-            }
-            if ((unsigned int) (blk->pt - start) >= n) { break; }
-            blk = last;
-        }
-
-        if (blk == 0) { return 0; }
-
-        cur       = (AmemBlock *) (blk->pt - 0x10);
-        start     = blk->pt - n;
-        cur->pt   = start;
-        cur->size = n;
-        blk->up   = cur;
-    }
-
-    if (last == 0) {
-        cur->next  = arg0->next;
-        cur->up    = 0;
-        arg0->next = cur;
-    } else {
-        cur->next  = last->next;
-        cur->up    = last;
-        last->next = cur;
-    }
-
-    p = start;
-    while (p < (char *) cur) { *p++ = 0; }
-
-    return cur->pt;
-}
-
-void *amemFree(AmemBlock *arg0, void *arg1)
-{
-    AmemBlock *blk;
-    AmemBlock *prev;
-    AmemBlock *next;
-    int        n;
-    char      *p;
-
-    for (blk = arg0->next; blk != 0; blk = blk->next) {
-        if (arg1 == blk->pt) { break; }
-    }
-
-    if (blk == 0) { return 0; }
-
-    prev = blk->up;
-    next = blk->next;
-
-    if (blk == arg0->next) {
-        arg0->next = next;
-    } else {
-        prev->next = next;
-    }
-
-    if (next != 0) { next->up = prev; }
-
-    p = blk->pt;
-    n = blk->size;
-
-    while (n--) { *p++ = 0; }
-
-    return arg1;
-}
-
-void func_80014C00(AmemBlock *arg0)
-{
-    AmemBlock *var_v0;
-
-    var_v0 = arg0->next;
-
-    while (var_v0 != 0) {
-        var_v0 = var_v0->next;
-    }
 }

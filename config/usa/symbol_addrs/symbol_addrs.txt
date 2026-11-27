@@ -297,28 +297,29 @@ g_sys = 0x8015C5C8;
 g_sys_real = 0x8008CCC0; // size:0xCF908
 
 // gfx_util.c
-D_8007B8D0 = 0x8007B8D0; // type:f64 force_not_migration:True
-D_8007B8D8 = 0x8007B8D8; // type:f64 force_not_migration:True
-D_8007B8E0 = 0x8007B8E0; // type:f64 force_not_migration:True
-D_8007B8E8 = 0x8007B8E8; // type:f64 force_not_migration:True
-D_8007B8F0 = 0x8007B8F0; // type:f64 force_not_migration:True
-D_8007B8F8 = 0x8007B8F8; // type:f64 force_not_migration:True
-D_8007B900 = 0x8007B900; // type:f64 force_not_migration:True
-D_8007B908 = 0x8007B908; // type:f64 force_not_migration:True
+D_8007B8D0 = 0x8007B8D0; // type:f64
+D_8007B8D8 = 0x8007B8D8; // type:f64
+D_8007B8E0 = 0x8007B8E0; // type:f64
+D_8007B8E8 = 0x8007B8E8; // type:f64
+D_8007B8F0 = 0x8007B8F0; // type:f64
+D_8007B8F8 = 0x8007B8F8; // type:f64
+D_8007B900 = 0x8007B900; // type:f64
+D_8007B908 = 0x8007B908; // type:f64
 
 // joypad.c
-D_8007A970 = 0x8007A970; // type:f64 force_not_migration:True
+D_8007A970 = 0x8007A970; // type:f64
 
 // okutani.c
-D_8007AC78 = 0x8007AC78; // type:f64 force_not_migration:True
-D_8007AC80 = 0x8007AC80; // type:f64 force_not_migration:True
-D_8007AC88 = 0x8007AC88; // type:f64 force_not_migration:True
+D_8000170 = 0x08000170;
+D_8007AC78 = 0x8007AC78; // type:f64
+D_8007AC80 = 0x8007AC80; // type:f64
+D_8007AC88 = 0x8007AC88; // type:f64
 
 // ripple.c
-D_8007C09C = 0x8007C09C; // type:f32 force_not_migration:True
-D_8007C0A0 = 0x8007C0A0; // type:f32 force_not_migration:True
-D_8007C0A8 = 0x8007C0A8; // type:f64 force_not_migration:True
-D_8007C0B0 = 0x8007C0B0; // type:f64 force_not_migration:True
+D_8007C09C = 0x8007C09C; // type:f32
+D_8007C0A0 = 0x8007C0A0; // type:f32
+D_8007C0A8 = 0x8007C0A8; // type:f64
+D_8007C0B0 = 0x8007C0B0; // type:f64
 
 // sched.c
 osCreateScheduler = 0x80006DF0; // type:func
@@ -328,12 +329,15 @@ osScGetCmdQ = 0x80007014; // type:func
 osScGetUnknownQ = 0x8000701C; // type:func
 osScGetInterruptQ = 0x80007024; // type:func
 
+// yamamoto.c
+connect_magicfix = 0x8001198C; // type:func
+
 // bit.c
 bitInit = 0x80014C20; // type:func
 bitRead1 = 0x80014C54; // type:func
 bitRead = 0x80014CC4; // type:func
 
-// wave_uty.c
+// amem.c
 amemAlloc = 0x800148F0; // type:func
 amemFree = 0x80014B74; // type:func
 
@@ -568,6 +572,7 @@ D_08001390_file_709 = 0x08001390; // segment:file_709
 D_08002090_1179A20 = 0x08002090; // segment:file_633
 
 // sys.c
+g_sys_glistp = 0x8015C5CC;
 D_8015C5D8 = 0x8015C5D8; // size:0x30
 D_8015C608 = 0x8015C608; // size:0x308
 D_8015C910 = 0x8015C910; // size:0x308
@@ -579,7 +584,11 @@ D_8016DAF0 = 0x8016DAF0; // size:0x80
 D_801671F0 = 0x801671F0; // size:0x1A0
 D_80167390 = 0x80167390; // size:0x10
 
+// scenario.c
+func_8003F710 = 0x8003F710; // type:func
+
 // sd_main.c
+func_80039438 = 0x80039438; // type:func
 sptr = 0x801C1728; // size:0x4
 mptr = 0x801C172C; // size:0x4
 D_801C0A68 = 0x801C0A68; // size:0x1C0
@@ -597,15 +606,12 @@ D_8020A7F0_5C6700 = 0x8020A7F0; // type:asciz segment:file_11
 D_8020A814_5C6724 = 0x8020A814; // type:asciz segment:file_11
 D_8020A9E0_5C68F0 = 0x8020A9E0; // size:0x8 force_migration:True segment:file_11
 
-// 5944C0.c
-D_8020ACF0_5C6C00 = 0x8020ACF0; // force_not_migration:True segment:file_11
-D_8020ACF8_5C6C08 = 0x8020ACF8; // force_not_migration:True segment:file_11
-D_8020ACFC_5C6C0C = 0x8020ACFC; // force_not_migration:True segment:file_11
-D_8020AD00_5C6C10 = 0x8020AD00; // force_not_migration:True segment:file_11
-
-// 5B71E0.c
+// 5B6060.c
 jtbl_8020C7F8_5C8708 = 0x8020C7F8; // force_not_migration:True segment:file_11
 D_8020C820_5C8730 = 0x8020C820; // force_not_migration:True segment:file_11
 D_8020C824_5C8734 = 0x8020C824; // force_not_migration:True segment:file_11
 D_8020C828_5C8738 = 0x8020C828; // force_not_migration:True segment:file_11
+D_8020C830_5C8740 = 0x8020C830; // force_not_migration:True segment:file_11
+
+// 5B7A40.c
 D_8020C858_5C8768 = 0x8020C858; // force_not_migration:True segment:file_11

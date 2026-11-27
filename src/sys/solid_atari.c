@@ -1,31 +1,25 @@
 #include "sys/solid_atari.h"
 #include "common.h"
-#include "sys/anime.h"
+#include "sys/math.h"
 
-unsigned char  func_80032DC4(unsigned short track, ColObj *obj, unsigned char *out, float a, float b, int c);
-void           func_80033404(ObjSolid *solid, ColObj *obj, ColObj *other);
+#pragma intrinsic(sqrtf)
+
+unsigned char  func_80032DC4(unsigned short track, Task *task, unsigned char *out, float a, float b, int c);
+int            func_800334EC(Task *self, Task *task);
+void           func_80033688(ObjSolid *src_solid, ObjSolid *dst_solid, Task *src, Task *dst);
+void           func_80033404(ObjSolid *node, Task *self, Task *task);
 void           func_80033590(ColShape *shape);
 int            func_80033BDC(float width, float height, float x, float y, float z, float radius, float *out, ObjSolid *solid);
 void           func_80033D40(float width, float height, float x, float y, float z, float *out, ObjSolid *solid);
 unsigned short func_80033F24(unsigned short track);
 short          func_800340FC(unsigned short track);
-unsigned short func_80034268(unsigned short pos, int frame_a, short *out_a, int frame_b);
-
-#pragma intrinsic(sqrtf)
+unsigned short func_80034268(unsigned short pos, int frame_a, unsigned short *out_a, int frame_b);
 
 // clang-format off
 
-// <<<<< data >>>>>
-unsigned int D_8006D310[4] = {
-    0x00000007, 0x00000008, 0x00000009, 0xFFFFFFFF,
-};
-
-// <<<<< rodata >>>>>
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/D_8007C690.s")
-
 // <<<<< bss >>>>>
-unsigned char D_80168F70[4];
-int           D_80168F74;
+unsigned int  D_80168F70;
+unsigned char *D_80168F74;
 float         D_80168F78;
 float         D_80168F7C;
 float         D_80168F80;
@@ -36,111 +30,97 @@ unsigned char D_80168F90[32];
 
 // clang-format on
 
-#ifdef NON_MATCHING
-int func_80032B20(ColObj *obj, unsigned char *out, float a, float b, int c)
+int func_80032B20(Task *task, unsigned char *out, float a, float b, int c)
 {
+    unsigned int   *data;
     ObjSolid       *solid;
-    unsigned int    ref;
-    unsigned int    hdr;
-    unsigned short *tracks;
     int             count;
+    unsigned short *keys;
+    unsigned int    header;
     int             i;
 
-    ref = obj->script;
-    if (ref == 0) {
+    data = (unsigned int *) task->anim_events;
+    if (data == NULL) {
         return 0;
     }
 
-    solid = obj->solid;
+    solid = (ObjSolid *) task->obj_head;
     if (solid == NULL) {
-        out[0] = 0;
-        out[1] = 0;
-        out[2] = 0;
-        out += 3;
-        *out = 0;
+        for (i = 0; i < 4; i++) { *out++ = 0; }
         return 0;
     }
 
-    ref = ANIME_REF_SOLID(solid, ref & 0x8FFFFFFE);
-    hdr = *(unsigned int *) ref;
-    if (hdr != 0) {
-        count        = (hdr >> 8) & 0x7FFF;
-        D_80168F78   = hdr & 0xFF;
-        D_80168F7C   = solid->time;
-        s_anime_keys = (unsigned char *) ANIME_REF_SOLID(solid, *(unsigned int *) (ref += 4));
-        tracks       = (unsigned short *) ANIME_REF_SOLID(solid, *(unsigned int *) (ref += 4));
+    D_80168F70 = (unsigned int) data & ANIME_REF_MASK;
+    data       = (unsigned int *) SOLID_SEG_ADDR(solid, D_80168F70);
+    header     = *data;
+    if (header != 0) {
+        count      = ANIME_HDR_ROOTS(header);
+        D_80168F78 = ANIME_HDR_FRAMES(header);
+        D_80168F7C = solid->time;
+        data++;
+        D_80168F70 = *data;
+        D_80168F74 = (unsigned char *) SOLID_SEG_ADDR(solid, D_80168F70);
+        data++;
+        D_80168F70 = *data;
+        keys       = (unsigned short *) SOLID_SEG_ADDR(solid, D_80168F70);
         for (i = 0; i < count; i++) {
-            if (!(*tracks & 0x8000)) {
-                func_80032DC4(*tracks, obj, out, a, b, c);
+            if (!(*keys & ANIME_TRACK_FIXED)) {
+                if ((unsigned int) func_80032DC4(*keys, task, out, a, b, c) < 0) {
+                    PRINTF_DEAD(("TMM WORK CLEAR!!\n"));
+                }
             } else {
                 *out = 0;
             }
-            tracks++;
+            keys++;
             out++;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80032B20.s")
-#endif
 
-#ifdef NON_MATCHING
-unsigned char func_80032DC4(unsigned short track, ColObj *obj, unsigned char *out, float a, float b, int c)
+unsigned char func_80032DC4(unsigned short track, Task *task, unsigned char *out, float a, float b, int c)
 {
-    ObjSolid      *solid;
-    float          time, rem, diff, step, key, delta;
-    unsigned short best;
-    int            i, end;
+    ObjSolid      *solid      = (ObjSolid *) task->obj_head;
+    float          from_frame = (int) (solid->time - a - b);
+    float          now_frame  = (int) solid->time;
+    unsigned short value      = 0;
+    unsigned short v;
+    int            i;
 
-    solid = obj->solid;
-    time  = solid->time;
-    rem   = time - a;
-    time  = (int) time;
-    diff  = rem - b;
-    key   = diff;
-    key   = (int) key;
-    best  = 0;
-
-    delta = rem < b ? -diff : diff;
-    if (delta < 0.0000001 || rem <= b) {
-        best = func_80034268(track, -1, 0, 0);
-    } else if (time == key) {
+#ifdef JAPAN_0
+    if (ABS(solid->time - a - b) < 1e-5 || solid->time - a <= b) {
+#else
+    if (ABS(solid->time - a - b) < 1e-7 || solid->time - a <= b) {
+#endif
+        value = func_80034268(track, -1, NULL, 0);
+    } else if (now_frame == from_frame) {
         *out = 0;
         return 0;
-    } else if (D_80168F78 <= time && c == 0) {
-        best = func_80034268(track, -1, 0, (int) (D_80168F78 - 1.0f));
-    } else if (1.0f == time - key) {
-        best = func_80034268(track, -1, 0, (int) time);
+    } else if (D_80168F78 <= now_frame && !c) {
+        value = func_80034268(track, -1, NULL, D_80168F78 - 1.0f);
+    } else if (now_frame - from_frame == 1.0f) {
+        value = func_80034268(track, -1, NULL, now_frame);
     } else {
-        step = key < diff ? -(key - diff) : key - diff;
-        end  = (int) time;
-        if (step < 0.00001) {
-            i = (int) key;
+        if (ABS(from_frame - (solid->time - a - b)) < 1e-5) {
+            i = from_frame;
         } else {
-            i = (int) key + 1;
+            i = (int) from_frame + 1;
         }
-        for (; i <= end; i++) {
-            int prev = best;
-            int v    = func_80034268(track, -1, 0, i);
-            if (v >= prev) {
-                best = v;
+        for (; i <= (int) now_frame; i++) {
+            v = func_80034268(track, -1, NULL, i);
+            if (v >= value) {
+                value = v;
             }
         }
     }
-
-    if (best >= 0x800) {
+    if (value >= 0x800) {
         *out = 1;
     } else {
         *out = 0;
     }
     return *out;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80032DC4.s")
-#endif
 
-#ifdef NON_MATCHING
-void func_80033024(ColObj *list, ColObj *other)
+void func_80033024(Task *list, Task *other)
 {
     int            pad[3];
     unsigned short key;
@@ -151,38 +131,42 @@ void func_80033024(ColObj *list, ColObj *other)
     int            count;
     unsigned short i;
 
-    key = list->unk_20;
+    key = list->priority;
 
     while (list != NULL) {
-        solid = list->solid;
-        if (solid != NULL && solid->header.kind == 2 && (ref = list->ref) != 0) {
+        solid = (ObjSolid *) list->obj_head;
+        if (solid != NULL && solid->header.kind == OBJ_KIND_SOLID && (ref = list->hit_ref) != 0) {
             if (ref == -1) {
-                if (list->hit_by == NULL && (list->flags & 2)) {
-                    D_80168F8C    = (unsigned int) list->unk_4E;
+                if (list->hit_by == NULL && (list->hit_flags & 2)) {
+                    D_80168F8C    = (unsigned int) list->attack_radius;
                     D_80168F80    = 0.0f;
-                    D_80168F84    = list->unk_50;
-                    D_80168F88    = list->unk_52;
+                    D_80168F84    = list->attack_offset_y;
+                    D_80168F88    = list->attack_offset_z;
                     D_80168F90[0] = 1;
                     func_80033404(solid, list, other);
                 }
             } else {
-                ref = ANIME_REF_SOLID(solid, ref & 0x8FFFFFFE);
-                if (ref < 0x08000000) {
+                D_80168F70 = ref & ANIME_REF_MASK;
+                ref        = SOLID_SEG_ADDR(solid, D_80168F70);
+                if (ref < WAVE_SEGMENT_ADDR) {
+                    PRINTF(("**** WARNING in solid_atari.c : solid_init error ****\n"));
                     list = list->next;
-                    if (list == NULL || key >= list->unk_20) {
+                    if (list == NULL || key >= list->priority) {
                         return;
                     }
                     continue;
                 }
 
-                if (list->hit_by == NULL && (list->flags & 2)) {
+                if (list->hit_by == NULL && (list->hit_flags & 2)) {
                     hdr = *(unsigned int *) ref;
                     if (hdr != 0) {
-                        count        = (hdr >> 8) & 0x7FFF;
-                        D_80168F78   = hdr & 0xFF;
-                        D_80168F7C   = solid->time;
-                        s_anime_keys = (unsigned char *) ANIME_REF_SOLID(solid, *(unsigned int *) (ref += 4));
-                        shapes       = ANIME_REF_SOLID(solid, *(unsigned int *) (ref += 4));
+                        count      = ANIME_HDR_ROOTS(hdr);
+                        D_80168F78 = ANIME_HDR_FRAMES(hdr);
+                        D_80168F7C = solid->time;
+                        D_80168F70 = *(unsigned int *) (ref += 4);
+                        D_80168F74 = (unsigned char *) SOLID_SEG_ADDR(solid, D_80168F70);
+                        D_80168F70 = *(unsigned int *) (ref += 4);
+                        shapes     = SOLID_SEG_ADDR(solid, D_80168F70);
                         for (i = 0; i < count; i++) {
                             func_80033590((ColShape *) shapes);
                             D_80168F90[0] = i + 1;
@@ -194,18 +178,53 @@ void func_80033024(ColObj *list, ColObj *other)
             }
         }
         list = list->next;
-        if (list == NULL || key >= list->unk_20) {
+        if (list == NULL || key >= list->priority) {
             break;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80033024.s")
-#endif
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80033404.s")
+void func_80033404(ObjSolid *node, Task *self, Task *task)
+{
+    unsigned short depth = task->priority;
+    ObjSolid      *other;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_800334EC.s")
+    while (task != NULL) {
+        if (self->hit != 0) {
+            return;
+        }
+        other = (ObjSolid *) task->obj_head;
+        if (other != NULL && func_800334EC(self, task) != 0 && other != node && other->header.kind == OBJ_KIND_SOLID &&
+            task->hit_by == 0 && task->width != 0) {
+            func_80033688(node, other, self, task);
+        }
+        if (task->next == NULL || task->next->priority <= depth) {
+            return;
+        }
+        task = task->next;
+    }
+}
+
+int func_800334EC(Task *self, Task *task)
+{
+    int kinds[4] = { 7, 8, 9, -1 };
+    int found    = 0;
+    int i        = 0;
+
+    while (kinds[i] != -1) {
+        if (self->hit_kind == (unsigned char) kinds[i++]) {
+            found = 1;
+            break;
+        }
+    }
+    if (task->hit_flags & 4) {
+        return found;
+    }
+    if (task->hit_flags & 1) {
+        return 1;
+    }
+    return 0;
+}
 
 void func_80033590(ColShape *shape)
 {
@@ -215,14 +234,14 @@ void func_80033590(ColShape *shape)
     D_80168F88 = (float) func_800340FC(shape->z) * 0.03125;
 }
 
-void func_80033688(ObjSolid *src_solid, ObjSolid *dst_solid, ColObj *src, ColObj *dst)
+void func_80033688(ObjSolid *src_solid, ObjSolid *dst_solid, Task *src, Task *dst)
 {
     float x, y, z;
 
     x = src_solid->sx * D_80168F80;
     y = src_solid->sy * D_80168F84;
     z = src_solid->sz * D_80168F88;
-    func_80033898(src_solid->rx & 0x3FF, src_solid->ry & 0x3FF, src_solid->rz & 0x3FF, &x, &y, &z);
+    func_80033898(src_solid->rx & ANGLE_MASK, src_solid->ry & ANGLE_MASK, src_solid->rz & ANGLE_MASK, &x, &y, &z);
 
     x += src_solid->tx;
     y += src_solid->ty;
@@ -231,7 +250,7 @@ void func_80033688(ObjSolid *src_solid, ObjSolid *dst_solid, ColObj *src, ColObj
     x -= dst_solid->tx;
     y -= dst_solid->ty;
     z -= dst_solid->tz;
-    func_80033A3C(dst_solid->rx & 0x3FF, dst_solid->ry & 0x3FF, dst_solid->rz & 0x3FF, &x, &y, &z);
+    func_80033A3C(dst_solid->rx & ANGLE_MASK, dst_solid->ry & ANGLE_MASK, dst_solid->rz & ANGLE_MASK, &x, &y, &z);
 
     y -= dst->offset_y * dst_solid->sy;
     z -= dst->offset_z * dst_solid->sz;
@@ -244,9 +263,59 @@ void func_80033688(ObjSolid *src_solid, ObjSolid *dst_solid, ColObj *src, ColObj
     }
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80033898.s")
+void func_80033898(unsigned short rot_x, unsigned short rot_y, unsigned short rot_z, float *x, float *y, float *z)
+{
+    float sin_x;
+    float cos_x;
+    float sin_y;
+    float cos_y;
+    float sin_z;
+    float cos_z;
+    float sin_xsin_y;
+    float cos_xsin_y;
+    float new_x;
+    float new_y;
+    float new_z;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80033A3C.s")
+    sin_x      = func_80003F30(rot_x, &cos_x);
+    sin_y      = func_80003F30(rot_y, &cos_y);
+    sin_z      = func_80003F30(rot_z, &cos_z);
+    sin_xsin_y = sin_x * sin_y;
+    cos_xsin_y = cos_x * sin_y;
+    new_x      = cos_y * cos_z * *x + (sin_xsin_y * cos_z - cos_x * sin_z) * *y + *z * (cos_xsin_y * cos_z + sin_x * sin_z);
+    new_y      = cos_y * sin_z * *x + (sin_xsin_y * sin_z + cos_x * cos_z) * *y + *z * (cos_xsin_y * sin_z - sin_x * cos_z);
+    new_z      = -sin_y * *x + sin_x * cos_y * *y + *z * (cos_x * cos_y);
+    *x         = new_x;
+    *y         = new_y;
+    *z         = new_z;
+}
+
+void func_80033A3C(unsigned short rot_x, unsigned short rot_y, unsigned short rot_z, float *x, float *y, float *z)
+{
+    float sin_x;
+    float cos_x;
+    float sin_y;
+    float cos_y;
+    float sin_z;
+    float cos_z;
+    float sin_xsin_y;
+    float cos_xsin_y;
+    float new_x;
+    float new_y;
+    float new_z;
+
+    sin_x      = func_80003F30(rot_x, &cos_x);
+    sin_y      = func_80003F30(rot_y, &cos_y);
+    sin_z      = func_80003F30(rot_z, &cos_z);
+    sin_xsin_y = sin_x * sin_y;
+    cos_xsin_y = cos_x * sin_y;
+    new_x      = cos_y * cos_z * *x + cos_y * sin_z * *y + *z * -sin_y;
+    new_y      = (sin_xsin_y * cos_z - cos_x * sin_z) * *x + (sin_xsin_y * sin_z + cos_x * cos_z) * *y + *z * (sin_x * cos_y);
+    new_z      = (cos_xsin_y * cos_z + sin_x * sin_z) * *x + (cos_xsin_y * sin_z - sin_x * cos_z) * *y + *z * (cos_x * cos_y);
+    *x         = new_x;
+    *y         = new_y;
+    *z         = new_z;
+}
 
 int func_80033BDC(float width, float height, float x, float y, float z, float radius, float *out, ObjSolid *solid)
 {
@@ -270,12 +339,12 @@ int func_80033BDC(float width, float height, float x, float y, float z, float ra
     return 1;
 }
 
-void func_80033D10(ColObj *obj)
+void func_80033D10(Task *task)
 {
     float *p;
     int    i;
 
-    p = obj->contact;
+    p = task->contact;
     if (p != NULL) {
         for (i = 0; i < 3; i++) {
             *p++ = 0.0f;
@@ -283,41 +352,42 @@ void func_80033D10(ColObj *obj)
     }
 }
 
-#ifdef NON_MATCHING
 void func_80033D40(float width, float height, float x, float y, float z, float *out, ObjSolid *solid)
 {
-    float px, py, pz;
-    float scale, len, cap, t;
+    float  px;
+    float  py;
+    float  pz;
+    float  dist;
+    float  t;
+    float  lim;
+    float *point = out;
 
     if (out != NULL) {
         if (height == 0.0f) {
-            scale = width / sqrtf(x * x + y * y + z * z);
-            pz    = scale * x;
-            px    = scale * z;
-            py    = scale * y;
+            t  = width / sqrtf(x * x + y * y + z * z);
+            pz = t * x;
+            px = t * z;
+            py = t * y;
         } else {
-            if (y >= 0.0f || y <= height) {
-                py  = y;
-                len = sqrtf(z * z + x * x);
-                pz  = z / len * width;
-                px  = x / len * width;
+            if (0.0f <= y || y <= height) {
+                py   = y;
+                dist = sqrtf(z * z + x * x);
+                pz   = z / dist * width;
+                px   = x / dist * width;
             } else {
-                cap = y > 0.0f ? height : 0.0;
-                py  = cap;
-                t   = (cap - y) / (height / 2 - y);
+                lim = (0.0f < y) ? height : 0.0;
+                t   = (lim - y) / (height / 2 - y);
                 pz  = t * (0.0 - z) + z;
                 px  = t * (0.0 - x) + x;
+                py  = lim;
             }
-            func_80033898(solid->rx & 0x3FF, solid->ry & 0x3FF, solid->rz & 0x3FF, &px, &py, &pz);
+            func_80033898(solid->rx & ANGLE_MASK, solid->ry & ANGLE_MASK, solid->rz & ANGLE_MASK, &px, &py, &pz);
         }
-        out[0] = solid->tx + px;
-        out[1] = solid->ty + py;
-        out[2] = solid->tz + pz;
+        *point++ = solid->tx + px;
+        *point++ = solid->ty + py;
+        *point   = solid->tz + pz;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80033D40.s")
-#endif
 
 unsigned short func_80033F24(unsigned short track)
 {
@@ -327,14 +397,14 @@ unsigned short func_80033F24(unsigned short track)
     float          frac;
     int            frame;
 
-    track &= 0xBFFF;
+    track &= ANIME_TRACK_MASK;
 
-    if (track > 0xA000) {
-        return track - 0xB000;
+    if (track > ANIME_TRACK_CONST_MIN) {
+        return track - ANIME_TRACK_CONST_BIAS;
     }
 
-    if (track & 0x8000) {
-        track = track & 0x7FFF;
+    if (track & ANIME_TRACK_FIXED) {
+        track = track & ANIME_TRACK_INDEX_MASK;
         frac  = 0.0f;
         frame = 0;
     } else {
@@ -363,14 +433,14 @@ short func_800340FC(unsigned short track)
     float frac;
     int   frame;
 
-    track &= 0xBFFF;
+    track &= ANIME_TRACK_MASK;
 
-    if (track > 0xA000) {
-        return track - 0xB000;
+    if (track > ANIME_TRACK_CONST_MIN) {
+        return track - ANIME_TRACK_CONST_BIAS;
     }
 
-    if (track & 0x8000) {
-        track = track & 0x7FFF;
+    if (track & ANIME_TRACK_FIXED) {
+        track = track & ANIME_TRACK_INDEX_MASK;
         frac  = 0.0f;
         frame = 0;
     } else {
@@ -391,38 +461,116 @@ short func_800340FC(unsigned short track)
     return cur + (short) ((next - cur) * frac);
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/solid_atari/func_80034268.s")
+unsigned short func_80034268(unsigned short pos, int frame_a, unsigned short *value_a, int frame_b)
+{
+    unsigned char  op;
+    unsigned char  hi;
+    unsigned short n;
+    unsigned short rep;
 
-int func_8003454C(ColObj *obj, int index, short delta, short limit)
+    hi = 0;
+    while (1) {
+        op = D_80168F74[pos];
+        pos++;
+        if (op < 0x78) {
+            if (op >= 0x60) {
+                hi = D_80168F74[pos++];
+            } else if (op >= 0x40) {
+                hi++;
+            } else if (op >= 0x20) {
+                hi--;
+            }
+            n = op & 0x1F;
+            if (frame_a >= 0) {
+                if (!n || frame_a < n) {
+                    *value_a = D_80168F74[pos + frame_a] + (hi << 8);
+                    frame_a  = -1;
+                } else {
+                    frame_a -= n;
+                }
+            }
+            if (!n || frame_b < n) {
+                return D_80168F74[pos + frame_b] + (hi << 8);
+            }
+            frame_b -= n;
+            pos += n;
+        } else if (op < 0xF0) {
+            rep = op - 0x78;
+            if (op >= 0xD8) {
+                hi = D_80168F74[pos++];
+            } else if (op >= 0xB8) {
+                hi++;
+            } else if (op >= 0x98) {
+                hi--;
+            }
+            n = rep & 0x1F;
+            if (n != 0) {
+                n += 2;
+            }
+            if (frame_a >= 0) {
+                if (!n || frame_a < n) {
+                    *value_a = D_80168F74[pos] + (hi << 8);
+                    frame_a  = -1;
+                } else {
+                    frame_a -= n;
+                }
+            }
+            if (!n || frame_b < n) {
+                return D_80168F74[pos] + (hi << 8);
+            }
+            frame_b -= n;
+            pos++;
+        } else {
+            n = op & 0xF;
+            if (frame_a >= 0) {
+                if (!n || frame_a < n) {
+                    *value_a = (D_80168F74[pos + frame_a * 2] << 8) + D_80168F74[pos + frame_a * 2 + 1];
+                    frame_a  = -1;
+                } else {
+                    frame_a -= n;
+                }
+            }
+            if (!n || frame_b < n) {
+                return (D_80168F74[pos + frame_b * 2] << 8) + D_80168F74[pos + frame_b * 2 + 1];
+            }
+            frame_b -= n;
+            hi = D_80168F74[pos + n * 2 - 2];
+            pos += n * 2;
+        }
+    }
+}
+
+int func_8003454C(Task *task, int index, short delta, short limit)
 {
     unsigned short *u = NULL;
     short          *s = NULL;
 
     if (index < 0 || index >= 7) {
+        PRINTF(("Adm_morph error\n"));
         return -1;
     }
 
     switch (index) {
         case 0:
-            u = &obj->width;
+            u = &task->width;
             break;
         case 1:
-            u = &obj->height;
+            u = &task->height;
             break;
         case 2:
-            s = &obj->offset_y;
+            s = &task->offset_y;
             break;
         case 3:
-            s = &obj->offset_z;
+            s = &task->offset_z;
             break;
         case 4:
-            u = &obj->unk_4E;
+            u = &task->attack_radius;
             break;
         case 5:
-            s = &obj->unk_50;
+            s = &task->attack_offset_y;
             break;
         case 6:
-            s = &obj->unk_52;
+            s = &task->attack_offset_z;
             break;
     }
 

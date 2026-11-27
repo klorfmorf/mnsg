@@ -1,6 +1,8 @@
 #include "sys/sprite.h"
 #include "common.h"
-#include "sys/obj.h"
+#include "sys/sys.h"
+#include "sys/rom_queue.h"
+#include "sys/pic.h"
 #include "unk.h"
 
 // clang-format off
@@ -55,12 +57,34 @@ ObjSpritePart D_8005B8C0[11] = {
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sprite/func_80008650.s")
+void func_80008650(void)
+{
+    g_sys->sprite_tex_table = D_8005B6E0;
+    func_80005A20(&D_8006ADD8);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sprite/func_80008690.s")
+void func_80008690(int value)
+{
+    g_sys->unk_c5f7c = value;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sprite/func_800086A8.s")
+void func_800086A8(ObjSprite *sprite, unsigned short index, ObjSpriteFrame *table)
+{
+    ObjSpriteFrame *entry;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sprite/func_800086C4.s")
+    entry         = &table[index];
+    sprite->parts = entry->parts;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sprite/func_800086D8.s")
+void func_800086C4(ObjSprite *sprite, ObjSpritePart *frame, ObjSpriteTex *textures)
+{
+    sprite->parts               = frame;
+    sprite->textures            = textures;
+    g_sys_real.sprite_tex_table = textures;
+}
+
+void func_800086D8(ObjSprite *sprite, ObjSpritePart *data)
+{
+    sprite->parts    = data;
+    sprite->textures = g_sys_real.sprite_tex_table;
+}

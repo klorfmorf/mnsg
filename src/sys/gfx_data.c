@@ -1,17 +1,15 @@
 #include "sys/gfx_data.h"
 #include "common.h"
 
-extern Gfx D_8006DA80[];
-
 // clang-format off
 
 // <<<<< data >>>>>
-Vp D_8006D4D0 = { { { 640, 480, G_MAXZ / 2, 0 }, { 640, 480, G_MAXZ / 2, 0 } } };
+Vp D_8006D4D0 = { { { SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, G_MAXZ / 2, 0 }, { SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, G_MAXZ / 2, 0 } } };
 
 Gfx D_8006D4E0[] = {
     gsDPPipeSync(),
     gsSPViewport(&D_8006D4D0),
-    gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, 320, 240),
+    gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };
@@ -39,7 +37,7 @@ Gfx D_8006D580[] = {
     gsDPSetCycleType(G_CYC_1CYCLE),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
     gsDPSetTexturePersp(G_TP_NONE),
-    gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, 320, 240),
+    gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
     gsDPSetTextureDetail(G_TD_CLAMP),
     gsDPSetTextureLOD(G_TL_TILE),
     gsDPSetTextureFilter(G_TF_BILERP),
@@ -168,7 +166,7 @@ Gfx D_8006D868[] = {
     gsDPSetCycleType(G_CYC_FILL),
     gsDPPipelineMode(G_PM_NPRIMITIVE),
     gsDPSetFillColor(0x395F395F),
-    gsDPFillRectangle(0, 0, 319, 239),
+    gsDPFillRectangle(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1),
     gsSPEndDisplayList(),
 };
 
@@ -521,10 +519,10 @@ Gfx D_8006E030[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_FILL),
     gsDPSetRenderMode(G_RM_NOOP, G_RM_NOOP2),
-    gsDPSetColorImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, 0x002D1800),
+    gsDPSetColorImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, 0x002D1800),
     gsDPSetDepthImage(0x002D1800),
     gsDPSetFillColor(0xFFFCFFFC),
-    gsDPFillRectangle(0, 0, 319, 239),
+    gsDPFillRectangle(0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1),
     gsDPPipeSync(),
     gsSPEndDisplayList(),
 };
@@ -552,7 +550,7 @@ Gfx D_8006E0F0[] = {
 };
 
 Gfx D_8006E0F8[] = {
-    gsDPSetColorImage(G_IM_FMT_RGBA, G_IM_SIZ_4b, 320, 0x00000000),
+    gsDPSetColorImage(G_IM_FMT_RGBA, G_IM_SIZ_4b, SCREEN_WIDTH, 0x00000000),
     gsSPDisplayList(D_8006E078),
     gsSPEndDisplayList(),
 };
@@ -603,4 +601,6 @@ Gfx D_8006E1C8[] = {
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/gfx_data/func_80037DB0.s")
+void func_80037DB0(void)
+{
+}

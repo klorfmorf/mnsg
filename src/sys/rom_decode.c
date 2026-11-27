@@ -18,189 +18,180 @@ unsigned short s_lzkn64_planes;
 
 // clang-format on
 
-#ifdef NON_MATCHING
-unsigned char *func_80005220(unsigned char *p, unsigned char *dst)
+unsigned char *func_80005220(unsigned char *src, unsigned char *dst)
 {
-    unsigned char *end;
-    unsigned char *win;
-    unsigned char  byte;
+    unsigned char *end = src + *(int *) src;
+    unsigned char  c;
+    unsigned short n;
+    unsigned short dist;
+    unsigned char *from;
     unsigned char  fill;
-    unsigned short cmd;
-    unsigned short len;
 
-    end = p + *(int *) p;
-    p += 4;
-    while (p < end) {
-        cmd = byte = *p++;
-        if (cmd < 0x80) {
-            win = dst - (((byte << 8) + *p++) & 0x3FF);
-            len = (cmd >> 2) + 2;
-            while (len--) {
-                *dst++ = *win++;
+    src += 4;
+    while (src < end) {
+        c = *src++;
+        if (c < 0x80) {
+            dist = ((c << 8) + *src++) & 0x3FF;
+            n    = (c >> 2) + 2;
+            from = dst - dist;
+            while (n--) {
+                *dst++ = *from++;
             }
-        } else if (cmd < 0xA0) {
-            len = cmd & 0x1F;
-            while (len--) {
-                *dst++ = *p++;
+        } else if (c < 0xA0) {
+            n = c & 0x1F;
+            while (n--) {
+                *dst++ = *src++;
             }
         } else {
-            if (cmd < 0xE0) {
-                fill = *p++;
-                len  = (cmd & 0x1F) + 2;
-            } else if (cmd < 0xFF) {
+            if (c < 0xE0) {
+                n    = (c & 0x1F) + 2;
+                fill = *src++;
+            } else if (c < 0xFF) {
                 fill = 0;
-                len  = (cmd & 0x1F) + 2;
+                n    = (c & 0x1F) + 2;
             } else {
                 fill = 0;
-                len  = *p++ + 2;
+                n    = *src++ + 2;
             }
-            while (len--) {
+            while (n--) {
                 *dst++ = fill;
             }
         }
     }
     return dst;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/rom_decode/func_80005220.s")
-#endif
 
-#ifdef NON_MATCHING
 unsigned char *func_80005394(unsigned int rom, unsigned char *dst, int size)
 {
-    unsigned char *p;
-    unsigned char *base;
-    unsigned char *win;
-    unsigned char  fill;
-    unsigned short off;
-    unsigned int   nib;
-    unsigned int   hdr;
+    unsigned char *in;
+    unsigned int   header;
     unsigned int   end;
-    int            cmd;
-    unsigned short len;
+    unsigned char  c;
+    unsigned short n;
+    unsigned short dist;
+    unsigned char  fill;
+    unsigned char *base;
+    unsigned short passes;
+    unsigned char *from;
 
     s_lzkn64_rom = s_lzkn64_pos = rom;
     s_lzkn64_rom_left = s_lzkn64_left = size;
-    s_lzkn64_left                     = size - 1;
-    p                                 = g_sys->decompression_buffer;
+    s_lzkn64_left--;
+    in = g_sys->decompression_buffer;
     func_80005984();
     while (s_lzkn64_left > 0) {
-        hdr = *p << 24;
-        p   = func_80005900(p);
-        hdr += *p << 16;
-        p = func_80005900(p);
-        hdr += *p << 8;
-        p = func_80005900(p);
-        hdr += *p;
-        p   = func_80005900(p);
-        end = s_lzkn64_pos + hdr - 4;
-        nib = hdr & 0xF0000000;
-        if (nib != 0) {
+        header = *in << 24;
+        in     = func_80005900(in);
+        header += *in << 16;
+        in = func_80005900(in);
+        header += *in << 8;
+        in = func_80005900(in);
+        header += *in;
+        in  = func_80005900(in);
+        end = s_lzkn64_pos + header - 4;
+        if (header & 0xF0000000) {
             while (s_lzkn64_pos < end) {
-                len = *p;
-                p   = func_80005900(p);
-                cmd = len;
-                if (len < 0x80) {
-                    off = (*p + (len << 8)) & 0x3FF;
-                    p   = func_80005900(p);
-                    win = dst - off;
-                    len = (cmd >> 2) + 2;
-                    while (len--) {
-                        *dst++ = *win++;
+                c  = *in;
+                in = func_80005900(in);
+                if (c < 0x80) {
+                    dist = ((c << 8) + *in) & 0x3FF;
+                    in   = func_80005900(in);
+                    n    = (c >> 2) + 2;
+                    from = dst - dist;
+                    while (n--) {
+                        *dst++ = *from++;
                     }
-                } else if (cmd < 0xA0) {
-                    len = cmd & 0x1F;
-                    while (len--) {
-                        *dst++ = *p;
-                        p      = func_80005900(p);
+                } else if (c < 0xA0) {
+                    n = c & 0x1F;
+                    while (n--) {
+                        *dst++ = *in;
+                        in     = func_80005900(in);
                     }
                 } else {
-                    if (cmd < 0xE0) {
-                        len  = (cmd & 0x1F) + 2;
-                        fill = *p;
-                        p    = func_80005900(p);
-                    } else if (cmd < 0xFF) {
+                    if (c < 0xE0) {
+                        n    = (c & 0x1F) + 2;
+                        fill = *in;
+                        in   = func_80005900(in);
+                    } else if (c < 0xFF) {
                         fill = 0;
-                        len  = (cmd & 0x1F) + 2;
+                        n    = (c & 0x1F) + 2;
                     } else {
                         fill = 0;
-                        len  = *p + 2;
-                        p    = func_80005900(p);
+                        n    = *in + 2;
+                        in   = func_80005900(in);
                     }
-                    while (len--) {
+                    while (n--) {
                         *dst++ = fill;
                     }
                 }
             }
         } else {
-            s_lzkn64_planes = (nib >> 28) + 1;
-            base            = dst;
-            for (s_lzkn64_plane = 0; s_lzkn64_plane < s_lzkn64_planes; s_lzkn64_plane++) {
+            s_lzkn64_plane  = 0;
+            passes          = (header & 0xF0000000) >> 28;
+            s_lzkn64_planes = passes + 1;
+            for (base = dst; s_lzkn64_plane < s_lzkn64_planes; base++, s_lzkn64_plane++) {
                 if (s_lzkn64_plane != 0) {
-                    hdr = *p << 24;
-                    p   = func_80005900(p);
-                    hdr += *p << 16;
-                    p = func_80005900(p);
-                    hdr += *p << 8;
-                    p = func_80005900(p);
-                    hdr += *p;
-                    p   = func_80005900(p);
-                    end = s_lzkn64_pos + hdr - 4;
+                    header = *in << 24;
+                    in     = func_80005900(in);
+                    header += *in << 16;
+                    in = func_80005900(in);
+                    header += *in << 8;
+                    in = func_80005900(in);
+                    header += *in;
+                    in  = func_80005900(in);
+                    end = s_lzkn64_pos + header - 4;
                     dst = base;
                 }
-                hdr &= 0x0FFFFFFF;
+                header &= 0x0FFFFFFF;
                 while (s_lzkn64_pos < end) {
-                    len = *p;
-                    p   = func_80005900(p);
-                    cmd = len;
-                    if (len < 0x80) {
-                        off = (*p + (len << 8)) & 0x3FF;
-                        p   = func_80005900(p);
-                        win = dst - s_lzkn64_planes * off;
-                        len = (cmd >> 2) + 2;
-                        while (len--) {
-                            *dst = *win;
+                    c  = *in;
+                    in = func_80005900(in);
+                    if (c < 0x80) {
+                        dist = ((c << 8) + *in) & 0x3FF;
+                        n    = (c >> 2) + 2;
+                        in   = func_80005900(in);
+                        from = dst - dist * s_lzkn64_planes;
+                        while (n--) {
+                            *dst = *from;
                             dst += s_lzkn64_planes;
-                            win += s_lzkn64_planes;
+                            from += s_lzkn64_planes;
                         }
-                    } else if (cmd < 0xA0) {
-                        len = cmd & 0x1F;
-                        while (len--) {
-                            *dst = *p;
+                    } else if (c < 0xA0) {
+                        n = c & 0x1F;
+                        while (n--) {
+                            *dst = *in;
                             dst += s_lzkn64_planes;
-                            p = func_80005900(p);
+                            in = func_80005900(in);
                         }
                     } else {
-                        if (cmd < 0xE0) {
-                            len  = (cmd & 0x1F) + 2;
-                            fill = *p;
-                            p    = func_80005900(p);
-                        } else if (cmd < 0xFF) {
+                        if (c < 0xE0) {
+                            n    = (c & 0x1F) + 2;
+                            fill = *in;
+                            in   = func_80005900(in);
+                        } else if (c < 0xFF) {
                             fill = 0;
-                            len  = (cmd & 0x1F) + 2;
+                            n    = (c & 0x1F) + 2;
                         } else {
                             fill = 0;
-                            len  = *p + 2;
-                            p    = func_80005900(p);
+                            n    = *in + 2;
+                            in   = func_80005900(in);
                         }
-                        while (len--) {
+                        while (n--) {
                             *dst = fill;
                             dst += s_lzkn64_planes;
                         }
                     }
                 }
-                base++;
             }
         }
+#ifndef JAPAN_0
         while (end++ & 0xF) {
-            p = func_80005900(p);
+            in = func_80005900(in);
         }
+#endif
     }
     return dst;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/rom_decode/func_80005394.s")
-#endif
 
 unsigned char *func_80005900(unsigned char *p)
 {

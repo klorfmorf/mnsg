@@ -1708,7 +1708,7 @@ int func_80001C00(unsigned int id, int addr)
         D_8015C5D4 = 1;
 
         if (size != 0) {
-            if (!(D_800573C8.offsets[id - 1] & 0x80000000)) {
+            if (!(D_800573C8.offsets[id - 1] & LOAD_ROM_COMPRESSED)) {
                 func_80001640(D_800573C8.offsets[id - 1], addr, (size + 1) & ~1);
                 p = (char *) addr + ((size + 1) & ~1);
             } else {
@@ -1730,9 +1730,9 @@ int func_80001C00(unsigned int id, int addr)
     return 0;
 }
 
-int func_80001D68(unsigned short id) { return D_800573C8.offsets[id - 1] & 0x7FFFFFFF; }
+int func_80001D68(unsigned short id) { return D_800573C8.offsets[id - 1] & LOAD_ROM_MASK; }
 
-int func_80001D94(unsigned short id) { return D_800573C8.offsets[id] & 0x7FFFFFFF & 0x7FFFFFFF; }
+int func_80001D94(unsigned short id) { return D_800573C8.offsets[id] & LOAD_ROM_MASK & LOAD_ROM_MASK; }
 
 int func_80001DC0(unsigned int id)
 {
@@ -1746,11 +1746,11 @@ int func_80001DC0(unsigned int id)
 int func_80001DF4(unsigned int id)
 {
     if (func_80001E50(id) == 0x11) {
-        return 0x40000000;
+        return WAVE_DATA_TLB;
     }
 
     if (id != 0) {
-        return LOAD_VRAM_START(id) & 0x40000000;
+        return LOAD_VRAM_START(id) & WAVE_DATA_TLB;
     }
 
     return 0;

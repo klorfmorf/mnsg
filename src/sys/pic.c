@@ -1,13 +1,14 @@
-#define NO_PROTO_bitRead
-
 #include "sys/pic.h"
-#include "sys/sys.h"
-#include "sys/bit.h"
-#include "sys/wave_uty.h"
+#include "macros.h"
+#include "segments.h"
 #include "unk.h"
+#include "sys/sys.h"
+#define NO_PROTO_bitRead
+#include "sys/bit.h"
+#include "sys/amem.h"
 
-void *picDecode8(int arg0, void *buf, Pic *pic);
-void *picDecode4(int arg0, void *buf, Pic *pic);
+void *picDecode8(unsigned char *arg0, void *buf, Pic *pic);
+void *picDecode4(unsigned char *arg0, void *buf, Pic *pic);
 void  picReadPalette(int n, Pic *pic);
 void  picReadHeader(Pic *pic);
 void  picExpand16(Pic *pic);
@@ -37,12 +38,12 @@ int   picFlagTest(unsigned char *bits, int i);
 
 // <<<<< data >>>>>
 WaveReq D_8006ADD0 = {
-    0x40000001,
-    D_80301000,
+    FILE_1 | WAVE_REQ_LAST,
+    D_80301000, // ascii_buffer_seg
 };
 
 WaveReq D_8006ADD8 = {
-    0x40000003,
+    FILE_3 | WAVE_REQ_LAST,
     D_80304000,
 };
 
@@ -74,7 +75,7 @@ Pic *picOpen(unsigned char *data, Pic *pic)
     return pic;
 }
 
-Pic *picDecode(int arg0, void *buf, Pic *pic)
+Pic *picDecode(unsigned char *arg0, void *buf, Pic *pic)
 {
     int size;
     int i;
@@ -110,7 +111,7 @@ Pic *picDecode(int arg0, void *buf, Pic *pic)
     return pic;
 }
 
-void *picDecode8(int arg0, void *buf, Pic *pic)
+void *picDecode8(unsigned char *arg0, void *buf, Pic *pic)
 {
     int size;
     int i;
@@ -161,7 +162,7 @@ void *picDecode8(int arg0, void *buf, Pic *pic)
     return buf;
 }
 
-void *picDecode4(int arg0, void *buf, Pic *pic)
+void *picDecode4(unsigned char *arg0, void *buf, Pic *pic)
 {
     int width;
     int size;

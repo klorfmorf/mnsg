@@ -4,7 +4,7 @@
 #include "common.h"
 #include "structs.h"
 
-void func_80032320(ColHit *hit, int arg1, float arg2);
-int  func_8003266C(float x, float y, float z);
+void           func_80032320(ColHit *ray, unsigned char nearest, float length);
+unsigned short func_8003266C(float x, float y, float z);
 
 #endif // RIDE_H

@@ -16,7 +16,8 @@ unsigned char func_80001E50(unsigned int id);
 int           func_80001EB0(unsigned int id, int addr);
 void          func_80001FE8(void);
 
-extern int          D_80054ACC[(LOAD_FILE_MAX - 1) * 2];
-extern LoadRomTable D_800573C8;
+extern unsigned short D_80054910[];
+extern int            D_80054ACC[(LOAD_FILE_MAX - 1) * 2];
+extern LoadRomTable   D_800573C8;
 
 #endif // ROM_TRANS_H

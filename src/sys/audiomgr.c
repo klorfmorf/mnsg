@@ -1,3 +1,4 @@
+#include "sys/audiomgr.h"
 #include "structs.h"
 #include "sys/main.h"
 #include "sys/sched.h"
@@ -97,7 +98,7 @@ static void __amMain(void *arg)
 
     done = 0;
     prev = NULL;
-    osScAddClient((OSSched *) D_8008A9F0, &client, &__am.audioFrameMsgQ);
+    osScAddClient(&D_8008A9F0, &client, &__am.audioFrameMsgQ);
     while (!done) {
         osRecvMesg(&__am.audioFrameMsgQ, (OSMesg *) &msg, 1);
         switch (msg->gen.type) {
@@ -151,7 +152,7 @@ static int __amHandleFrameMsg(AudioInfo *info, AudioInfo *next)
     info->task.list.t.flags           = 0;
     info->task.list.t.ucode           = D_80053AB0;
     info->task.list.t.ucode_data      = D_8007DD60;
-    info->task.list.t.ucode_data_size = 0x800;
+    info->task.list.t.ucode_data_size = SP_UCODE_DATA_SIZE;
     info->task.list.t.yield_data_ptr  = NULL;
     info->task.list.t.yield_data_size = 0;
     osSendMesg(D_8008CCB0, &info->task, 1);

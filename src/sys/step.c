@@ -9,7 +9,6 @@
 #include "sys/controller_pak.h"
 #include "sys/douchu.h"
 #include "sys/save_file.h"
-#include "sys/sched.h"
 #include "sys/stage.h"
 #include "sys/sys.h"
 #include "sys/rom_trans.h"
@@ -17,10 +16,11 @@
 #include "sys/obj.h"
 #include "sys/string.h"
 #include "sys/wave_uty.h"
+#include "sys/amem.h"
 #include "sys/task.h"
-#include "unk.h"
 #include "sys/main.h"
 #include "sys/pic.h"
+#include "unk.h"
 
 void func_800020B8(void);
 void func_80002138(void);
@@ -35,15 +35,11 @@ void func_80002C7C(void);
 void func_80002D94(void);
 void func_80002DE4(void);
 void func_80002E70(void);
-void func_80002EFC(void);
 void func_80002F54(void);
 void func_800030F0(void);
 void func_80003328(void);
 void func_80003358(void);
-void func_80003678(void);
 void func_8000378C(void);
-void func_8000383C(void);
-void func_80003880(void);
 void func_800038E4(void);
 void func_8000394C(void);
 
@@ -72,9 +68,6 @@ GameStepTable D_80058908 = {
     },
 };
 
-// <<<<< rodata >>>>>
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/step/D_8007A7A0.s")
-
 // clang-format on
 
 void func_80002040(void)
@@ -90,7 +83,7 @@ void func_800020B8(void)
     func_80004240();
     func_800148C0(g_sys->memory_blocks, D_802F7000, 0xA000);
     func_80005A20(&D_8006ADD0);
-    g_sys->unk_cf7b0 = D_80058868;
+    g_sys->default_palette = D_80058868;
     func_8000B880();
     func_8000A0F0();
     func_8000378C();
@@ -102,6 +95,7 @@ void func_80002138(void)
 
     switch (g_sys->step_sub) {
         case 0:
+            PRINTF(("ROM TENSO \n"));
             func_80001C00(FILE_23, func_801CB460);
             i = 0xFFFF;
             while (1) {
@@ -131,7 +125,7 @@ void func_80002138(void)
             return;
         case 2:
             g_sys_real.dont_process_draw_lists = 1;
-            if (func_801CBB70(&D_8015C5CC, func_800141C4(2)) != 0) {
+            if (func_801CBB70(&g_sys_glistp, func_800141C4(FILE_2)) != 0) {
                 func_80003678();
             }
             return;
@@ -211,7 +205,7 @@ void func_80002454(void)
         g_sys_real.disable_graphics_tasks = 0;
     }
     func_801CB460();
-    D_8015C5CC = func_801CB668(g_sys_real.current_graphics_pool, D_8015C5CC);
+    g_sys_glistp = func_801CB668(g_sys_real.current_graphics_pool, g_sys_glistp);
     if (g_sys->stepw != GAME_STEP_KONAMI_LOGO) {
         g_sys->retraces_per_game_step = 2;
         osViSetSpecialFeatures(OS_VI_GAMMA_OFF | OS_VI_GAMMA_DITHER_OFF | OS_VI_DIVOT_ON | OS_VI_DITHER_FILTER_ON);
@@ -277,46 +271,36 @@ void func_80002518(void)
     }
 }
 
-#ifdef NON_MATCHING
 void func_80002718(void)
 {
-    unsigned int  step;
-    unsigned char i;
+    unsigned char delay = 0;
 
-    step = g_sys->step_sub;
-    switch (step) {
+    switch (g_sys->step_sub) {
         case 0:
             func_8000383C();
             func_80004910();
             if (g_sys->step_sub == 0) {
                 func_80001C00(FILE_11, func_801CB460);
                 func_80001C00(FILE_19, D_8020D2A0);
-                do {
-                    i = 0xFF;
-                    while (1) {
-                        if (i == 0) {
-                            break;
-                        }
-                        i--;
-                    }
-                } while (0);
+                while (--delay) {
+                }
             }
         case 1:
             g_sys->step_sub++;
-            return;
+            break;
         case 2:
             g_sys->retraces_per_game_step     = 2;
             g_sys_real.demo_mode              = 0;
             g_sys_real.disable_graphics_tasks = 0;
-            func_8003488C(D_8020D2A0);
+            func_8003488C((void (*)(Task *, Obj *)) D_8020D2A0);
             g_sys->step_sub++;
-            return;
+            break;
         case 3:
             func_800038E4();
-            return;
+            break;
         case 4:
             func_8000394C();
-            return;
+            break;
         case 5:
             g_sys->wait_frames--;
             if (g_sys->wait_frames == 0) {
@@ -337,19 +321,17 @@ void func_80002718(void)
                     func_80003728(GAME_STEP_OPTIONS);
                 }
             }
-            return;
+            break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/step/func_80002718.s")
-#endif
 
 void func_80002938(void)
 {
     switch (g_sys->step_sub) {
         case 0:
+            PRINTF(("LOOP DEMO111111\n"));
             func_8000383C();
-            g_sys->intended_room_id = 0x24C;
+            g_sys->intended_stage_id = 0x24C;
             func_8000B3E4();
             func_80020440();
             g_sys_real.disable_graphics_tasks = 0;
@@ -358,6 +340,7 @@ void func_80002938(void)
         case 1:
             if (g_sys_real.disable_graphics_tasks == 0 &&
                 ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & (A_BUTTON | B_BUTTON | START_BUTTON))) {
+                PRINTF(("LOOP DEMO2222222222\n"));
                 g_sys->stepw_end++;
             }
             func_800038E4();
@@ -370,6 +353,7 @@ void func_80002938(void)
                 func_8000383C();
                 g_sys_real.disable_graphics_tasks = 0;
                 g_sys_real.demo_no &= 0x7FFF;
+                PRINTF(("TITLE GO\n"));
                 func_80003728(GAME_STEP_TITLE);
             }
             return;
@@ -381,37 +365,30 @@ void func_80002A98(void)
     func_80005B90();
 }
 
-#ifdef NON_MATCHING
 void func_80002AB8(void)
 {
-    unsigned char i;
+    unsigned char delay = 0;
 
-    i = g_sys->step_sub;
-    switch (i) {
+    switch (g_sys->step_sub) {
         case 0:
             func_8000383C();
             func_80001C00(FILE_15, func_801CB460);
-            i = 0xFF;
-            while (1) {
-                if (i == 0) {
-                    break;
-                }
-                i--;
+            while (--delay) {
             }
             g_sys->step_sub++;
-            return;
+            break;
         case 1:
-            g_sys->intended_room_group_index = 0;
-            func_8003488C(D_801CCB7C);
+            g_sys->intended_stage_group_index = 0;
+            func_8003488C((void (*)(Task *, Obj *)) D_801CCB7C);
             g_sys->step_sub++;
-            return;
+            break;
         case 2:
             func_80034734();
             if (g_sys_real.stepw_end != 0) {
                 func_80038BC8(7);
                 g_sys->step_sub++;
             }
-            return;
+            break;
         case 3:
             if (g_sys_real.stepw_end != 0) {
                 func_8000383C();
@@ -420,9 +397,11 @@ void func_80002AB8(void)
                     func_80003728(GAME_STEP_TITLE);
                 }
                 if (g_sys_real.stepw_end == 2) {
-                    if (D_8015C608.room_id == 0x1D1) {
+                    if (D_8015C608.stage_id == 0x1D1) {
+                        PRINTF(("OPENING GO\n"));
                         func_80003728(GAME_STEP_INTRO);
                     } else {
+                        PRINTF(("GAME GO\n"));
                         func_80003728(GAME_STEP_WARP_SAVE);
                     }
                 }
@@ -430,16 +409,13 @@ void func_80002AB8(void)
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/step/func_80002AB8.s")
-#endif
 
 void func_80002C7C(void)
 {
     switch (g_sys->step_sub) {
         case 0:
             func_8000383C();
-            g_sys->intended_room_id = 0x231;
+            g_sys->intended_stage_id = 0x231;
             func_8000B3E4();
             func_80020440();
             g_sys->step_sub++;
@@ -467,7 +443,7 @@ void func_80002D94(void)
     func_80020730();
     if (g_sys->stepw_end != 0) {
         g_sys->mode_frame_count = 0;
-        func_80003728(3);
+        func_80003728(GAME_STEP_KONAMI_LOGO);
     }
 }
 
@@ -479,6 +455,7 @@ void func_80002DE4(void)
         return;
     }
     if (D_800548D8 == 0) {
+        PRINTF(("Game 2 Init1\n"));
         func_8000B2A0();
         g_sys_real.step_sub = 1;
         func_8000383C();
@@ -494,6 +471,7 @@ void func_80002E70(void)
         return;
     }
     if (D_800548D8 == 0) {
+        PRINTF(("Game 2 Init2\n"));
         func_8000B364();
         g_sys_real.step_sub = 1;
         func_8000383C();
@@ -507,7 +485,7 @@ void func_80002EFC(void)
     func_80034734();
     if (g_sys->mode_end != 0) {
         g_sys->mode_frame_count = 0;
-        func_80003728(3);
+        func_80003728(GAME_STEP_KONAMI_LOGO);
     }
 }
 
@@ -521,8 +499,8 @@ void func_80002F54(void)
         case 1:
             if (D_800548D8 == 0) {
                 func_8000383C();
-                g_sys->intended_room_group       = 12;
-                g_sys->intended_room_group_index = 0;
+                g_sys->intended_stage_group       = 12;
+                g_sys->intended_stage_group_index = 0;
                 func_80020440();
                 func_800369B4(g_task_list.head);
                 g_sys->step_sub++;
@@ -586,8 +564,8 @@ void func_800030F0(void)
             g_sys->step_sub++;
             return;
         case 3:
-            g_sys->intended_room_group_index = 3;
-            func_8003488C(D_801CCB7C);
+            g_sys->intended_stage_group_index = 3;
+            func_8003488C((void (*)(Task *, Obj *)) D_801CCB7C);
             g_sys->step_sub++;
             return;
         case 4:
@@ -597,15 +575,15 @@ void func_800030F0(void)
                     return;
                 case 1:
                     func_8000383C();
-                    g_sys->intended_room_group_index = 3;
-                    g_sys_real.stepw_end             = 0;
-                    func_8003488C(D_801CCB7C);
+                    g_sys->intended_stage_group_index = 3;
+                    g_sys_real.stepw_end              = 0;
+                    func_8003488C((void (*)(Task *, Obj *)) D_801CCB7C);
                     return;
                 case 2:
                     func_8000383C();
-                    g_sys->intended_room_group_index = 1;
-                    g_sys_real.stepw_end             = 0;
-                    func_8003488C(D_801CCB7C);
+                    g_sys->intended_stage_group_index = 1;
+                    g_sys_real.stepw_end              = 0;
+                    func_8003488C((void (*)(Task *, Obj *)) D_801CCB7C);
                     return;
                 case 3:
                     func_8000383C();
@@ -619,13 +597,15 @@ void func_800030F0(void)
 
 void func_80003328(void)
 {
+    PRINTF(("SR DEMO1\n"));
     func_8000B364();
     func_8000383C();
-    func_80003728(0x11);
+    func_80003728(GAME_STEP_STAFF_ROLL);
 }
 
 void func_80003358(void)
 {
+    PRINTF(("SR DEMO2\n"));
     func_8001F8B0();
     func_80034734();
 }
@@ -747,7 +727,7 @@ void func_80003880(void)
     func_80035B50();
     func_8000B880();
     func_8000B8A4(D_800627F0);
-    g_sys_real.task_disabled_status = 0x14;
+    g_sys_real.task_disabled_status = TASK_STATUS_SUSPEND_UPDATE | TASK_STATUS_SUSPEND_DRAW;
     func_80013940();
     osViBlack(FALSE);
 }

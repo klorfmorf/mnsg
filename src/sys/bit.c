@@ -3,12 +3,14 @@
 // clang-format off
 
 // <<<<< data >>>>>
+
 int D_8006ADC0 = 0;
 int D_8006ADC4 = 0;
 int D_8006ADC8 = 8;
 int D_8006ADCC = 0;
 
 // <<<<< bss >>>>>
+
 unsigned char *D_80168160;
 
 // clang-format on
@@ -27,6 +29,7 @@ int bitRead1(void)
     if (--D_8006ADC4 >= 0) {
         return ((unsigned int) D_8006ADCC >> D_8006ADC4) & 1;
     }
+
     D_8006ADC4 = 7;
     D_8006ADCC = *D_80168160++;
 
@@ -43,6 +46,7 @@ int bitRead(int n)
         D_8006ADCC = *D_80168160++;
         D_8006ADC4 = 8;
     }
+
     D_8006ADC4 -= n;
 
     return (((unsigned int) D_8006ADCC >> D_8006ADC4) & ((1 << n) - 1)) | x;

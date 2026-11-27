@@ -4,11 +4,13 @@
 #include "common.h"
 #include "structs.h"
 
-void anime_init_frame(void);
-int  anime_draw(ObjSolid *solid);
+void  anime_init_frame(void);
+int   anime_draw(ObjSolid *solid);
 float anime_frame_count(ObjSolid *solid);
-int  anime_locate_joint(ObjSolid *out, ObjSolid *solid, int target);
-int  anime_swap_models(ObjSolid *target_solid, unsigned int model, unsigned int *table);
+void  anime_set_default_ambient(unsigned char r, unsigned char g, unsigned char b);
+int   anime_spawn_parts(void *arg0, ObjSolid *src);
+int   anime_locate_joint(ObjSolid *out, ObjSolid *solid, int target);
+int   anime_swap_models(ObjSolid *target_solid, unsigned int model, unsigned int *table);
 
 extern Vp             g_anime_default_vp;
 extern ObjSolid      *g_anime_solid;

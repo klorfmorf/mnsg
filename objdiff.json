@@ -10,6 +10,262 @@
   ],
   "units": [
     {
+      "name": "douchu/587B50",
+      "target_path": "expected/targets/douchu/587B50.o",
+      "base_path": "build/usa/src/douchu/587B50.c.o",
+      "metadata": {
+        "source_path": "src/douchu/587B50.c"
+      }
+    },
+    {
+      "name": "douchu/5883D0",
+      "target_path": "expected/targets/douchu/5883D0.o",
+      "base_path": "build/usa/src/douchu/5883D0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5883D0.c"
+      }
+    },
+    {
+      "name": "douchu/58B870",
+      "target_path": "expected/targets/douchu/58B870.o",
+      "base_path": "build/usa/src/douchu/58B870.c.o",
+      "metadata": {
+        "source_path": "src/douchu/58B870.c"
+      }
+    },
+    {
+      "name": "douchu/58E2D0",
+      "target_path": "expected/targets/douchu/58E2D0.o",
+      "base_path": "build/usa/src/douchu/58E2D0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/58E2D0.c"
+      }
+    },
+    {
+      "name": "douchu/5907F0",
+      "target_path": "expected/targets/douchu/5907F0.o",
+      "base_path": "build/usa/src/douchu/5907F0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5907F0.c"
+      }
+    },
+    {
+      "name": "douchu/5913D0",
+      "target_path": "expected/targets/douchu/5913D0.o",
+      "base_path": "build/usa/src/douchu/5913D0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5913D0.c"
+      }
+    },
+    {
+      "name": "douchu/5944C0",
+      "target_path": "expected/targets/douchu/5944C0.o",
+      "base_path": "build/usa/src/douchu/5944C0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5944C0.c"
+      }
+    },
+    {
+      "name": "douchu/5959C0",
+      "target_path": "expected/targets/douchu/5959C0.o",
+      "base_path": "build/usa/src/douchu/5959C0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5959C0.c"
+      }
+    },
+    {
+      "name": "douchu/598540",
+      "target_path": "expected/targets/douchu/598540.o",
+      "base_path": "build/usa/src/douchu/598540.c.o",
+      "metadata": {
+        "source_path": "src/douchu/598540.c"
+      }
+    },
+    {
+      "name": "douchu/5995F0",
+      "target_path": "expected/targets/douchu/5995F0.o",
+      "base_path": "build/usa/src/douchu/5995F0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5995F0.c"
+      }
+    },
+    {
+      "name": "douchu/5997A0",
+      "target_path": "expected/targets/douchu/5997A0.o",
+      "base_path": "build/usa/src/douchu/5997A0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5997A0.c"
+      }
+    },
+    {
+      "name": "douchu/59D4E0",
+      "target_path": "expected/targets/douchu/59D4E0.o",
+      "base_path": "build/usa/src/douchu/59D4E0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/59D4E0.c"
+      }
+    },
+    {
+      "name": "douchu/5A12F0",
+      "target_path": "expected/targets/douchu/5A12F0.o",
+      "base_path": "build/usa/src/douchu/5A12F0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5A12F0.c"
+      }
+    },
+    {
+      "name": "douchu/5A4730",
+      "target_path": "expected/targets/douchu/5A4730.o",
+      "base_path": "build/usa/src/douchu/5A4730.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5A4730.c"
+      }
+    },
+    {
+      "name": "douchu/5A6F30",
+      "target_path": "expected/targets/douchu/5A6F30.o",
+      "base_path": "build/usa/src/douchu/5A6F30.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5A6F30.c"
+      }
+    },
+    {
+      "name": "douchu/5AA6B0",
+      "target_path": "expected/targets/douchu/5AA6B0.o",
+      "base_path": "build/usa/src/douchu/5AA6B0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5AA6B0.c"
+      }
+    },
+    {
+      "name": "douchu/5AE300",
+      "target_path": "expected/targets/douchu/5AE300.o",
+      "base_path": "build/usa/src/douchu/5AE300.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5AE300.c"
+      }
+    },
+    {
+      "name": "douchu/5AEBE0",
+      "target_path": "expected/targets/douchu/5AEBE0.o",
+      "base_path": "build/usa/src/douchu/5AEBE0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5AEBE0.c"
+      }
+    },
+    {
+      "name": "douchu/5AFA40",
+      "target_path": "expected/targets/douchu/5AFA40.o",
+      "base_path": "build/usa/src/douchu/5AFA40.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5AFA40.c"
+      }
+    },
+    {
+      "name": "douchu/5B03F0",
+      "target_path": "expected/targets/douchu/5B03F0.o",
+      "base_path": "build/usa/src/douchu/5B03F0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B03F0.c"
+      }
+    },
+    {
+      "name": "douchu/5B13D0",
+      "target_path": "expected/targets/douchu/5B13D0.o",
+      "base_path": "build/usa/src/douchu/5B13D0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B13D0.c"
+      }
+    },
+    {
+      "name": "douchu/5B17D0",
+      "target_path": "expected/targets/douchu/5B17D0.o",
+      "base_path": "build/usa/src/douchu/5B17D0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B17D0.c"
+      }
+    },
+    {
+      "name": "douchu/5B20B0",
+      "target_path": "expected/targets/douchu/5B20B0.o",
+      "base_path": "build/usa/src/douchu/5B20B0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B20B0.c"
+      }
+    },
+    {
+      "name": "douchu/5B30E0",
+      "target_path": "expected/targets/douchu/5B30E0.o",
+      "base_path": "build/usa/src/douchu/5B30E0.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B30E0.c"
+      }
+    },
+    {
+      "name": "douchu/5B6060",
+      "target_path": "expected/targets/douchu/5B6060.o",
+      "base_path": "build/usa/src/douchu/5B6060.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B6060.c"
+      }
+    },
+    {
+      "name": "douchu/5B7A40",
+      "target_path": "expected/targets/douchu/5B7A40.o",
+      "base_path": "build/usa/src/douchu/5B7A40.c.o",
+      "metadata": {
+        "source_path": "src/douchu/5B7A40.c"
+      }
+    },
+    {
+      "name": "douchu/file_11",
+      "target_path": "expected/targets/douchu/file_11.o",
+      "base_path": "build/usa/src/douchu/file_11.c.o",
+      "metadata": {
+        "source_path": "src/douchu/file_11.c"
+      }
+    },
+    {
+      "name": "enemy/5C8B40",
+      "target_path": "expected/targets/enemy/5C8B40.o",
+      "base_path": "build/usa/src/enemy/5C8B40.c.o",
+      "metadata": {
+        "source_path": "src/enemy/5C8B40.c"
+      }
+    },
+    {
+      "name": "enemy/5D1B10",
+      "target_path": "expected/targets/enemy/5D1B10.o",
+      "base_path": "build/usa/src/enemy/5D1B10.c.o",
+      "metadata": {
+        "source_path": "src/enemy/5D1B10.c"
+      }
+    },
+    {
+      "name": "enemy/file_12",
+      "target_path": "expected/targets/enemy/file_12.o",
+      "base_path": "build/usa/src/enemy/file_12.c.o",
+      "metadata": {
+        "source_path": "src/enemy/file_12.c"
+      }
+    },
+    {
+      "name": "file_28",
+      "target_path": "expected/targets/file_28.o",
+      "base_path": "build/usa/src/file_28.c.o",
+      "metadata": {
+        "source_path": "src/file_28.c"
+      }
+    },
+    {
+      "name": "sys/amem",
+      "target_path": "expected/targets/sys/amem.o",
+      "base_path": "build/usa/src/sys/amem.c.o",
+      "metadata": {
+        "source_path": "src/sys/amem.c"
+      }
+    },
+    {
       "name": "sys/anime",
       "target_path": "expected/targets/sys/anime.o",
       "base_path": "build/usa/src/sys/anime.c.o",
@@ -71,6 +327,14 @@
       "base_path": "build/usa/src/sys/douchu.c.o",
       "metadata": {
         "source_path": "src/sys/douchu.c"
+      }
+    },
+    {
+      "name": "sys/dracam",
+      "target_path": "expected/targets/sys/dracam.o",
+      "base_path": "build/usa/src/sys/dracam.c.o",
+      "metadata": {
+        "source_path": "src/sys/dracam.c"
       }
     },
     {
@@ -194,6 +458,30 @@
       }
     },
     {
+      "name": "sys/ride",
+      "target_path": "expected/targets/sys/ride.o",
+      "base_path": "build/usa/src/sys/ride.c.o",
+      "metadata": {
+        "source_path": "src/sys/ride.c"
+      }
+    },
+    {
+      "name": "sys/ride_floor",
+      "target_path": "expected/targets/sys/ride_floor.o",
+      "base_path": "build/usa/src/sys/ride_floor.c.o",
+      "metadata": {
+        "source_path": "src/sys/ride_floor.c"
+      }
+    },
+    {
+      "name": "sys/ride_wall",
+      "target_path": "expected/targets/sys/ride_wall.o",
+      "base_path": "build/usa/src/sys/ride_wall.c.o",
+      "metadata": {
+        "source_path": "src/sys/ride_wall.c"
+      }
+    },
+    {
       "name": "sys/ripple",
       "target_path": "expected/targets/sys/ripple.o",
       "base_path": "build/usa/src/sys/ripple.c.o",
@@ -258,6 +546,14 @@
       }
     },
     {
+      "name": "sys/sd_location",
+      "target_path": "expected/targets/sys/sd_location.o",
+      "base_path": "build/usa/src/sys/sd_location.c.o",
+      "metadata": {
+        "source_path": "src/sys/sd_location.c"
+      }
+    },
+    {
       "name": "sys/sd_main",
       "target_path": "expected/targets/sys/sd_main.o",
       "base_path": "build/usa/src/sys/sd_main.c.o",
@@ -311,6 +607,14 @@
       "base_path": "build/usa/src/sys/solid_atari.c.o",
       "metadata": {
         "source_path": "src/sys/solid_atari.c"
+      }
+    },
+    {
+      "name": "sys/spline",
+      "target_path": "expected/targets/sys/spline.o",
+      "base_path": "build/usa/src/sys/spline.c.o",
+      "metadata": {
+        "source_path": "src/sys/spline.c"
       }
     },
     {
@@ -402,6 +706,14 @@
       }
     },
     {
+      "name": "sys/vram_wall",
+      "target_path": "expected/targets/sys/vram_wall.o",
+      "base_path": "build/usa/src/sys/vram_wall.c.o",
+      "metadata": {
+        "source_path": "src/sys/vram_wall.c"
+      }
+    },
+    {
       "name": "sys/warp",
       "target_path": "expected/targets/sys/warp.o",
       "base_path": "build/usa/src/sys/warp.c.o",
@@ -423,6 +735,22 @@
       "base_path": "build/usa/src/sys/window.c.o",
       "metadata": {
         "source_path": "src/sys/window.c"
+      }
+    },
+    {
+      "name": "sys/window_effect",
+      "target_path": "expected/targets/sys/window_effect.o",
+      "base_path": "build/usa/src/sys/window_effect.c.o",
+      "metadata": {
+        "source_path": "src/sys/window_effect.c"
+      }
+    },
+    {
+      "name": "sys/xvram",
+      "target_path": "expected/targets/sys/xvram.o",
+      "base_path": "build/usa/src/sys/xvram.c.o",
+      "metadata": {
+        "source_path": "src/sys/xvram.c"
       }
     },
     {

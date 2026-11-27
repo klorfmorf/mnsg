@@ -10,14 +10,15 @@ void func_80004208(unsigned char *src, unsigned char *dst, int size);
 
 extern Sys                g_sys_real;
 extern Sys               *g_sys;
-extern Gfx               *D_8015C5CC;
+extern Gfx               *g_sys_glistp;
 extern char               D_8015C5D4;
 extern SaveStats          D_8015C5D8;
 extern SaveFile           D_8015C608;
 extern SaveFile           D_8015C910;
 extern unsigned char      D_8015CC18[0x18];
-extern unsigned int       D_8015CC30[36]; // EnemyMgr, see ENEMY_MGR
-extern EnemySpawn        *D_8015CDDC;
+extern unsigned int       D_8015CC30[36]; // see ENEMY_MGR
+extern int                D_8015CCC0[6];
+extern unsigned char      D_8015CCD8[0x104];
 extern EnemyDef          *D_8015CDE0;
 extern unsigned long long D_8015CDF0[];
 extern unsigned long long D_8015DDF0[];

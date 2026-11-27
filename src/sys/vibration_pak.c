@@ -8,13 +8,6 @@ int func_80037B78(int a);
 
 // clang-format off
 
-// <<<<< rodata >>>>>
-const char D_8007C880[] =
-    "vpak_action: undefined action %d\n\0\0\0"
-    "motor_control: ???\n\0"
-    "\0\0\0\0"
-    "\0\0\0";
-
 // <<<<< bss >>>>>
 VibrationPak D_8016DAF0[4];
 
@@ -63,9 +56,9 @@ int func_80037B10(int arg)
 {
     VibrationPak *pak = &D_8016DAF0[arg];
 
-    pak->status = func_80037B78(arg);
-    pak->unk_04 = 30;
-    pak->state  = 0;
+    pak->status   = func_80037B78(arg);
+    pak->duration = 30;
+    pak->state    = 0;
     return pak->status;
 }
 
@@ -101,7 +94,7 @@ int func_80037C20(int a, int b, int c)
     switch (b) {
         case 1:
             p          = &D_8016DAF0[a];
-            p->timer   = p->unk_04;
+            p->timer   = p->duration;
             p->state   = 1;
             p->pattern = c;
             p->bit     = 31;
@@ -112,6 +105,7 @@ int func_80037C20(int a, int b, int c)
             D_8016DAF0[a].state = b;
             break;
         default:
+            PRINTF(("vpak_action: undefined action %d\n", b));
             return -1;
     }
     return 0;
@@ -119,33 +113,30 @@ int func_80037C20(int a, int b, int c)
 
 void func_80037C9C(int a, int b)
 {
-    D_8016DAF0[a].unk_04 = b;
+    D_8016DAF0[a].duration = b;
 }
 
-#ifdef NON_MATCHING
 int func_80037CB0(int port, int on)
 {
-    VibrationPak *pak = &D_8016DAF0[port];
+    VibrationPak *pak;
 
-    if (on != 0) {
+    if (on) {
+        pak         = &D_8016DAF0[port];
         pak->status = osMotorStart(&D_801671F0[port]);
     } else {
+        pak         = &D_8016DAF0[port];
         pak->status = osMotorStop(&D_801671F0[port]);
     }
-    on = pak->status;
-    if (on == 0) {
+    if (pak->status == 0) {
         pak->retry = 0;
-        on         = D_8016DAF0[port].status;
-    } else if (on == 4) {
+    } else if (pak->status == 4) {
         pak->retry++;
         if (pak->retry >= 5) {
             pak->retry = 0;
             func_80037B54(port);
         }
-        on = D_8016DAF0[port].status;
+    } else {
+        PRINTF(("motor_control: ???\n"));
     }
-    return on;
+    return pak->status;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/vibration_pak/func_80037CB0.s")
-#endif

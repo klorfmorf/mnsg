@@ -4,6 +4,6 @@
 #include "common.h"
 #include "structs.h"
 
-extern void *D_80073038[];
+extern SoundData D_80073038[131];
 
 #endif // SE_TBL1_H

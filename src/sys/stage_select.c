@@ -1,68 +1,22 @@
-#include "common.h"
 #include "sys/stage_select.h"
+#include "common.h"
+#include "sys/step.h"
+#include "sys/string.h"
+#include "sys/sys.h"
+#include "sys/save_file.h"
 
-extern unsigned char D_8007BAD0[];
-extern unsigned char D_8007BADC[];
-extern unsigned char D_8007BAE8[];
-extern unsigned char D_8007BAF4[];
-extern unsigned char D_8007BB00[];
-extern unsigned char D_8007BB08[];
-extern unsigned char D_8007BB10[];
-extern unsigned char D_8007BB18[];
-extern unsigned char D_8007BB20[];
-extern unsigned char D_8007BB28[];
-extern unsigned char D_8007BB30[];
-extern unsigned char D_8007BB38[];
-extern unsigned char D_8007BB40[];
-extern unsigned char D_8007BB48[];
-extern unsigned char D_8007BB54[];
-extern unsigned char D_8007BB60[];
-extern unsigned char D_8007BB68[];
-extern unsigned char D_8007BB70[];
-extern unsigned char D_8007BB94[];
-extern unsigned char D_8007BB98[];
-extern unsigned char D_8007BB9C[];
-extern unsigned char D_8007BBA0[];
-extern unsigned char D_8007BBA4[];
-extern unsigned char D_8007BBA8[];
-extern unsigned char D_8007BBAC[];
-extern unsigned char D_8007BBB0[];
-extern unsigned char D_8007BBB4[];
-extern unsigned char D_8007BBB8[];
-extern unsigned char D_8007BBBC[];
-extern unsigned char D_8007BBC0[];
-extern unsigned char D_8007BBC4[];
-extern unsigned char D_8007BBC8[];
-extern unsigned char D_8007BBCC[];
-extern unsigned char D_8007BBD0[];
-extern unsigned char D_8007BBD4[];
-extern unsigned char D_8007BBD8[];
-extern unsigned char D_8007BBDC[];
-extern unsigned char D_8007BBE0[];
-extern unsigned char D_8007BBE4[];
-extern unsigned char D_8007BBE8[];
-extern unsigned char D_8007BBF8[];
-extern unsigned char D_8007BBFC[];
-extern unsigned char D_8007BC00[];
-extern unsigned char D_8007BC04[];
-extern unsigned char D_8007BC08[];
-extern unsigned char D_8007BC0C[];
-extern unsigned char D_8007BC10[];
-extern unsigned char D_8007BC14[];
-extern unsigned char D_8007BC18[];
-extern unsigned char D_8007BC1C[];
-extern unsigned char D_8007BC20[];
-void                 func_800207AC();
-void                 func_80020804();
-void                 func_80020964();
-void                 func_800209B4();
-void                 func_80020C78();
-void                 func_80020F10();
+void func_800207AC();
+void func_80020804();
+void func_80020964();
+void func_800209B4();
+void func_80020C78();
+void func_80020F10();
+void func_80021444(void);
 
 // clang-format off
 
 // <<<<< data >>>>>
-StageEntry D_8006B780[620] = {
+StageSelectEntry D_8006B780[620] = {
     { 130, -75, 300, 768, 16 },
     { -150, -80, -130, 0, 16 },
     { -165, -75, 0, 256, 16 },
@@ -687,171 +641,297 @@ StageEntry D_8006B780[620] = {
 
 unsigned int D_8006CFB8 = 0;
 
-unsigned int D_8006CFBC[3] = {
-    0x00000000, 0x00000000, 0x00000000,
-};
+unsigned int D_8006CFBC = 0;
 
-void *D_8006CFC8[6] = {
-    func_800207AC, func_80020804, func_80020964, func_800209B4,
-    func_80020C78, func_80020F10,
-};
-
-void *D_8006CFE0[5] = {
-    D_8007BAD0, D_8007BADC, D_8007BAE8, D_8007BAF4,
-    NULL,
-};
-
-void *D_8006CFF4[15] = {
-    D_8007BB00, D_8007BB08, D_8007BB10, D_8007BB18,
-    D_8007BB20, D_8007BB28, D_8007BB30, D_8007BB38,
-    D_8007BB40, D_8007BB48, D_8007BB54, D_8007BB60,
-    D_8007BB68, D_8007BB70, NULL,
-};
-
-void *D_8006D030[11] = {
-    D_8007BB94, D_8007BB98, D_8007BB9C, D_8007BBA0,
-    D_8007BBA4, D_8007BBA8, D_8007BBAC, D_8007BBB0,
-    D_8007BBB4, D_8007BBB8, D_8007BBBC,
-};
-
-void *D_8006D05C[11] = {
-    D_8007BBC0, D_8007BBC4, D_8007BBC8, D_8007BBCC,
-    D_8007BBD0, D_8007BBD4, D_8007BBD8, D_8007BBDC,
-    D_8007BBE0, D_8007BBE4, D_8007BBE8,
-};
-
-void *D_8006D088[11] = {
-    D_8007BBF8, D_8007BBFC, D_8007BC00, D_8007BC04,
-    D_8007BC08, D_8007BC0C, D_8007BC10, D_8007BC14,
-    D_8007BC18, D_8007BC1C, D_8007BC20,
-};
-
-short D_8006D0B4[12] = {
-    0, 300, 350, 400, 540, 544, 549, 561, 588, 607, 613, 619,
-};
-
-short D_8006D0CC[12] = {
-    300, 50, 50, 140, 4, 5, 12, 27, 19, 6, 5, 1,
+unsigned int unk_8006CFC0[2] = {
+    0x00000000, 0x00000000,
 };
 
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80020730.s")
+void func_80020730(void)
+{
+    void (*steps[6])(void) = { func_800207AC, func_80020804, func_80020964, func_800209B4, func_80020C78, func_80020F10 };
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_800207AC.s")
+    steps[g_sys->step_sub]();
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80020804.s")
+void func_800207AC(void)
+{
+    osViBlack(0);
+    func_80004240();
+    D_8006CFB8 = D_8015C5D8.character;
+    func_800042AC(0, "PLAYER SELECT", 112, 48);
+    func_80003678();
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80020964.s")
+void func_80020804(void)
+{
+    char *names[5] = { "GOEMON   ", "EBISUMARU", "SASKE    ", "YAE      ", NULL };
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BAD0.s")
+    if (g_sys->controller[0].button_pressed & U_JPAD) {
+        if (D_8006CFB8 == 0) {
+            D_8006CFB8 = 4;
+        }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BADC.s")
+        if (D_8006CFB8 == 0) {
+            D_8006CFB8 = 4;
+        }
+        D_8006CFB8--;
+    }
+    if (g_sys->controller[0].button_pressed & D_JPAD) {
+        D_8006CFB8++;
+    }
+    if (D_8006CFB8 >= 4) {
+        D_8006CFB8 = 0;
+    }
+    func_800042AC(3, names[D_8006CFB8], 136, 96);
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & (A_BUTTON | START_BUTTON)) {
+        func_80003678();
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & B_BUTTON) {
+        func_80003728(GAME_STEP_DIARY);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BAE8.s")
+void func_80020964(void)
+{
+    func_80004240();
+    D_8006CFBC              = g_sys->intended_stage_group + 1;
+    g_sys->mode_frame_count = 0;
+    func_80003678();
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BAF4.s")
+void func_800209B4(void)
+{
+    int   i         = 0;
+    char *modes[15] = {
+        "MAIN",
+        "SIRO",
+        "DOUCHU",
+        "MACHI",
+        "SHOP",
+        "BOMBER",
+        "3DBOSS",
+        "DAIMAP",
+        "OPENING",
+        "GOPENING",
+        "BOSS3D_OP",
+        "DIARY",
+        "GOETEAM",
+        "GAMEOVER",
+        NULL,
+    };
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB00.s")
+    func_800042AC(1, "0", 128, D_8006CFBC * 15 + 24);
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & U_JPAD) {
+        if (D_8006CFBC == 0) {
+            D_8006CFBC = 13;
+        } else {
+            D_8006CFBC--;
+        }
+    }
+    if ((g_sys->controller[1].button_pressed | g_sys->controller[0].button_pressed) & D_JPAD) {
+        D_8006CFBC++;
+        if (modes[D_8006CFBC] == NULL) {
+            D_8006CFBC = 0;
+        }
+    }
+    while (modes[i] != NULL) {
+        func_800042AC(i + 2, modes[i], (i == D_8006CFBC) ? 136 : 144, i * 15 + 24);
+        i++;
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & B_BUTTON) {
+        g_sys->step_sub = 0;
+    }
+    if ((g_sys->controller[1].button_pressed | g_sys->controller[0].button_pressed) & (A_BUTTON | START_BUTTON)) {
+        if (D_8006CFBC == 0) {
+            D_8006CFBC = 0xFF;
+            func_80021444();
+            return;
+        }
+        g_sys->intended_stage_group = D_8006CFBC - 1;
+        PRINTF(("COMAND_STAGE %d\n", g_sys->intended_stage_group));
+        switch (g_sys->intended_stage_group) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                g_sys->step_sub++;
+                g_sys->step_sub++;
+                g_sys->stage_select_digit = 0;
+                func_80004240();
+                break;
+            default:
+                func_80021444();
+                break;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB08.s")
+void func_80020C78(void)
+{
+    int   tens;
+    int   stage;
+    int   one;
+    char *ones[11]        = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
+    char *tens_digits[11] = { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB10.s")
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & U_JPAD) {
+        g_sys->intended_stage_id--;
+    }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB18.s")
+    if ((unsigned int) g_sys->intended_stage_id < 0.0) {
+        g_sys->intended_stage_id = 99;
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & D_JPAD) {
+        g_sys->intended_stage_id++;
+    }
+    if (g_sys->intended_stage_id >= 100) {
+        g_sys->intended_stage_id = 0;
+    }
+    func_800042AC(1, "STAGE_NO", 80, 80);
+    stage = g_sys->intended_stage_id;
+    for (tens = 0; tens < 10; tens++) {
+        one = stage - tens * 10;
+        if (one < 10) {
+            func_800042AC(3, ones[one], 160, 80);
+            func_800042AC(4, tens_digits[tens], 149, 80);
+            break;
+        }
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & B_BUTTON) {
+        g_sys->step_sub = 2;
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & (A_BUTTON | START_BUTTON)) {
+        func_80021444();
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB20.s")
+void func_80020F10(void)
+{
+    int   stage;
+    int   hundreds;
+    int   tens;
+    int   ones;
+    short number;
+    short step;
+    char *digits[11] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " " };
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB28.s")
+    unsigned short first_stage[12] = { 0, 300, 350, 400, 540, 544, 549, 561, 588, 607, 613, 619 };
+    unsigned short stage_count[12] = { 300, 50, 50, 140, 4, 5, 12, 27, 19, 6, 5, 1 };
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB30.s")
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & R_JPAD) {
+        if (g_sys->stage_select_digit != 0) {
+            g_sys->stage_select_digit--;
+        }
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & L_JPAD) {
+        if (g_sys->stage_select_digit < 2) {
+            g_sys->stage_select_digit++;
+        }
+    }
+    switch (g_sys->stage_select_digit) {
+        case 0:
+            step = 1;
+            break;
+        case 1:
+            step = 10;
+            break;
+        case 2:
+            step = 100;
+            break;
+    }
+    number = g_sys->intended_stage_group_index;
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & U_JPAD) {
+        number -= step;
+        if (number < 0) {
+            number = stage_count[g_sys->intended_stage_group];
+        }
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & D_JPAD) {
+        number += step;
+        if (number >= stage_count[g_sys->intended_stage_group]) {
+            number = 0;
+        }
+    }
+    func_800042AC(1, "STAGENAI_NO", 48, 80);
+    g_sys->intended_stage_group_index = number;
+    g_sys->intended_stage_id          = first_stage[g_sys->intended_stage_group] + number;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB38.s")
+    hundreds = number / 100;
+    tens     = (number - hundreds * 100) / 10;
+    ones     = (number - hundreds * 100) - tens * 10;
+    func_800042AC(2, digits[ones], 168, 80);
+    if (hundreds == 0 && tens == 0) {
+        tens = 10;
+    }
+    func_800042AC(3, digits[tens], 160, 80);
+    if (hundreds == 0) {
+        hundreds = 10;
+    }
+    func_800042AC(4, digits[hundreds], 152, 80);
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB40.s")
+    hundreds = g_sys->intended_stage_id / 100;
+    tens     = (g_sys->intended_stage_id - hundreds * 100) / 10;
+    ones     = (g_sys->intended_stage_id - hundreds * 100) - tens * 10;
+    func_800042AC(5, "STAGE_NO", 64, 128);
+    func_800042AC(6, digits[ones], 160, 128);
+    if (hundreds == 0 && tens == 0) {
+        tens = 10;
+    }
+    func_800042AC(7, digits[tens], 152, 128);
+    if (hundreds == 0) {
+        hundreds = 10;
+    }
+    func_800042AC(8, digits[hundreds], 144, 128);
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB48.s")
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & B_BUTTON) {
+        g_sys->step_sub = 2;
+    }
+    if ((g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed) & (A_BUTTON | START_BUTTON)) {
+        stage = g_sys->intended_stage_id;
+        PRINTF(("COMAND IN %d,%d\n", g_sys->intended_stage_group, stage));
+        func_80021444();
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB54.s")
+void func_80021444(void)
+{
+    if (D_8006CFBC != 0xFF) {
+        g_sys->used_stage_select = 1;
+        D_8015C608.stage_id      = g_sys->intended_stage_id;
+        D_8015C608.stage_group   = g_sys->intended_stage_group;
+        D_8015C5D8.character     = D_8006CFB8;
+        func_800214E4();
+        func_8000B864();
+        func_80003728(GAME_STEP_WARP_SAVE);
+    } else {
+        func_80003728(GAME_STEP_WARP_SAVE);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB60.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB68.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB70.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_800209B4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB94.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB98.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BB9C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBA0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBA4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBA8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBAC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBB0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBB4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBB8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBBC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBC0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBC4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBC8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBCC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBD0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBD4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBD8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBDC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBE0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBE4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBE8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80020C78.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBF8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BBFC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC00.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC04.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC08.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC0C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC10.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC14.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC18.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC1C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/D_8007BC20.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80020F10.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_80021444.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/stage_select/func_800214E4.s")
+void func_800214E4(void)
+{
+    if (D_8006B780[g_sys->intended_stage_id].x != 0 || D_8006B780[g_sys->intended_stage_id].y != 0 ||
+        D_8006B780[g_sys->intended_stage_id].z != 0) {
+        D_8015C608.x          = D_8006B780[g_sys->intended_stage_id].x;
+        D_8015C608.y          = D_8006B780[g_sys->intended_stage_id].y;
+        D_8015C608.z          = D_8006B780[g_sys->intended_stage_id].z;
+        D_8015C608.player_yaw = D_8006B780[g_sys->intended_stage_id].player_yaw;
+        D_8015C608.camera_yaw = D_8006B780[g_sys->intended_stage_id].camera_yaw;
+    } else {
+        D_8015C608.x          = 0;
+        D_8015C608.y          = 0;
+        D_8015C608.z          = 0;
+        D_8015C608.player_yaw = 0;
+        D_8015C608.camera_yaw = 0;
+    }
+}

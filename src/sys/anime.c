@@ -4,8 +4,9 @@
 #include "sys/obj_alloc.h"
 #include "sys/math.h"
 #include "sys/sys.h"
-#include "unk.h"
 #include "sys/gfx_data.h"
+#include "douchu/587B50.h"
+#include "unk.h"
 
 void           anime_camera_keys(AnimeCameraKeys *keys, float (*mf)[4]);
 void           anime_camera(AnimeCamera *cam, float (*mf)[4]);
@@ -31,7 +32,6 @@ unsigned short anime_key_angle(unsigned short track);
 void           anime_key_rot(AnimeJoint *joint, unsigned short *rot);
 unsigned short anime_key_decode(unsigned short pos, int frame_a, short *out_a, int frame_b);
 void           anime_set_view(AnimeCamera *cam);
-int            anime_locate_joint(ObjSolid *out, ObjSolid *solid, int target);
 int            anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, float frame, float blend, int target);
 int            anime_find_joint_path(AnimeJoint *joint, unsigned int target, int depth, ObjSolid *solid);
 int            anime_swap_joint_models(AnimeJoint *joint, unsigned int *table, ObjSolid *solid);
@@ -133,15 +133,15 @@ void anime_commit_lights(void)
 
         s_anime_light_count = s_anime_light_next;
 
-        gDPPipeSync(D_8015C5CC++);
-        gSPSetGeometryMode(D_8015C5CC++, G_LIGHTING);
-        gSPNumLights(D_8015C5CC++, s_anime_light_count);
+        gDPPipeSync(g_sys_glistp++);
+        gSPSetGeometryMode(g_sys_glistp++, G_LIGHTING);
+        gSPNumLights(g_sys_glistp++, s_anime_light_count);
 
         for (i = 0; i < s_anime_light_count; i++) {
-            gSPLight(D_8015C5CC++, &s_anime_lights->l[i], i + 1);
+            gSPLight(g_sys_glistp++, &s_anime_lights->l[i], i + 1);
         }
 
-        gSPLight(D_8015C5CC++, &s_anime_lights->a, s_anime_light_count + 1);
+        gSPLight(g_sys_glistp++, &s_anime_lights->a, s_anime_light_count + 1);
     }
 
     s_anime_light_next = -1;
@@ -171,21 +171,21 @@ int anime_draw(ObjSolid *solid)
 
     g_anime_solid = solid;
 
-    if (solid->rx != 0x8000) {
-        solid->rx &= 0x3FF;
+    if (solid->rx != ANGLE_BILLBOARD) {
+        solid->rx &= ANGLE_MASK;
     }
 
-    if (solid->ry != 0x8000) {
-        solid->ry &= 0x3FF;
+    if (solid->ry != ANGLE_BILLBOARD) {
+        solid->ry &= ANGLE_MASK;
     }
 
-    if (solid->rz != 0x8000) {
-        solid->rz &= 0x3FF;
+    if (solid->rz != ANGLE_BILLBOARD) {
+        solid->rz &= ANGLE_MASK;
     }
 
     script = g_anime_solid->AModel;
 
-    if (script == 0 || (script & 0x8FFFFFFE) == 0) {
+    if (script == 0 || (script & ANIME_REF_MASK) == 0) {
         if (g_anime_solid->sibling != NULL || g_anime_solid->child != NULL) {
             func_800364FC(g_anime_solid);
         }
@@ -193,11 +193,11 @@ int anime_draw(ObjSolid *solid)
         return 0;
     }
 
-    kind = script & 0x70000000;
+    kind = script & ANIME_KIND_MASK;
 
     s_anime_rsp_mtx     = 1;
     s_anime_solid_ready = 0;
-    s_anime_proxy       = script & 1;
+    s_anime_proxy       = script & ANIME_PROXY;
 
     if (s_anime_proxy) {
         s_anime_rsp_mtx = 0;
@@ -206,7 +206,7 @@ int anime_draw(ObjSolid *solid)
     switch (kind) {
         case ANIME_KIND_DEMO:
         case ANIME_KIND_ANIME:
-            script = ANIME_REF(script & 0x8FFFFFFE);
+            script = ANIME_REF(script & ANIME_REF_MASK);
 
             hdr = *(unsigned int *) script;
 
@@ -216,14 +216,14 @@ int anime_draw(ObjSolid *solid)
 
             script += 4;
 
-            s_anime_local       = (hdr / 0x80000000) & 1;
-            s_anime_frame_total = hdr & 0xFF;
+            s_anime_local       = ANIME_HDR_LOCAL(hdr);
+            s_anime_frame_total = ANIME_HDR_FRAMES(hdr);
             s_anime_frame       = g_anime_solid->time;
             s_anime_keys        = (unsigned char *) ANIME_REF(*(unsigned int *) script);
 
             script += 4;
 
-            camera_count = (hdr >> 28) & 7;
+            camera_count = ANIME_HDR_CAMERAS(hdr);
 
             if (camera_count != 0) {
                 func_8001E380(s_anime_mtx, g_anime_solid);
@@ -240,8 +240,8 @@ int anime_draw(ObjSolid *solid)
                 }
             }
 
-            if ((hdr >> 24) & 0xF) {
-                for (lights_left = (hdr >> 24) & 0xF; lights_left--;) {
+            if (ANIME_HDR_LIGHTS(hdr)) {
+                for (lights_left = ANIME_HDR_LIGHTS(hdr); lights_left--;) {
                     light_keys = ANIME_REF(*(unsigned int *) script);
                     script += 4;
 
@@ -253,11 +253,11 @@ int anime_draw(ObjSolid *solid)
                 }
             }
 
-            if ((hdr >> 8) & 0x7FFF) {
+            if (ANIME_HDR_ROOTS(hdr)) {
                 anime_commit_lights();
                 anime_push_solid(g_anime_solid);
 
-                for (roots_left = (hdr >> 8) & 0x7FFF; roots_left--;) {
+                for (roots_left = ANIME_HDR_ROOTS(hdr); roots_left--;) {
                     root = ANIME_REF(*(unsigned int *) script);
                     script += 4;
 
@@ -266,34 +266,34 @@ int anime_draw(ObjSolid *solid)
                     }
                 }
 
-                gSPPopMatrix(D_8015C5CC++, G_MTX_MODELVIEW);
+                gSPPopMatrix(g_sys_glistp++, G_MTX_MODELVIEW);
             }
 
             break;
 
         case ANIME_KIND_CAMERA:
             func_8001E380(s_anime_mtx, g_anime_solid);
-            anime_camera((AnimeCamera *) (script & 0x8FFFFFFE), s_anime_mtx);
-            anime_set_view((AnimeCamera *) ANIME_REF(script & 0x8FFFFFFE));
+            anime_camera((AnimeCamera *) (script & ANIME_REF_MASK), s_anime_mtx);
+            anime_set_view((AnimeCamera *) ANIME_REF(script & ANIME_REF_MASK));
             break;
 
         case ANIME_KIND_AMBIENT:
-            anime_ambient((AnimeAmbient *) ANIME_REF(script & 0x8FFFFFFE));
+            anime_ambient((AnimeAmbient *) ANIME_REF(script & ANIME_REF_MASK));
             break;
 
         case ANIME_KIND_LIGHT:
-            anime_light((AnimeLight *) ANIME_REF(script & 0x8FFFFFFE));
+            anime_light((AnimeLight *) ANIME_REF(script & ANIME_REF_MASK));
             break;
 
         case ANIME_KIND_MODEL:
             anime_commit_lights();
             anime_push_solid(g_anime_solid);
-            anime_model(g_anime_solid->AModel & 0x8FFFFFFE);
-            gSPPopMatrix(D_8015C5CC++, G_MTX_MODELVIEW);
+            anime_model(g_anime_solid->AModel & ANIME_REF_MASK);
+            gSPPopMatrix(g_sys_glistp++, G_MTX_MODELVIEW);
             break;
 
         case ANIME_KIND_JCHAR:
-            script = ANIME_REF(script & 0x8FFFFFFE);
+            script = ANIME_REF(script & ANIME_REF_MASK);
             hdr    = *(unsigned int *) script;
 
             if (hdr == 0) {
@@ -302,8 +302,8 @@ int anime_draw(ObjSolid *solid)
 
             script += 4;
 
-            s_anime_local       = (hdr / 0x80000000) & 1;
-            s_anime_frame_total = hdr & 0xFF;
+            s_anime_local       = ANIME_HDR_LOCAL(hdr);
+            s_anime_frame_total = ANIME_HDR_FRAMES(hdr);
             s_anime_frame       = g_anime_solid->time;
             s_anime_blend       = g_anime_solid->blend;
 
@@ -325,7 +325,7 @@ int anime_draw(ObjSolid *solid)
                 g_anime_solid->blend -= 1.0f;
             }
 
-            gSPPopMatrix(D_8015C5CC++, G_MTX_MODELVIEW);
+            gSPPopMatrix(g_sys_glistp++, G_MTX_MODELVIEW);
             break;
 
         case ANIME_KIND_JMODEL:
@@ -357,26 +357,26 @@ void anime_camera_keys(AnimeCameraKeys *keys, float (*mf)[4])
 
     if (s_anime_camera->vp != NULL) {
         s_anime_vp_pool[s_anime_vp_count] = *s_anime_camera->vp;
-        gSPViewport(D_8015C5CC++, &s_anime_vp_pool[s_anime_vp_count]);
+        gSPViewport(g_sys_glistp++, &s_anime_vp_pool[s_anime_vp_count]);
         s_anime_vp_count++;
 
         if (s_anime_vp_count >= 5) {
             PRINTF(("ERROR!! out of buffer Tvp in lt_sys.h\n"));
         }
     } else {
-        gSPViewport(D_8015C5CC++, &g_anime_default_vp);
+        gSPViewport(g_sys_glistp++, &g_anime_default_vp);
     }
 
     if (!(s_anime_camera->flags & 1)) {
         guPerspective(projection, &persp_norm, (2 * (float) (unsigned int) anime_key_angle(keys->fovy) * 180.0f) / 32768.0f, 1.3333334f,
             (float) (unsigned int) anime_key_u16(keys->near), (float) (unsigned int) anime_key_u16(keys->far), 1.0f);
-        gSPPerspNormalize(D_8015C5CC++, persp_norm);
+        gSPPerspNormalize(g_sys_glistp++, persp_norm);
     } else {
         guOrtho(projection, s_anime_camera->left, s_anime_camera->right, s_anime_camera->bottom, s_anime_camera->top, s_anime_camera->near,
             s_anime_camera->far, 1.0f);
     }
 
-    gSPMatrix(D_8015C5CC++, (char *) projection + 0x80000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(projection), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
     if (!(s_anime_camera->flags & 1)) {
         guLookAtHilite(look, s_anime_lookat_pool++, s_anime_hilite_pool++,
@@ -386,24 +386,24 @@ void anime_camera_keys(AnimeCameraKeys *keys, float (*mf)[4])
             s_anime_camera->light[0], s_anime_camera->light[1], s_anime_camera->light[2],
             s_anime_camera->light[3], s_anime_camera->light[4], s_anime_camera->light[5],
             (signed char) s_anime_camera->tex_w, (signed char) s_anime_camera->tex_h);
-        gSPMatrix(D_8015C5CC++, (char *) look + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+        gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(look), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     }
 
     guMtxF2L(mf, world);
-    gSPMatrix(D_8015C5CC++, (char *) world + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+    gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(world), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
     guMtxIdent(ident);
-    gSPMatrix(D_8015C5CC++, (unsigned int) ident & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(g_sys_glistp++, K0_TO_PHYS(ident), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (s_anime_camera->clip != 0) {
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RNX, s_anime_camera->clip);
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RNY, s_anime_camera->clip);
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RPX, 0x10000 - s_anime_camera->clip);
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RPY, 0x10000 - s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RNX, s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RNY, s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RPX, 0x10000 - s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RPY, 0x10000 - s_anime_camera->clip);
     }
 
     if (s_anime_camera->scissor0 | s_anime_camera->scissor1 | s_anime_camera->scissor2 | s_anime_camera->scissor3) {
-        gDPSetScissor(D_8015C5CC++, G_SC_NON_INTERLACE, s_anime_camera->scissor0, s_anime_camera->scissor1, s_anime_camera->scissor2, s_anime_camera->scissor3);
+        gDPSetScissor(g_sys_glistp++, G_SC_NON_INTERLACE, s_anime_camera->scissor0, s_anime_camera->scissor1, s_anime_camera->scissor2, s_anime_camera->scissor3);
     }
 }
 
@@ -429,26 +429,26 @@ void anime_camera(AnimeCamera *cam, float (*mf)[4])
 
     if (s_anime_camera->vp != NULL) {
         s_anime_vp_pool[s_anime_vp_count] = *s_anime_camera->vp;
-        gSPViewport(D_8015C5CC++, &s_anime_vp_pool[s_anime_vp_count]);
+        gSPViewport(g_sys_glistp++, &s_anime_vp_pool[s_anime_vp_count]);
         s_anime_vp_count++;
 
         if (s_anime_vp_count >= 5) {
             PRINTF(("ERROR!! out of buffer Tvp in lt_sys.h\n"));
         }
     } else {
-        gSPViewport(D_8015C5CC++, &g_anime_default_vp);
+        gSPViewport(g_sys_glistp++, &g_anime_default_vp);
     }
 
     if (!(s_anime_camera->flags & 1)) {
         guPerspective(projection, &persp_norm, (2 * (float) s_anime_camera->fovy * 180.0f) / 32768.0f, 1.3333334f, s_anime_camera->near,
             s_anime_camera->far, 1.0f);
-        gSPPerspNormalize(D_8015C5CC++, persp_norm);
+        gSPPerspNormalize(g_sys_glistp++, persp_norm);
     } else {
         guOrtho(projection, s_anime_camera->left, s_anime_camera->right, s_anime_camera->bottom, s_anime_camera->top, s_anime_camera->near,
             s_anime_camera->far, 1.0f);
     }
 
-    gSPMatrix(D_8015C5CC++, (char *) projection + 0x80000000, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(projection), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
     if (!(s_anime_camera->flags & 1)) {
         guLookAtHilite(look, s_anime_lookat_pool++, s_anime_hilite_pool++,
@@ -458,24 +458,24 @@ void anime_camera(AnimeCamera *cam, float (*mf)[4])
             s_anime_camera->light[0], s_anime_camera->light[1], s_anime_camera->light[2],
             s_anime_camera->light[3], s_anime_camera->light[4], s_anime_camera->light[5],
             (signed char) s_anime_camera->tex_w, (signed char) s_anime_camera->tex_h);
-        gSPMatrix(D_8015C5CC++, (char *) look + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+        gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(look), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
     }
 
     guMtxF2L(mf, world);
-    gSPMatrix(D_8015C5CC++, (char *) world + 0x80000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+    gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(world), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
     guMtxIdent(ident);
-    gSPMatrix(D_8015C5CC++, (unsigned int) ident & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(g_sys_glistp++, K0_TO_PHYS(ident), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (s_anime_camera->clip != 0) {
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RNX, s_anime_camera->clip);
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RNY, s_anime_camera->clip);
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RPX, 0x10000 - s_anime_camera->clip);
-        gMoveWd(D_8015C5CC++, G_MW_CLIP, G_MWO_CLIP_RPY, 0x10000 - s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RNX, s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RNY, s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RPX, 0x10000 - s_anime_camera->clip);
+        gMoveWd(g_sys_glistp++, G_MW_CLIP, G_MWO_CLIP_RPY, 0x10000 - s_anime_camera->clip);
     }
 
     if (s_anime_camera->scissor0 | s_anime_camera->scissor1 | s_anime_camera->scissor2 | s_anime_camera->scissor3) {
-        gDPSetScissor(D_8015C5CC++, G_SC_NON_INTERLACE, s_anime_camera->scissor0, s_anime_camera->scissor1, s_anime_camera->scissor2, s_anime_camera->scissor3);
+        gDPSetScissor(g_sys_glistp++, G_SC_NON_INTERLACE, s_anime_camera->scissor0, s_anime_camera->scissor1, s_anime_camera->scissor2, s_anime_camera->scissor3);
     }
 }
 
@@ -546,13 +546,13 @@ void anime_draw_root(AnimeJoint *joint, unsigned int kind)
     }
 
     if (!(joint->model & ANIME_KIND_ANIME)) {
-        if (joint->model & 0x8FFFFFFF) {
-            ref = joint->model & 0x8FFFFFFF;
+        if (joint->model & ANIME_ADDR_MASK) {
+            ref = joint->model & ANIME_ADDR_MASK;
             anime_model(ref);
         }
     } else {
         ref     = ANIME_REF(joint->model);
-        subtree = (AnimeJoint *) (ref & 0x8FFFFFFF);
+        subtree = (AnimeJoint *) (ref & ANIME_ADDR_MASK);
 
         if (subtree->model != 0) {
             anime_model(subtree->model);
@@ -568,7 +568,7 @@ void anime_draw_root(AnimeJoint *joint, unsigned int kind)
         }
     }
 
-    if (kind == ANIME_KIND_DEMO && ((joint->rx | joint->ry | joint->rz) & 0x4000)) {
+    if (kind == ANIME_KIND_DEMO && ((joint->rx | joint->ry | joint->rz) & ANIME_ROT_BILLBOARD)) {
         anime_pop_joint();
     }
 
@@ -595,14 +595,14 @@ void anime_draw_joint(AnimeJoint *joint)
 
     model = joint->model;
 
-    if (!(model & 0x10000000)) {
-        if (model & 0x8FFFFFFF) {
-            ref = model & 0x8FFFFFFF;
+    if (!(model & ANIME_KIND_ANIME)) {
+        if (model & ANIME_ADDR_MASK) {
+            ref = model & ANIME_ADDR_MASK;
             anime_model(ref);
         }
     } else {
         ref     = ANIME_REF(model);
-        subtree = (AnimeJoint *) (ref & 0x8FFFFFFF);
+        subtree = (AnimeJoint *) (ref & ANIME_ADDR_MASK);
 
         if (subtree->model != 0) {
             anime_model(subtree->model);
@@ -617,7 +617,7 @@ void anime_draw_joint(AnimeJoint *joint)
         }
     }
 
-    if ((joint->rx | joint->ry | joint->rz) & 0x4000) {
+    if ((joint->rx | joint->ry | joint->rz) & ANIME_ROT_BILLBOARD) {
         anime_pop_joint();
     }
 
@@ -649,7 +649,7 @@ void anime_jchar(AnimeJoint *joint, unsigned int kind, ObjSolid *model_node)
         model_node           = func_80036448(g_anime_solid);
         model_node->parent   = NULL;
         g_anime_solid->child = model_node;
-    } else if ((joint->model != model_node->AModel) & 0x8FFFFFFE) {
+    } else if ((joint->model != model_node->AModel) & ANIME_REF_MASK) {
         func_800364FC(g_anime_solid);
         model_node           = func_80036448(g_anime_solid);
         model_node->parent   = NULL;
@@ -712,14 +712,14 @@ void anime_draw_jchar_joint(AnimeJoint *joint, ObjSolid *solid)
 
     model = joint->model;
 
-    if (!(model & 0x10000000)) {
-        if (model & 0x8FFFFFFF) {
-            ref = model & 0x8FFFFFFF;
+    if (!(model & ANIME_KIND_ANIME)) {
+        if (model & ANIME_ADDR_MASK) {
+            ref = model & ANIME_ADDR_MASK;
             anime_model(ref);
         }
     } else {
         ref     = ANIME_REF(model);
-        subtree = (AnimeJoint *) (ref & 0x8FFFFFFF);
+        subtree = (AnimeJoint *) (ref & ANIME_ADDR_MASK);
 
         if (subtree->model != 0) {
             anime_model(subtree->model);
@@ -734,7 +734,7 @@ void anime_draw_jchar_joint(AnimeJoint *joint, ObjSolid *solid)
         }
     }
 
-    if ((joint->rx | joint->ry | joint->rz) & 0x4000) {
+    if ((joint->rx | joint->ry | joint->rz) & ANIME_ROT_BILLBOARD) {
         anime_pop_joint();
     }
 
@@ -781,15 +781,15 @@ ObjSolid *anime_child_node(AnimeJoint *joint, ObjSolid *solid)
     ObjSolid    *first;
 
     node  = solid->child;
-    model = joint[joint->child].model & 0x8FFFFFFF;
+    model = joint[joint->child].model & ANIME_ADDR_MASK;
 
-    if (node == NULL || model != (node->AModel & 0x8FFFFFFE)) {
+    if (node == NULL || model != (node->AModel & ANIME_REF_MASK)) {
         first = node;
 
         if (node != NULL) {
             node = node->sibling;
 
-            while (node != NULL && model != (node->AModel & 0x8FFFFFFE)) {
+            while (node != NULL && model != (node->AModel & ANIME_REF_MASK)) {
                 node = node->sibling;
             }
         }
@@ -819,15 +819,15 @@ ObjSolid *anime_sibling_node(AnimeJoint *joint, ObjSolid *solid)
     ObjSolid    *first;
 
     node  = solid->sibling;
-    model = joint[joint->sibling].model & 0x8FFFFFFF;
+    model = joint[joint->sibling].model & ANIME_ADDR_MASK;
 
-    if (node == NULL || model != (node->AModel & 0x8FFFFFFE)) {
+    if (node == NULL || model != (node->AModel & ANIME_REF_MASK)) {
         first = node;
 
         if (node != NULL) {
             node = node->sibling;
 
-            while (node != NULL && model != (node->AModel & 0x8FFFFFFE)) {
+            while (node != NULL && model != (node->AModel & ANIME_REF_MASK)) {
                 node = node->sibling;
             }
         }
@@ -950,7 +950,7 @@ void anime_push_joint(AnimeJoint *joint, ObjSolid *solid)
     if (s_anime_rsp_mtx) {
         joint_mtx = s_anime_mtx_pool++;
         func_8001F5F8(*cur, joint_mtx);
-        gSPMatrix(D_8015C5CC++, (unsigned int) joint_mtx & 0x1FFFFFFF, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(g_sys_glistp++, K0_TO_PHYS(joint_mtx), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     } else {
         if (parent != NULL) {
             func_8001F2D8(*parent, *cur);
@@ -959,27 +959,27 @@ void anime_push_joint(AnimeJoint *joint, ObjSolid *solid)
         *(AnimeMtx *) s_anime_world_mtx = *(AnimeMtx *) cur;
     }
 
-    if ((joint->rx | joint->ry | joint->rz) & 0x4000) {
+    if ((joint->rx | joint->ry | joint->rz) & ANIME_ROT_BILLBOARD) {
         billboard = s_anime_mtx_top++;
 
         func_8001E634(*billboard,
-            (joint->rx & 0x4000) ? D_801689F0 : 0,
-            (joint->ry & 0x4000) ? D_801689F2 : 0,
-            (joint->rz & 0x4000) ? D_801689F4 : 0);
+            (joint->rx & ANIME_ROT_BILLBOARD) ? D_801689F0 : 0,
+            (joint->ry & ANIME_ROT_BILLBOARD) ? D_801689F2 : 0,
+            (joint->rz & ANIME_ROT_BILLBOARD) ? D_801689F4 : 0);
 
         guAlignF(align_mf, 0,
-            ((joint->ry & 0x4000) || (joint->rz & 0x4000)) ? -s_anime_view_x : 0.0f,
-            ((joint->rz & 0x4000) || (joint->rx & 0x4000)) ? -s_anime_view_y : 0.0f,
-            ((joint->rx & 0x4000) || (joint->ry & 0x4000)) ? -s_anime_view_z : 0.0f);
+            ((joint->ry & ANIME_ROT_BILLBOARD) || (joint->rz & ANIME_ROT_BILLBOARD)) ? -s_anime_view_x : 0.0f,
+            ((joint->rz & ANIME_ROT_BILLBOARD) || (joint->rx & ANIME_ROT_BILLBOARD)) ? -s_anime_view_y : 0.0f,
+            ((joint->rx & ANIME_ROT_BILLBOARD) || (joint->ry & ANIME_ROT_BILLBOARD)) ? -s_anime_view_z : 0.0f);
 
         if (s_anime_rsp_mtx) {
             billboard_mtx = s_anime_mtx_pool++;
             func_8001F5F8(*billboard, billboard_mtx);
-            gSPMatrix(D_8015C5CC++, (unsigned int) billboard_mtx & 0x1FFFFFFF, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(g_sys_glistp++, K0_TO_PHYS(billboard_mtx), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
             align_mtx = s_anime_mtx_pool++;
             func_8001F5F8(align_mf, align_mtx);
-            gSPMatrix(D_8015C5CC++, (unsigned int) align_mtx & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPMatrix(g_sys_glistp++, K0_TO_PHYS(align_mtx), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             return;
         }
 
@@ -1001,7 +1001,7 @@ void anime_pop_joint(void)
     s_anime_mtx_top--;
 
     if (s_anime_rsp_mtx) {
-        gSPPopMatrix(D_8015C5CC++, G_MTX_MODELVIEW);
+        gSPPopMatrix(g_sys_glistp++, G_MTX_MODELVIEW);
     }
 }
 
@@ -1016,59 +1016,59 @@ void anime_model(unsigned int dlist)
     int          seg;
     float        scale;
 
-    if ((dlist & 0x0FFFFF00) == 0x0FFFFF00) {
+    if ((dlist & ANIME_NO_MODEL) == ANIME_NO_MODEL) {
         return;
     }
 
     seg = -1;
     if (s_anime_solid_ready == 0) {
-        while (++seg < 6) {
+        while (++seg < WAVE_SEGMENT_COUNT) {
             if (g_anime_solid->SegWave[seg].data != 0) {
-                gSPSegment(D_8015C5CC++, seg + 8, (char *) g_anime_solid->SegWave[seg].data + 0x80000000);
+                gSPSegment(g_sys_glistp++, seg + WAVE_SEGMENT, OS_K0_TO_PHYSICAL(g_anime_solid->SegWave[seg].data));
             }
         }
 
-        if ((g_anime_solid->init_glist & 0x40000000) || (g_anime_solid->init_glist & 0x8FFFFFFF) != (unsigned int) s_anime_init_glist) {
-            if ((g_anime_solid->init_glist & 0x8FFFFFFF) != 0) {
-                s_anime_init_glist = (Gfx *) (g_anime_solid->init_glist & 0x8FFFFFFF);
+        if ((g_anime_solid->init_glist & ANIME_GLIST_RELOAD) || (g_anime_solid->init_glist & ANIME_ADDR_MASK) != (unsigned int) s_anime_init_glist) {
+            if ((g_anime_solid->init_glist & ANIME_ADDR_MASK) != 0) {
+                s_anime_init_glist = (Gfx *) (g_anime_solid->init_glist & ANIME_ADDR_MASK);
 
-                if (g_anime_solid->init_glist & 0x20000000) {
-                    for (; end.force_structure_alignment != s_anime_init_glist->force_structure_alignment; D_8015C5CC++, s_anime_init_glist++) {
-                        *D_8015C5CC = *s_anime_init_glist;
+                if (g_anime_solid->init_glist & ANIME_GLIST_COPY) {
+                    for (; end.force_structure_alignment != s_anime_init_glist->force_structure_alignment; g_sys_glistp++, s_anime_init_glist++) {
+                        *g_sys_glistp = *s_anime_init_glist;
 
                         if (branch.words.w0 == s_anime_init_glist->words.w0) {
                             start = (unsigned int) s_anime_init_glist;
-                            patch = D_8015C5CC;
+                            patch = g_sys_glistp;
                             stop  = s_anime_init_glist->words.w1;
                         }
 
                         if (stop != 0 && stop == (unsigned int) s_anime_init_glist) {
-                            copy = D_8015C5CC;
-                            gSPBranchList(patch, D_8015C5CC);
+                            copy = g_sys_glistp;
+                            gSPBranchList(patch, g_sys_glistp);
                         }
 
                         if (copy != NULL && *(signed char *) s_anime_init_glist == G_VTX) {
                             if (s_anime_init_glist->words.w1 >= start && s_anime_init_glist->words.w1 < stop) {
-                                D_8015C5CC->words.w1 = D_8015C5CC->words.w1 + (unsigned int) patch - start;
+                                g_sys_glistp->words.w1 = g_sys_glistp->words.w1 + (unsigned int) patch - start;
                             }
                         }
                     }
                 } else {
-                    gSPDisplayList(D_8015C5CC++, s_anime_init_glist);
+                    gSPDisplayList(g_sys_glistp++, s_anime_init_glist);
                 }
             } else {
-                gDPPipeSync(D_8015C5CC++);
+                gDPPipeSync(g_sys_glistp++);
             }
         } else {
-            gDPPipeSync(D_8015C5CC++);
+            gDPPipeSync(g_sys_glistp++);
         }
 
-        if (g_anime_solid->init_glist & 0x10000000) {
-            gSPLookAtX(D_8015C5CC++, s_anime_lookat_pool - 1);
-            gSPLookAtY(D_8015C5CC++, (char *) s_anime_lookat_pool - 0x10);
+        if (g_anime_solid->init_glist & ANIME_GLIST_LOOKAT) {
+            gSPLookAtX(g_sys_glistp++, s_anime_lookat_pool - 1);
+            gSPLookAtY(g_sys_glistp++, (char *) s_anime_lookat_pool - 0x10);
         }
     } else {
-        gDPPipeSync(D_8015C5CC++);
+        gDPPipeSync(g_sys_glistp++);
     }
 
     if (dlist == 0) {
@@ -1078,7 +1078,7 @@ void anime_model(unsigned int dlist)
     s_anime_solid_ready = 1;
 
     if (s_anime_rsp_mtx) {
-        gSPDisplayList(D_8015C5CC++, dlist);
+        gSPDisplayList(g_sys_glistp++, dlist);
     } else if (s_anime_mtx_top > s_anime_mtx_stack) {
         scale = 1.0f;
 
@@ -1095,16 +1095,16 @@ void anime_model(unsigned int dlist)
         }
 
         func_8001F5F8(s_anime_world_mtx, s_anime_proxy_mtx);
-        gSPMatrix(D_8015C5CC++, (unsigned int) s_anime_proxy_mtx & 0x1FFFFFFF, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-        gSPDisplayList(D_8015C5CC++, s_anime_proxy_dlists[g_anime_solid->work[0x13]]);
-        gSPPopMatrix(D_8015C5CC++, G_MTX_MODELVIEW);
+        gSPMatrix(g_sys_glistp++, K0_TO_PHYS(s_anime_proxy_mtx), G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPDisplayList(g_sys_glistp++, s_anime_proxy_dlists[g_anime_solid->work[0x13]]);
+        gSPPopMatrix(g_sys_glistp++, G_MTX_MODELVIEW);
     } else {
-        gSPDisplayList(D_8015C5CC++, s_anime_proxy_dlists[g_anime_solid->work[0x13]]);
+        gSPDisplayList(g_sys_glistp++, s_anime_proxy_dlists[g_anime_solid->work[0x13]]);
     }
 
-    if (g_anime_solid->init_glist & 0x40000000) {
-        gSPNumLights(D_8015C5CC++, s_anime_light_count);
-        gSPLight(D_8015C5CC++, &s_anime_lights->a, s_anime_light_count + 1);
+    if (g_anime_solid->init_glist & ANIME_GLIST_RELOAD) {
+        gSPNumLights(g_sys_glistp++, s_anime_light_count);
+        gSPLight(g_sys_glistp++, &s_anime_lights->a, s_anime_light_count + 1);
     }
 }
 
@@ -1117,13 +1117,13 @@ void anime_push_solid(ObjSolid *solid)
 
     mtx = s_anime_mtx_pool++;
     func_8001F5F8(mf, mtx);
-    gSPMatrix(D_8015C5CC++, (unsigned int) mtx & 0x1FFFFFFF, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(g_sys_glistp++, K0_TO_PHYS(mtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    if (solid->rx == 0x8000 || solid->ry == 0x8000 || solid->rz == 0x8000) {
+    if (solid->rx == ANGLE_BILLBOARD || solid->ry == ANGLE_BILLBOARD || solid->rz == ANGLE_BILLBOARD) {
         mtx = s_anime_mtx_pool++;
 
         guAlign(mtx, 0, NEG_IF_HALF_TURN(solid->ry, solid->rz, s_anime_view_x), NEG_IF_HALF_TURN(solid->rx, solid->rz, s_anime_view_y), NEG_IF_HALF_TURN(solid->rx, solid->ry, s_anime_view_z));
-        gSPMatrix(D_8015C5CC++, (unsigned int) mtx & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+        gSPMatrix(g_sys_glistp++, K0_TO_PHYS(mtx), G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
     }
 
     s_anime_mtx_top = s_anime_mtx_stack;
@@ -1157,35 +1157,35 @@ void anime_joint_mtx(float (*mf)[4], AnimeJoint *joint, ObjSolid *solid)
 
     if (solid != NULL) {
         if (s_anime_blend > 0.0f) {
-            delta = (rot[0] - solid->rx) & 0x3FF;
-            if (delta > 0x198 && delta < 0x268) {
+            delta = (rot[0] - solid->rx) & ANGLE_MASK;
+            if (delta > 408 && delta < 616) {
                 func_8001F878(&solid->rx, &solid->ry, &solid->rz);
                 delta = rot[0] - solid->rx;
             }
 
-            if (!(delta & 0x200)) {
-                step = (delta & 0x3FF) / (s_anime_blend + 1.0f);
+            if (!(delta & ANGLE_HALF)) {
+                step = (delta & ANGLE_MASK) / (s_anime_blend + 1.0f);
             } else {
-                step = (unsigned short) (0x400 - (unsigned short) (((0x400 - delta) & 0x3FF) / (s_anime_blend + 1.0f))) & 0x3FF;
+                step = (unsigned short) (ANGLE_FULL - (unsigned short) (((ANGLE_FULL - delta) & ANGLE_MASK) / (s_anime_blend + 1.0f))) & ANGLE_MASK;
             }
             rot[0] = (unsigned short) step + solid->rx;
 
-            if (!((rot[1] - solid->ry) & 0x200)) {
-                step = ((rot[1] - solid->ry) & 0x3FF) / (s_anime_blend + 1.0f);
+            if (!((rot[1] - solid->ry) & ANGLE_HALF)) {
+                step = ((rot[1] - solid->ry) & ANGLE_MASK) / (s_anime_blend + 1.0f);
             } else {
-                step = (unsigned short) (0x400 - (unsigned short) (((solid->ry - rot[1]) & 0x3FF) / (s_anime_blend + 1.0f))) & 0x3FF;
+                step = (unsigned short) (ANGLE_FULL - (unsigned short) (((solid->ry - rot[1]) & ANGLE_MASK) / (s_anime_blend + 1.0f))) & ANGLE_MASK;
             }
             rot[1] = (unsigned short) step + solid->ry;
 
-            if (!((rot[2] - solid->rz) & 0x200)) {
-                step = ((rot[2] - solid->rz) & 0x3FF) / (s_anime_blend + 1.0f);
+            if (!((rot[2] - solid->rz) & ANGLE_HALF)) {
+                step = ((rot[2] - solid->rz) & ANGLE_MASK) / (s_anime_blend + 1.0f);
             } else {
-                step = (unsigned short) (0x400 - (unsigned short) (((solid->rz - rot[2]) & 0x3FF) / (s_anime_blend + 1.0f))) & 0x3FF;
+                step = (unsigned short) (ANGLE_FULL - (unsigned short) (((solid->rz - rot[2]) & ANGLE_MASK) / (s_anime_blend + 1.0f))) & ANGLE_MASK;
             }
             rot[2] = (unsigned short) step + solid->rz;
 
             // clang-format off
-            rot[0] &= 0x3FF; rot[1] &= 0x3FF; rot[2] &= 0x3FF;
+            rot[0] &= ANGLE_MASK; rot[1] &= ANGLE_MASK; rot[2] &= ANGLE_MASK;
             // clang-format on
 
             mf[3][0] = (mf[3][0] - solid->tx) / (s_anime_blend + 1.0f) + solid->tx;
@@ -1262,14 +1262,14 @@ unsigned short anime_key_u16(unsigned short track)
     float          frac;
     int            frame;
 
-    track &= 0xBFFF;
+    track &= ANIME_TRACK_MASK;
 
-    if (track > 0xA000) {
-        return track - 0xB000;
+    if (track > ANIME_TRACK_CONST_MIN) {
+        return track - ANIME_TRACK_CONST_BIAS;
     }
 
-    if (track & 0x8000) {
-        track = track & 0x7FFF;
+    if (track & ANIME_TRACK_FIXED) {
+        track = track & ANIME_TRACK_INDEX_MASK;
         frac  = 0.0f;
         frame = 0;
     } else {
@@ -1297,14 +1297,14 @@ short anime_key_s16(unsigned short track)
     float frac;
     int   frame;
 
-    track &= 0xBFFF;
+    track &= ANIME_TRACK_MASK;
 
-    if (track > 0xA000) {
-        return track - 0xB000;
+    if (track > ANIME_TRACK_CONST_MIN) {
+        return track - ANIME_TRACK_CONST_BIAS;
     }
 
-    if (track & 0x8000) {
-        track = track & 0x7FFF;
+    if (track & ANIME_TRACK_FIXED) {
+        track = track & ANIME_TRACK_INDEX_MASK;
         frac  = 0.0f;
         frame = 0;
     } else {
@@ -1333,14 +1333,14 @@ unsigned short anime_key_angle(unsigned short track)
     float          frac;
     int            frame;
 
-    track &= 0xBFFF;
+    track &= ANIME_TRACK_MASK;
 
-    if (track > 0xA000) {
-        return track - 0xB000;
+    if (track > ANIME_TRACK_CONST_MIN) {
+        return track - ANIME_TRACK_CONST_BIAS;
     }
 
-    if (track & 0x8000) {
-        track = track & 0x7FFF;
+    if (track & ANIME_TRACK_FIXED) {
+        track = track & ANIME_TRACK_INDEX_MASK;
         frac  = 0.0f;
         frame = 0;
     } else {
@@ -1358,13 +1358,13 @@ unsigned short anime_key_angle(unsigned short track)
         next = anime_key_decode(track, frame, (short *) &cur, frame + 1);
     }
 
-    delta = (unsigned short) ((next - cur) & 0x3FF);
+    delta = (unsigned short) ((next - cur) & ANGLE_MASK);
 
-    while (delta > 0x200) {
-        delta -= 0x400;
+    while (delta > ANGLE_HALF) {
+        delta -= ANGLE_FULL;
     }
 
-    return (short) ((short) cur + (short) (delta * frac)) & 0x3FF;
+    return (short) ((short) cur + (short) (delta * frac)) & ANGLE_MASK;
 }
 
 void anime_key_rot(AnimeJoint *joint, unsigned short *rot)
@@ -1386,13 +1386,13 @@ void anime_key_rot(AnimeJoint *joint, unsigned short *rot)
     track_frame = frame;
     track_frac  = frac;
 
-    track[0] &= 0xBFFF;
-    if (track[0] > 0xA000) {
-        rot[0] = next_rot[0] = track[0] - 0xB000;
+    track[0] &= ANIME_TRACK_MASK;
+    if (track[0] > ANIME_TRACK_CONST_MIN) {
+        rot[0] = next_rot[0] = track[0] - ANIME_TRACK_CONST_BIAS;
     } else {
-        if (track[0] & 0x8000) {
+        if (track[0] & ANIME_TRACK_FIXED) {
             track_frac = 0.0f;
-            track[0] &= 0x7FFF;
+            track[0] &= ANIME_TRACK_INDEX_MASK;
             track_frame = 0;
         }
         if (!(track_frac != 0.0f)) {
@@ -1406,13 +1406,13 @@ void anime_key_rot(AnimeJoint *joint, unsigned short *rot)
         track_frac  = frac;
     }
 
-    track[1] &= 0xBFFF;
-    if (track[1] > 0xA000) {
-        rot[1] = next_rot[1] = track[1] - 0xB000;
+    track[1] &= ANIME_TRACK_MASK;
+    if (track[1] > ANIME_TRACK_CONST_MIN) {
+        rot[1] = next_rot[1] = track[1] - ANIME_TRACK_CONST_BIAS;
     } else {
-        if (track[1] & 0x8000) {
+        if (track[1] & ANIME_TRACK_FIXED) {
             track_frac = 0.0f;
-            track[1] &= 0x7FFF;
+            track[1] &= ANIME_TRACK_INDEX_MASK;
             track_frame = 0;
         }
         if (!(track_frac != 0.0f)) {
@@ -1426,13 +1426,13 @@ void anime_key_rot(AnimeJoint *joint, unsigned short *rot)
         track_frac  = frac;
     }
 
-    track[2] &= 0xBFFF;
-    if (track[2] > 0xA000) {
-        rot[2] = next_rot[2] = track[2] - 0xB000;
+    track[2] &= ANIME_TRACK_MASK;
+    if (track[2] > ANIME_TRACK_CONST_MIN) {
+        rot[2] = next_rot[2] = track[2] - ANIME_TRACK_CONST_BIAS;
     } else {
-        if (track[2] & 0x8000) {
+        if (track[2] & ANIME_TRACK_FIXED) {
             track_frac = 0.0f;
-            track[2] &= 0x7FFF;
+            track[2] &= ANIME_TRACK_INDEX_MASK;
             track_frame = 0;
         }
         if (track_frac == 0.0f) {
@@ -1448,29 +1448,29 @@ void anime_key_rot(AnimeJoint *joint, unsigned short *rot)
 
     if (frac != 0.0f) {
         if (rot[0] != next_rot[0]) {
-            delta = (next_rot[0] - rot[0]) & 0x3FF;
-            if (delta > 0x198 && delta < 0x268) {
+            delta = (next_rot[0] - rot[0]) & ANGLE_MASK;
+            if (delta > 408 && delta < 616) {
                 func_8001F878(&rot[0], &rot[1], &rot[2]);
             }
-            delta = (next_rot[0] - rot[0]) & 0x3FF;
-            while (delta > 0x200) {
-                delta -= 0x400;
+            delta = (next_rot[0] - rot[0]) & ANGLE_MASK;
+            while (delta > ANGLE_HALF) {
+                delta -= ANGLE_FULL;
             }
-            rot[0] = (short) ((short) rot[0] + (short) (delta * frac)) & 0x3FF;
+            rot[0] = (short) ((short) rot[0] + (short) (delta * frac)) & ANGLE_MASK;
         }
         if (rot[1] != next_rot[1]) {
-            delta = (next_rot[1] - rot[1]) & 0x3FF;
-            while (delta > 0x200) {
-                delta -= 0x400;
+            delta = (next_rot[1] - rot[1]) & ANGLE_MASK;
+            while (delta > ANGLE_HALF) {
+                delta -= ANGLE_FULL;
             }
-            rot[1] = (short) ((short) rot[1] + (short) (delta * frac)) & 0x3FF;
+            rot[1] = (short) ((short) rot[1] + (short) (delta * frac)) & ANGLE_MASK;
         }
         if (rot[2] != next_rot[2]) {
-            delta = (next_rot[2] - rot[2]) & 0x3FF;
-            while (delta > 0x200) {
-                delta -= 0x400;
+            delta = (next_rot[2] - rot[2]) & ANGLE_MASK;
+            while (delta > ANGLE_HALF) {
+                delta -= ANGLE_FULL;
             }
-            rot[2] = (short) ((short) rot[2] + (short) (delta * frac)) & 0x3FF;
+            rot[2] = (short) ((short) rot[2] + (short) (delta * frac)) & ANGLE_MASK;
         }
     }
 }
@@ -1572,8 +1572,8 @@ float anime_frame_count(ObjSolid *solid)
     unsigned int ref;
     unsigned int hdr;
 
-    kind = solid->AModel & 0x70000000;
-    ref  = solid->AModel & 0x8FFFFFFE;
+    kind = solid->AModel & ANIME_KIND_MASK;
+    ref  = solid->AModel & ANIME_REF_MASK;
 
     switch (kind) {
         case ANIME_KIND_DEMO:
@@ -1591,7 +1591,7 @@ float anime_frame_count(ObjSolid *solid)
 
     hdr = *(unsigned int *) ANIME_REF_SOLID(solid, ref);
 
-    return hdr & 0xFF;
+    return ANIME_HDR_FRAMES(hdr);
 }
 
 void anime_set_default_ambient(unsigned char r, unsigned char g, unsigned char b)
@@ -1628,10 +1628,10 @@ int anime_spawn_parts(void *arg0, ObjSolid *src)
     pose.ry        = 0;
     pose.rz        = 0;
 
-    model = anime_locate_joint(&pose, src, 0xF0000001);
+    model = anime_locate_joint(&pose, src, ANIME_TARGET_NTH_JOINT + 1);
 
     while (model != 0) {
-        part = func_80035EEC(arg0, 2, 1);
+        part = func_80035EEC(arg0, OBJ_KIND_SOLID, 1);
 
         if (part == NULL) {
             return count;
@@ -1642,7 +1642,7 @@ int anime_spawn_parts(void *arg0, ObjSolid *src)
         part->header.pri = src->header.pri;
         part->init_glist = src->init_glist;
 
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < WAVE_SEGMENT_COUNT; i++) {
             part->SegWave[i] = src->SegWave[i];
         }
 
@@ -1652,7 +1652,7 @@ int anime_spawn_parts(void *arg0, ObjSolid *src)
         pose.ry = 0;
         pose.rz = 0;
 
-        model = anime_locate_joint(&pose, src, count + 0xF0000001);
+        model = anime_locate_joint(&pose, src, count + (ANIME_TARGET_NTH_JOINT + 1));
     }
 
     return count;
@@ -1687,13 +1687,13 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
     have_parent         = 0;
     g_anime_solid       = solid;
 
-    if ((model & 0x70000000) != ANIME_KIND_JCHAR) {
+    if ((model & ANIME_KIND_MASK) != ANIME_KIND_JCHAR) {
         right = NULL;
     } else {
         right = g_anime_solid->child;
     }
 
-    script = (unsigned int *) ANIME_REF(model & 0x8FFFFFFE);
+    script = (unsigned int *) ANIME_REF(model & ANIME_REF_MASK);
     hdr    = *script++;
 
     if (!hdr) {
@@ -1701,21 +1701,21 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
     }
 
     joint               = NULL;
-    s_anime_local       = (hdr / 0x80000000) & 1;
-    roots_left          = (hdr >> 8) & 0x7FFF;
-    s_anime_frame_total = hdr & 0xFF;
+    s_anime_local       = ANIME_HDR_LOCAL(hdr);
+    roots_left          = ANIME_HDR_ROOTS(hdr);
+    s_anime_frame_total = ANIME_HDR_FRAMES(hdr);
     // clang-format off
-    s_anime_keys = (unsigned char *) ANIME_REF(*script); script += ((hdr >> 28) & 7) + ((hdr >> 24) & 0xF) + 1;
+    s_anime_keys = (unsigned char *) ANIME_REF(*script); script += ANIME_HDR_CAMERAS(hdr) + ANIME_HDR_LIGHTS(hdr) + 1;
     // clang-format on
     depth = 0;
 
-    if ((target & 0xF0000000) == 0xF0000000) {
-        s_anime_joint_countdown = target - 0xF0000000;
+    if ((target & ANIME_TARGET_MASK) == ANIME_TARGET_NTH_JOINT) {
+        s_anime_joint_countdown = target - ANIME_TARGET_NTH_JOINT;
     } else {
         s_anime_joint_countdown = 0;
     }
-    if ((target & 0xF0000000) == 0xE0000000) {
-        s_anime_root_countdown = target - 0xE0000000;
+    if ((target & ANIME_TARGET_MASK) == ANIME_TARGET_NTH_ROOT) {
+        s_anime_root_countdown = target - ANIME_TARGET_NTH_ROOT;
     } else {
         s_anime_root_countdown = 0;
     }
@@ -1730,7 +1730,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
             joint = last_root = (AnimeJoint *) ANIME_REF(*script);
             script++;
 
-            if ((model & 0x70000000) == ANIME_KIND_DEMO) {
+            if ((model & ANIME_KIND_MASK) == ANIME_KIND_DEMO) {
                 s_anime_path_joint[depth] = joint;
                 s_anime_path_solid[depth] = NULL;
                 depth                     = 1;
@@ -1739,7 +1739,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
             if (s_anime_root_countdown && --s_anime_root_countdown == 0) {
                 break;
             }
-        } else if ((model & 0x70000000) == ANIME_KIND_DEMO) {
+        } else if ((model & ANIME_KIND_MASK) == ANIME_KIND_DEMO) {
             s_anime_path_joint[depth] = joint;
             s_anime_path_solid[depth] = NULL;
             depth                     = 1;
@@ -1750,7 +1750,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
             continue;
         }
 
-        joint_id = joint->model & 0x8FFFFFFF;
+        joint_id = joint->model & ANIME_ADDR_MASK;
 
         if ((unsigned int) target == joint_id || (joint_id && s_anime_joint_countdown && --s_anime_joint_countdown == 0)) {
             break;
@@ -1823,7 +1823,7 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
             func_8001EEF4(&out->tx, &out->ty, &out->tz, &out->rx, &out->ry, &out->rz, &out->sx, &out->sy,
                 &out->sz, s_anime_mtx_stack[0]);
         } else {
-            if (!last_root || (unsigned int) target != (last_root->model & 0x8FFFFFFF)) {
+            if (!last_root || (unsigned int) target != (last_root->model & ANIME_ADDR_MASK)) {
                 return 0;
             }
 
@@ -1831,20 +1831,20 @@ int anime_locate_joint_at(ObjSolid *out, ObjSolid *solid, unsigned int model, fl
             func_8001C970(out, solid);
         }
 
-        if (joint->rx & 0x4000) {
-            out->rx = 0x8000;
+        if (joint->rx & ANIME_ROT_BILLBOARD) {
+            out->rx = ANGLE_BILLBOARD;
         }
-        if (joint->ry & 0x4000) {
-            out->ry = 0x8000;
+        if (joint->ry & ANIME_ROT_BILLBOARD) {
+            out->ry = ANGLE_BILLBOARD;
         }
-        if (joint->rz & 0x4000) {
-            out->rz = 0x8000;
+        if (joint->rz & ANIME_ROT_BILLBOARD) {
+            out->rz = ANGLE_BILLBOARD;
         }
     } else if (depth) {
         joint = s_anime_path_joint[depth - 1];
     } else {
         joint = last_root;
-        if (!last_root || (unsigned int) target != (last_root->model & 0x8FFFFFFF)) {
+        if (!last_root || (unsigned int) target != (last_root->model & ANIME_ADDR_MASK)) {
             return 0;
         }
     }
@@ -1867,7 +1867,7 @@ int anime_find_joint_path(AnimeJoint *joint, unsigned int target, int depth, Obj
     sibling                   = NULL;
     child                     = NULL;
     s_anime_path_solid[depth] = solid;
-    model                     = joint->model & 0x8FFFFFFF;
+    model                     = joint->model & ANIME_ADDR_MASK;
 
     if (target == model || (model != 0 && s_anime_joint_countdown != 0 && --s_anime_joint_countdown == 0)) {
         s_anime_found_solid = solid;
@@ -1930,22 +1930,22 @@ int anime_swap_models(ObjSolid *target_solid, unsigned int model, unsigned int *
         model = target_solid->AModel;
     }
 
-    if ((model & 0x70000000) != ANIME_KIND_JCHAR) {
+    if ((model & ANIME_KIND_MASK) != ANIME_KIND_JCHAR) {
         right = NULL;
     } else {
         right = g_anime_solid->child;
     }
 
-    script = (unsigned int *) ANIME_REF_SOLID(g_anime_solid, model & 0x8FFFFFFE);
+    script = (unsigned int *) ANIME_REF_SOLID(g_anime_solid, model & ANIME_REF_MASK);
     hdr    = *script++;
 
     if (hdr == 0) {
         return 0;
     }
 
-    s_anime_local       = (hdr / 0x80000000) & 1;
-    roots_left          = (hdr >> 8) & 0x7FFF;
-    s_anime_frame_total = hdr & 0xFF;
+    s_anime_local       = ANIME_HDR_LOCAL(hdr);
+    roots_left          = ANIME_HDR_ROOTS(hdr);
+    s_anime_frame_total = ANIME_HDR_FRAMES(hdr);
     s_anime_keys        = (unsigned char *) ANIME_REF_SOLID(g_anime_solid, *script);
 
     if (script == NULL) {
@@ -1960,7 +1960,7 @@ int anime_swap_models(ObjSolid *target_solid, unsigned int model, unsigned int *
         PRINTF(("!!!!!!!!!!!!!!!!!!!!!!!!!\n"));
     }
 
-    script += ((hdr >> 28) & 7) + ((hdr >> 24) & 0xF) + 1;
+    script += ANIME_HDR_CAMERAS(hdr) + ANIME_HDR_LIGHTS(hdr) + 1;
 
     for (;;) {
         if (roots_left-- == 0) {
@@ -1991,10 +1991,10 @@ int anime_swap_joint_models(AnimeJoint *joint, unsigned int *table, ObjSolid *so
     sibling = NULL;
 
     for (i = 0; table[i] != 0; i += 2) {
-        if ((joint->model & 0x8FFFFFFF) == table[i]) {
+        if ((joint->model & ANIME_ADDR_MASK) == table[i]) {
             joint->model = table[i + 1];
 
-            if (solid != NULL && (solid->AModel & 0x8FFFFFFE) == table[i]) {
+            if (solid != NULL && (solid->AModel & ANIME_REF_MASK) == table[i]) {
                 solid->AModel = table[i + 1];
             }
         }

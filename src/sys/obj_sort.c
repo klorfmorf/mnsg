@@ -4,11 +4,8 @@
 #include "sys/task.h"
 #include "unk.h"
 
-unsigned char func_8000AFA8(ObjSolid *solid, AnimeCamera *cam, float x, float y, float z, float a, float b);
+unsigned char func_8000AFA8(ObjSolid *solid, AnimeCamera *cam, float dir_x, float dir_y, float dir_z, float scale, float radius);
 void          func_8000AD08(ObjSolid *solid, AnimeCamera *cam);
-
-extern float  D_8007AAF0;
-extern double D_8007AAF8;
 
 // clang-format off
 
@@ -36,75 +33,68 @@ void func_8000A680(Obj **objects, unsigned short *keys, int count)
     }
 }
 
-#ifdef NON_MATCHING
-void func_8000A74C(ObjLayer *layer, unsigned short *arg1, int arg2)
+void func_8000A74C(Obj **objects, unsigned short *keys, int count)
 {
-    int            top;
-    int            l;
-    int            r;
-    int            lo[32];
-    int            hi[32];
+    int            lo = 0, hi = count - 1;
     int            i;
     int            j;
+    int            sp;
+    int            lo_stack[32];
+    int            hi_stack[32];
     unsigned short pivot;
-    unsigned short tmp;
+    unsigned short key;
     Obj           *obj;
 
-    r   = arg2 - 1;
-    l   = 0;
-    top = 0;
+    sp = 0;
     for (;;) {
-        if (r - l < 11) {
-            if (top == 0) {
+        if (hi - lo <= 10) {
+            if (sp == 0) {
                 break;
             }
-            top--;
-            l = lo[top];
-            r = hi[top];
+            sp--;
+            lo = lo_stack[sp];
+            hi = hi_stack[sp];
         }
-        pivot = arg1[(l + r) / 2];
-        i     = l;
-        j     = r;
+        pivot = keys[(lo + hi) / 2];
+        i     = lo;
+        j     = hi;
         for (;;) {
-            while (arg1[i] < pivot) {
+            while (keys[i] < pivot) {
                 i++;
             }
-            while (pivot < arg1[j]) {
+            while (pivot < keys[j]) {
                 j--;
             }
             if (i >= j) {
                 break;
             }
-            tmp               = arg1[i];
-            arg1[i]           = arg1[j];
-            arg1[j]           = tmp;
-            obj               = layer->objects[i];
-            layer->objects[i] = layer->objects[j];
-            layer->objects[j] = obj;
+            key        = keys[i];
+            keys[i]    = keys[j];
+            keys[j]    = key;
+            obj        = objects[i];
+            objects[i] = objects[j];
+            objects[j] = obj;
             i++;
             j--;
         }
-        if (r - j < i - l) {
-            if (i - l >= 11) {
-                lo[top] = l;
-                hi[top] = i - 1;
-                top++;
+        if (hi - j < i - lo) {
+            if (i - lo > 10) {
+                lo_stack[sp] = lo;
+                hi_stack[sp] = i - 1;
+                sp++;
             }
-            l = j + 1;
+            lo = j + 1;
         } else {
-            if (r - j >= 11) {
-                lo[top] = j + 1;
-                hi[top] = r;
-                top++;
+            if (hi - j > 10) {
+                lo_stack[sp] = j + 1;
+                hi_stack[sp] = hi;
+                sp++;
             }
-            r = i - 1;
+            hi = i - 1;
         }
     }
-    func_8000A680(layer, arg1, arg2);
+    func_8000A680(objects, keys, count);
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_sort/func_8000A74C.s")
-#endif
 
 int func_8000A918(ObjLayer *layer, unsigned short *keys)
 {
@@ -115,8 +105,8 @@ int func_8000A918(ObjLayer *layer, unsigned short *keys)
 
     for (i = 0, size = count = layer->size; i < size; i++, keys++) {
         obj = layer->objects[i];
-        if (!(obj->kind & 0x80)) {
-            if (layer->unk_371 & 0x80) {
+        if (!(obj->kind & OBJ_HIDDEN)) {
+            if (layer->sort_flags & LAYER_SORT_REVERSE) {
                 *keys = 0xFFFF - obj->s_pri;
             } else {
                 *keys = obj->s_pri;
@@ -131,9 +121,9 @@ void func_8000A99C(ObjLayer *layer)
 {
     short count;
 
-    if (layer->unk_371 & 0x1) {
+    if (layer->sort_flags & LAYER_SORT_ENABLE) {
         if ((count = func_8000A918(layer, D_80167A80)) >= 2) {
-            func_8000A74C(layer, D_80167A80, count);
+            func_8000A74C(layer->objects, D_80167A80, count);
         }
     }
 }
@@ -150,16 +140,17 @@ void func_8000AA00(ObjLayer *layer)
         if (prev != NULL) {
             if (prev->priority < D_8016DAB4->priority) {
                 continue;
+            } else {
+                prev = NULL;
             }
-            prev = NULL;
         }
-        if (D_8016DAB4->status & g_sys_real.task_disabled_status & 0xD0) {
+        if (D_8016DAB4->status & g_sys_real.task_disabled_status & TASK_STATUS_DRAW_MASK) {
             prev = D_8016DAB4;
             continue;
         }
         obj = D_8016DAB4->obj_head;
         while (obj != NULL) {
-            if (!(obj->kind & 0x80)) {
+            if (!(obj->kind & OBJ_HIDDEN)) {
                 dst                     = &layer[obj->pri];
                 dst->objects[dst->size] = obj;
                 dst->size++;
@@ -183,7 +174,7 @@ void func_8000AAE8(ObjLayer *layers)
 
 void func_8000AB10(void *dst)
 {
-    func_800041E0(dst, 0x2970);
+    func_800041E0(dst, sizeof(ObjLayer) * 12);
 }
 
 void func_8000AB30(void)
@@ -191,7 +182,7 @@ void func_8000AB30(void)
     short i;
 
     for (i = 0; i < 12; i++) {
-        g_sys_real.layers[i].unk_371 = 0;
+        g_sys_real.layers[i].sort_flags = 0;
     }
 }
 
@@ -210,25 +201,25 @@ void func_8000AB74(void)
         if (g_sys_real.layers[i].size != 0) {
             for (j = 0, size = g_sys_real.layers[i].size; j < size; j++) {
                 solid = (ObjSolid *) g_sys_real.layers[i].objects[j];
-                if (solid->header.kind == 2) {
-                    switch (solid->AModel & 0x70000000) {
-                        case 0x20000000:
+                if (solid->header.kind == OBJ_KIND_SOLID) {
+                    switch (solid->AModel & ANIME_KIND_MASK) {
+                        case ANIME_KIND_CAMERA:
                             if (solid->hidden == 0) {
-                                cam = (AnimeCamera *) (solid->AModel & 0x8FFFFFFE);
+                                cam = (AnimeCamera *) (solid->AModel & ANIME_REF_MASK);
                                 count++;
                             }
                             break;
-                        case 0x0:
-                        case 0x10000000:
-                        case 0x40000000:
-                        case 0x60000000:
-                        case 0x70000000:
+                        case ANIME_KIND_DEMO:
+                        case ANIME_KIND_ANIME:
+                        case ANIME_KIND_MODEL:
+                        case ANIME_KIND_JCHAR:
+                        case ANIME_KIND_JMODEL:
                             if (count != 0) {
                                 func_8000AD08(solid, cam);
                             }
                             break;
-                        case 0x30000000:
-                        case 0x50000000:
+                        case ANIME_KIND_LIGHT:
+                        case ANIME_KIND_AMBIENT:
                             break;
                     }
                 }
@@ -276,7 +267,7 @@ void func_8000AD08(ObjSolid *solid, AnimeCamera *cam)
         ux              = dx * k;
         uy              = dy * k + 1.0f;
         uz              = dz * k;
-        solid->disabled = func_8000AFA8(solid, cam, ux, uy, uz, D_8007AAF0, solid->scratch_f[0]);
+        solid->disabled = func_8000AFA8(solid, cam, ux, uy, uz, 4.0f / 3.0f, solid->scratch_f[0]);
         if (solid->disabled >= 0) {
             vz              = dy * ux - dx * uy;
             solid->disabled = func_8000AFA8(solid, cam, dz * uy - dy * uz, dx * uz - dz * ux, vz, 1.0f, solid->scratch_f[1]);
@@ -284,76 +275,66 @@ void func_8000AD08(ObjSolid *solid, AnimeCamera *cam)
     }
 }
 
-#ifdef NON_MATCHING
-unsigned char func_8000AFA8(ObjSolid *solid, AnimeCamera *cam, float x, float y, float z, float a, float b)
+unsigned char func_8000AFA8(ObjSolid *solid, AnimeCamera *cam, float dir_x, float dir_y, float dir_z, float scale, float radius)
 {
-    float tx;
-    float ty;
-    float tz;
-    float dot;
-    float len2;
-    float t;
-    float dx;
-    float dy;
-    float dz;
-    float span;
-    float phi;
-    float ratio;
-    float s1;
-    float theta;
-    float dlen;
-    float cosv;
-    float s2;
-    float vlen;
-    float vx;
-    float vy;
-    float ey;
-    float vz;
-    float vlen2;
+    float        px;
+    float        py;
+    float        pz;
+    float        ax;
+    float        ay;
+    float        az;
+    float        ex;
+    float        ey;
+    float        ez;
+    float        t;
+    float        length;
+    float        limit;
+    unsigned int half_angle;
+    float        sin_r;
+    float        cos_r;
+    float        angle_r;
+    float        sin_c;
+    float        cos_c;
+    float        angle_c;
+    float        dist;
 
-    tx    = solid->tx;
-    ty    = solid->ty;
-    tz    = solid->tz;
-    dx    = cam->at[0] - cam->eye[0];
-    ey    = cam->eye[1];
-    dy    = cam->at[1] - ey;
-    dz    = cam->at[2] - cam->eye[2];
-    dot   = x * (cam->eye[0] - tx) + y * (cam->eye[1] - ty) + z * (cam->eye[2] - tz);
-    len2  = x * x + y * y + z * z;
-    t     = dot / len2;
-    vx    = tx + x * t - cam->eye[0];
-    vy    = ty + y * t - cam->eye[1];
-    vz    = tz + z * t - cam->eye[2];
-    vlen2 = vx * vx + vy * vy + vz * vz;
-    ratio = b / _nsqrtf(vlen2);
-    if (ratio > 1.0f) {
+    px    = solid->tx;
+    py    = solid->ty;
+    pz    = solid->tz;
+    ax    = cam->eye[0];
+    ay    = cam->eye[1];
+    az    = cam->eye[2];
+    ex    = cam->at[0] - ax;
+    ey    = cam->at[1] - ay;
+    ez    = cam->at[2] - az;
+    t     = ((ax - px) * dir_x + dir_y * (ay - py) + dir_z * (az - pz)) / (dir_x * dir_x + dir_y * dir_y + dir_z * dir_z);
+    sin_r = radius / _nsqrtf((dir_x * t + px - ax) * (dir_x * t + px - ax) + (dir_y * t + py - ay) * (dir_y * t + py - ay) + (dir_z * t + pz - az) * (dir_z * t + pz - az));
+    if (1.0f < sin_r) {
         return 0xFF;
     }
-    if (ratio * ratio >= 1.0f) {
-        s1 = 0.0f;
+    if (1.0f <= sin_r * sin_r) {
+        cos_r = 0.0f;
     } else {
-        s1 = _nsqrtf(1.0f - ratio * ratio);
+        cos_r = _nsqrtf(1.0f - sin_r * sin_r);
     }
-    theta = func_800166E0(ratio, s1);
-    vlen  = _nsqrtf(vlen2);
-    dlen  = _nsqrtf(dx * dx + dy * dy + dz * dz);
-    cosv  = (vx * dx + vy * dy + vz * dz) / (dlen * vlen);
-    if (cosv > 1.0f) {
-        phi = 0.0f;
+    angle_r = func_800166E0(sin_r, cos_r);
+    dist    = _nsqrtf((dir_x * t + px - ax) * (dir_x * t + px - ax) + (dir_y * t + py - ay) * (dir_y * t + py - ay) + (dir_z * t + pz - az) * (dir_z * t + pz - az));
+    length  = _nsqrtf(ex * ex + ey * ey + ez * ez);
+    cos_c   = ((dir_x * t + px - ax) * ex + (dir_y * t + py - ay) * ey + (dir_z * t + pz - az) * ez) / (length * dist);
+    if (1.0f < cos_c) {
+        angle_c = 0.0f;
     } else {
-        if (cosv * cosv >= 1.0f) {
-            s2 = 0.0f;
+        if (1.0f <= cos_c * cos_c) {
+            sin_c = 0.0f;
         } else {
-            s2 = _nsqrtf(1.0f - cosv * cosv);
+            sin_c = _nsqrtf(1.0f - cos_c * cos_c);
         }
-        phi = func_800166E0(s2, cosv);
+        angle_c = func_800166E0(sin_c, cos_c);
     }
-    span = (cam->fovy * (float) 2) * D_8007AAF8 / 65536.0 * a;
-    if (span < phi - theta) {
+    half_angle = cam->fovy & 0xFFFF;
+    limit      = (float) half_angle * 2 * 3.1415 / 65536 * scale;
+    if (limit < angle_c - angle_r) {
         return 0xFF;
     }
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/obj_sort/func_8000AFA8.s")
-#endif

@@ -29,7 +29,7 @@ options:
   # extensions_path: tools/splat_ext
 
   # Uncomment the line below when creating an ELF file for dumping N64Recomp symbols or analyzing in Ghidra
-  asm_nonmatching_label_macro: ""
+  # asm_nonmatching_label_macro: ""
 
   symbol_name_format: $VRAM_$ROM
 
@@ -67,61 +67,62 @@ segments:
     subalign: 16
     subsegments:
     - [0x1050, c, main]
-    - [0x2410, c, is_debug]         # IS64 Debugger
-    - [0x2800, c, rom_trans]        # Data Loading
-    - [0x2C40, c, step]             # Game Loop
-    - [0x45C0, c, math]             # Math
-    - [0x4D70, c, sys]              # System Struct
-    - [0x4E40, c, string]           # Print Text
-    - [0x5510, c, joypad]           # Controller
-    - [0x5E20, c, rom_decode]       # LZKN64 Decompression
-    - [0x6620, c, rom_queue]        # File Requests
-    - [0x6790, c, demo]             # Demo
-    - [0x6F50, c, profiler]         # Profiler
-    - [0x79F0, c, sched]            # Scheduler
-    - [0x8570, c, pal]              # Palette Manager
-    - [0x9250, c, sprite]           # Sprite Object Helpers
-    - [0x92F0, c, obj]              # Object Initialization and Drawing
-    - [0xB280, c, obj_sort]         # Object Ordering
-    - [0xBEA0, c, stage]            # Stages
-    - [0xC1D0, c, save_file]        # Save File
-    - [0xC480, c, window]           # Dialog Box Graphics
-    - [0xE000, asm, dialog]         # Dialog Box Logic
-    - [0xE7F0, c, okutani]          # Okutani helpers
-    - [0xFE40, asm, sd_location]    # Spatial Sound
-    - [0x10D80, c, yamamoto]        # Yamamoto helpers
-    - [0x12760, asm, dracam]        # dra(ma?)cam(era)
-    - [0x14540, c, wave_uty]        # Memory Utilities [wave_uty.c]
-    - [0x15820, c, bit]             # Bit Reader (compiled with -g3)
-    - [0x15970, c, pic]             # PIC Decompression
-    - [0x172E0, c, atan2]           # atan2
-    - [0x17550, c, anime]           # Solid Object Drawing [anime.c]
-    - [0x1D570, c, gfx_util]        # Math/Graphics Utilities and Helpers
-    - [0x204B0, c, douchu]          # Overworld
-    - [0x21330, c, stage_select]    # Level Select
-    - [0x221D0, c, gbg]             # Background Sky Object
-    - [0x23DE0, c, controller_pak]  # Memory Pak
-    - [0x249F0, c, save_flags]      # Save Flags
-    - [0x24D60, c, ripple]          # Rippling Background/Water
-    - [0x27FE0, c, vram]            # Vram: Push-Out and Point Tests (stage and ride)
-    - [0x2B600, asm, xvram]         # XVram: Ray Casts (stage and ride)
-    - [0x2F710, asm, vram_wall]     # Cylinder wall push-out against the stage
-    - [0x31330, asm, ride_wall]     # Cylinder wall push-out against rides
-    - [0x32F20, asm, ride]          # Ride (Push-Out, Ray and Point tests over all ride objects)
-    - [0x33450, asm, ride_floor]    # Ride Floor (Platform or Water Surface under a point
-    - [0x33720, c, solid_atari]     # Attack hit detection [solid_atari.c]
-    - [0x35280, c, task]            # Task System
-    - [0x36750, c, obj_alloc]       # Object Allocation
-    - [0x37440, c, fade]            # Fade
-    - [0x37C00, c, warp]            # Warps
-    - [0x382B0, asm, camera_path]   # Camera Paths
-    - [0x385D0, c, vibration_pak]   # Rumble Pak
-    - [0x389B0, c, gfx_data]        # Empty
-    - [0x389C0, c, audiomgr]        # Audio Thread Manager
-    - [0x392E0, c, sd_main]         # Audio Interface
-    - [0x3AF70, c, sd_sub1]         # Audio Sequencing
-    - [0x3C010, c, sd_sub2]         # Audio Commands
-    - [0x3DBA0, c, scenario]        # Scenario Interpreter
+    - [0x2410, c, is_debug]        # IS64 Debugger
+    - [0x2800, c, rom_trans]       # Data Loading
+    - [0x2C40, c, step]            # Game Loop
+    - [0x45C0, c, math]            # Math
+    - [0x4D70, c, sys]             # System Struct
+    - [0x4E40, c, string]          # Print Text
+    - [0x5510, c, joypad]          # Controller
+    - [0x5E20, c, rom_decode]      # LZKN64 Decompression
+    - [0x6620, c, rom_queue]       # File Requests
+    - [0x6790, c, demo]            # Demo
+    - [0x6F50, c, profiler]        # Profiler
+    - [0x79F0, c, sched]           # Scheduler
+    - [0x8570, c, pal]             # Palette Manager
+    - [0x9250, c, sprite]          # Sprite Object Helpers
+    - [0x92F0, c, obj]             # Object Initialization and Drawing
+    - [0xB280, c, obj_sort]        # Object Ordering
+    - [0xBEA0, c, stage]           # Stages
+    - [0xC1D0, c, save_file]       # Save File
+    - [0xC480, c, window]          # Dialog Box Graphics
+    - [0xE000, c, window_effect]   # Window Effects
+    - [0xE7F0, c, okutani]         # Okutani helpers
+    - [0xFE40, c, sd_location]     # Spatial Sound
+    - [0x10D80, c, yamamoto]       # Yamamoto helpers
+    - [0x12760, c, dracam]         # dra(ma?)cam(era)
+    - [0x14540, c, wave_uty]       # Memory Utilities [wave_uty.c]
+    - [0x154C0, c, amem]           # Heap
+    - [0x15820, c, bit]            # Bit Reader (compiled with -g3)
+    - [0x15970, c, pic]            # PIC Decompression
+    - [0x172E0, c, atan2]          # atan2
+    - [0x17550, c, anime]          # Solid Object Drawing [anime.c]
+    - [0x1D570, c, gfx_util]       # Math/Graphics Utilities and Helpers
+    - [0x204B0, c, douchu]         # Overworld
+    - [0x21330, c, stage_select]   # Level Select
+    - [0x221D0, c, gbg]            # Background Sky Object
+    - [0x23DE0, c, controller_pak] # Memory Pak
+    - [0x249F0, c, save_flags]     # Save Flags
+    - [0x24D60, c, ripple]         # Rippling Background/Water
+    - [0x27FE0, c, vram]           # "Vram" Push-Out and Point Tests (stage and ride)
+    - [0x2B600, c, xvram]          # "XVram" Ray Casts (stage and ride)
+    - [0x2F710, c, vram_wall]      # Cylinder wall push-out against the stage
+    - [0x31330, c, ride_wall]      # Cylinder wall push-out against rides (objects)
+    - [0x32F20, c, ride]           # Ride (Push-Out, Ray and Point tests over all ride objects)
+    - [0x33450, c, ride_floor]     # Ride Floor (Platform or Water Surface under a point
+    - [0x33720, c, solid_atari]    # Attack hit detection [solid_atari.c]
+    - [0x35280, c, task]           # Task System
+    - [0x36750, c, obj_alloc]      # Object Allocation
+    - [0x37440, c, fade]           # Fade
+    - [0x37C00, c, warp]           # Warps
+    - [0x382B0, c, spline]         # Splines
+    - [0x385D0, c, vibration_pak]  # Rumble Pak
+    - [0x389B0, c, gfx_data]       # Empty
+    - [0x389C0, c, audiomgr]       # Audio Thread Manager
+    - [0x392E0, c, sd_main]        # Audio Interface
+    - [0x3AF70, c, sd_sub1]        # Audio Sequencing
+    - [0x3C010, c, sd_sub2]        # Audio Commands
+    - [0x3DBA0, c, scenario]       # Scenario Interpreter
 
     # libultra
     - { start: 0x40320, type: lib, name: libultra_rom, object: initialize, section: .text }
@@ -354,7 +355,7 @@ segments:
     - { start: 0x7B2D0, type: lib, name: libultra_rom, object: vimodentsclan1, section: .data }
 
     # main .rodata section
-    - [0x7B320, rodata, unmigrated/main]
+    - [0x7B320, .rodata, main]
     - [0x7B360, .rodata, rom_trans]
     - [0x7B3A0, .rodata, step]
     - [0x7B4A0, .rodata, math]
@@ -363,16 +364,17 @@ segments:
     - [0x7B5C0, .rodata, sched]
     - [0x7B5E0, .rodata, pal]
     - [0x7B6A0, .rodata, obj]
-    - [0x7B6F0, rodata, unmigrated/obj_sort]
+    - [0x7B6F0, .rodata, obj_sort]
     - [0x7B700, .rodata, stage]
     - [0x7B740, .rodata, save_file]
     - [0x7B780, .rodata, window]
-    - [0x7B820, rodata, dialog]
+    - [0x7B820, .rodata, window_effect]
     - [0x7B860, .rodata, okutani]
-    - [0x7B890, rodata, sd_location]
+    - [0x7B890, .rodata, sd_location]
     - [0x7B8A0, .rodata, yamamoto]
-    - [0x7BC40, rodata, dracam]
-    - [0x7BDA0, rodata, unmigrated/wave_uty]
+    - [0x7BC40, .rodata, dracam]
+    - [0x7BDA0, .rodata, wave_uty]
+    - [0x7C190, .rodata, amem]
     - [0x7C1E0, .rodata, pic]
     - [0x7C320, .rodata, atan2]
     - [0x7C350, .rodata, anime]
@@ -382,12 +384,13 @@ segments:
     - [0x7C880, .rodata, gbg]
     - [0x7C8A0, .rodata, controller_pak]
     - [0x7CC50, .rodata, ripple]
-    - [0x7CCC0, rodata, unmigrated/vram]
-    - [0x7CE30, rodata, xvram]
-    - [0x7D090, rodata, vram_wall]
-    - [0x7D190, rodata, ride_wall]
+    - [0x7CCC0, .rodata, vram]
+    - [0x7CE30, .rodata, xvram]
+    - [0x7D090, .rodata, vram_wall]
+    - [0x7D190, .rodata, ride_wall]
     - [0x7D290, .rodata, solid_atari]
-    - [0x7D320, rodata, unmigrated/task]
+    - [0x7D320, .rodata, task]
+    - [0x7D3F0, .rodata, obj_alloc]
     - [0x7D440, .rodata, fade]
     - [0x7D480, .rodata, vibration_pak]
     - [0x7D4C0, .rodata, scenario]
@@ -534,11 +537,12 @@ segments:
 
   # Player
   - name: file_11
+    dir: douchu
     type: code
     start: 0x587370
     vram: 0x801CB460
     bss_size: 0xA40
-    subalign: 8
+    subalign: 16
     overlay: yes
     exclusive_ram_id: ram_801CB460
     subsegments:
@@ -546,9 +550,11 @@ segments:
     - [0x587B50, c, 587B50]
     - [0x5883D0, c, 5883D0]
     - [0x58B870, c, 58B870]
+    - [0x58E2D0, c, 58E2D0]
     - [0x5907F0, c, 5907F0]
     - [0x5913D0, c, 5913D0]
     - [0x5944C0, c, 5944C0]
+    - [0x5959C0, c, 5959C0]
     - [0x598540, c, 598540]
     - [0x5995F0, c, 5995F0]
     - [0x5997A0, c, 5997A0]
@@ -562,33 +568,76 @@ segments:
     - [0x5AFA40, c, 5AFA40]
     - [0x5B03F0, c, 5B03F0]
     - [0x5B13D0, c, 5B13D0]
+    - [0x5B17D0, c, 5B17D0]
     - [0x5B20B0, c, 5B20B0]
-    - [0x5B71E0, c, 5B71E0]
+    - [0x5B30E0, c, 5B30E0]
+    - [0x5B6060, c, 5B6060]
+    - [0x5B7A40, c, 5B7A40]
     - [0x5B8500, data, unmigrated/file_11]
+    - [0x5B8510, data, unmigrated/587B50]
+    - [0x5B86D0, data, unmigrated/58B870]
+    - [0x5B86E0, data, unmigrated/58E2D0]
+    - [0x5B8B00, data, unmigrated/5907F0]
+    - [0x5B8B10, data, unmigrated/5913D0]
+    - [0x5B8B20, data, unmigrated/5944C0]
+    - [0x5B8BD0, data, unmigrated/5B8BD0]
+    - [0x5BA810, data, unmigrated/5BA810]
+    - [0x5BC260, data, unmigrated/5BC260]
+    - [0x5BDE10, data, unmigrated/5BDE10]
+    - [0x5BFAA0, data, unmigrated/5959C0]
+    - [0x5BFF30, data, unmigrated/598540]
+    - [0x5BFF70, data, unmigrated/5995F0]
+    - [0x5C0250, data, unmigrated/5997A0]
+    - [0x5C02C0, data, unmigrated/59D4E0]
+    - [0x5C0610, data, unmigrated/5A12F0]
+    - [0x5C06B0, data, unmigrated/5A4730]
+    - [0x5C09C0, data, unmigrated/5A6F30]
+    - [0x5C0C80, data, unmigrated/5AA6B0]
+    - [0x5C0F10, data, unmigrated/5AE300]
+    - [0x5C0FB0, data, unmigrated/5AEBE0]
+    - [0x5C1010, data, unmigrated/5AFA40]
+    - [0x5C1200, data, unmigrated/5B17D0]
+    - [0x5C12E0, data, unmigrated/5B30E0]
+    - [0x5C5910, data, unmigrated/5B6060]
+    - [0x5C5C70, data, unmigrated/5B7A40]
     - [0x5C65D0, rodata, unmigrated/file_11]
+    - [0x5C65F0, rodata, unmigrated/587B50]
     - [0x5C6700, .rodata, 5883D0]
-    - [0x5C6900, rodata, unmigrated/file_11_b]
-    - [0x5C6AB0, .rodata, 58B870]
+    - [0x5C6900, .rodata, 58B870]
+    - [0x5C6A10, .rodata, 58E2D0]
     - [0x5C6B60, .rodata, 5907F0]
     - [0x5C6B90, rodata, unmigrated/5913D0]
     - [0x5C6C00, .rodata, 5944C0]
-    - [0x5C6E70, .rodata, 5997A0]
+    - [0x5C6C20, .rodata, 5959C0]
+    - [0x5C6E70, .rodata, 598540]
+    - [0x5C6F70, .rodata, 5997A0]
     - [0x5C7100, .rodata, 59D4E0]
     - [0x5C72F0, .rodata, 5A12F0]
-    - [0x5C74F0, .rodata, 5A4730]
+    - [0x5C7500, .rodata, 5A4730]
     - [0x5C77B0, .rodata, 5A6F30]
-    - [0x5C79A0, rodata, unmigrated/5AA6B0]
-    - [0x5C7E60, .rodata, 5AE300]
+    - [0x5C79C0, .rodata, 5AA6B0]
+    - [0x5C7DF0, .rodata, 5AE300]
     - [0x5C7E90, .rodata, 5AEBE0]
     - [0x5C8060, .rodata, 5AFA40]
     - [0x5C8110, .rodata, 5B03F0]
     - [0x5C81D0, .rodata, 5B13D0]
-    - [0x5C81E0, .rodata, 5B20B0]
-    - [0x5C85B0, .rodata, 5B71E0]
+    - [0x5C81E0, .rodata, 5B17D0]
+    - [0x5C81F0, .rodata, 5B20B0]
+    - [0x5C8240, .rodata, 5B30E0]
+    - [0x5C85B0, .rodata, 5B6060]
+    - [0x5C8750, .rodata, 5B7A40]
+    # bss starts per TU but here kept as one piece.
+    # splat names bss symbols after the start of their subsegment,
+    # so splitting it renames them.
+    #   file_11 0x8020C860, 587B50 0x8020C930, 5883D0 0x8020CA20, 58B870 0x8020CAF0
+    #   58E2D0 0x8020CBF0, 5907F0 0x8020D1A0, 5913D0 0x8020D1B0, 5944C0 0x8020D200
+    #   5959C0 0x8020D210, 598540 0x8020D220, 5995F0 0x8020D250, 5997A0 0x8020D260
+    #   5A12F0 0x8020D270, 5B30E0 0x8020D280
     - { start: 0x5C8770, name: unmigrated/file_11, type: bss, vram: 0x8020C860 }
 
   # Enemy
   - name: file_12
+    dir: enemy
     type: code
     start: 0x5C8770
     vram: 0x8020D2A0
@@ -598,6 +647,7 @@ segments:
     exclusive_ram_id: ram_8020D2A0
     subsegments:
     - [0x5C8770, c, file_12]
+    - [0x5C8B40, c, 5C8B40]
     - [0x5C9310, asm, 5C9310]
     - [0x5CC7B0, asm, 5CC7B0]
     - [0x5D0060, asm, 5D0060]
@@ -606,6 +656,7 @@ segments:
     - [0x5D06B0, asm, 5D06B0]
     - [0x5D1B10, c, 5D1B10]
     - [0x5D62A0, asm, 5D62A0]
+    - [0x5DAA80, asm, 5DAA80]
     - [0x5DC440, asm, 5DC440]
     - [0x5DEE80, asm, 5DEE80]
     - [0x5DF1B0, asm, 5DF1B0]
@@ -613,17 +664,32 @@ segments:
     - [0x5E1330, asm, 5E1330]
     - [0x5E1D10, asm, 5E1D10]
     - [0x5E3C90, data, unmigrated/file_12]
-    - [0x5F4F60, rodata, unmigrated/file_12]
-    - [0x5F4FD0, rodata, 5CC7B0]
-    - [0x5F55F0, rodata, 5D04A0]
+    - [0x5E58C0, data, unmigrated/5C8B40]
+    - [0x5E76C0, data, 5C9310]
+    - [0x5ED450, data, 5CC7B0]
+    - [0x5F2E70, data, 5D06B0]
+    - [0x5F2EC0, data, 5D62A0]
+    - [0x5F3C70, data, 5DAA80]
+    - [0x5F3DD0, data, 5DC440]
+    - [0x5F3E40, data, 5E02F0]
+    - [0x5F3E50, data, 5E1D10]
+    - [0x5F4230, data, 5F4230]
+    - [0x5F4F60, rodata, unmigrated/5C8B40]
+    - [0x5F4FD0, rodata, 5C9310]
+    - [0x5F52B0, rodata, 5CC7B0]
+    - [0x5F5470, rodata, 5D0490]
+    - [0x5F55B0, rodata, 5D04A0]
     - [0x5F5600, rodata, 5D06B0]
-    - [0x5F5950, .rodata, 5D1B10]
+    - [0x5F5710, .rodata, 5D1B10]
     - [0x5F5A90, rodata, unmigrated/5D1B10]
-    - [0x5F5B70, rodata, 5D62A0]
-    - [0x5F5E80, rodata, 5DC440]
-    - [0x5F5F90, rodata, 5DF1B0]
-    - [0x5F6060, rodata, 5E02F0]
-    - [0x5F6510, rodata, 5E1D10]
+    - [0x5F5AA0, rodata, 5D62A0]
+    - [0x5F5C90, rodata, 5DAA80]
+    - [0x5F5D80, rodata, 5DC440]
+    - [0x5F5F90, rodata, 5DEE80]
+    - [0x5F6000, rodata, 5DF1B0]
+    - [0x5F6070, rodata, 5E02F0]
+    - [0x5F6510, rodata, 5E1330]
+    - [0x5F6540, rodata, 5E1D10]
     - { start: 0x5F6840, name: unmigrated/file_12, type: bss, vram: 0x8023B370 }
 
   # Impact 3D Boss
@@ -639,29 +705,47 @@ segments:
     subsegments:
     - [0x5F6840, asm, file_13]
     - [0x5F6A00, asm, impact_battle]
+    - [0x5FDFD0, asm, 5FDFD0]
     - [0x5FE1E0, asm, 5FE1E0]
     - [0x602A50, asm, 602A50]
     - [0x60E410, asm, 60E410]
     - [0x60F5D0, asm, 60F5D0]
+    - [0x60FBE0, asm, 60FBE0]
     - [0x61A6C0, asm, 61A6C0]
     - [0x622EB0, asm, 622EB0]
+    - [0x626290, asm, 626290]
     - [0x62B5E0, asm, 62B5E0]
     - [0x62FAD0, asm, 62FAD0]
     - [0x634E30, data, file_13]
-    - [0x638190, rodata, file_13]
-    - [0x638250, rodata, impact_battle]
+    - [0x634E40, data, impact_battle]
+    - [0x6350C0, data, 5FE1E0]
+    - [0x6350D0, data, 602A50]
+    - [0x636390, data, 636390]
+    - [0x636480, data, 60E410]
+    - [0x636530, data, 60F5D0]
+    - [0x636550, data, 60FBE0]
+    - [0x636640, data, 61A6C0]
+    - [0x6366C0, data, 622EB0]
+    - [0x6367D0, data, 626290]
+    - [0x636850, data, 62B5E0]
+    - [0x636C20, data, 62FAD0]
+    - [0x636CD0, data, 636CD0]
+    - [0x638190, rodata, impact_battle]
     - [0x638720, rodata, 5FE1E0]
     - [0x638A40, rodata, 602A50]
     - [0x639060, rodata, 60E410]
     - [0x6390D0, rodata, 60F5D0]
+    - [0x639100, rodata, 60FBE0]
     - [0x6397C0, rodata, 61A6C0]
     - [0x639BC0, rodata, 622EB0]
+    - [0x639CC0, rodata, 626290]
     - [0x639FD0, rodata, 62B5E0]
     - [0x63A1A0, rodata, 62FAD0]
     - { start: 0x63A2B0, name: file_13, type: bss, vram: 0x8020EED0 }
 
   # Impact Bomber
   - name: file_14
+    dir: bomber
     type: code
     start: 0x63A2B0
     vram: 0x801CB460
@@ -670,7 +754,6 @@ segments:
     exclusive_ram_id: ram_801CB460
     subsegments:
     - [0x63A2B0, asm, file_14]
-    - [0x63A3F0, asm, 63A3F0]
     - [0x63A890, asm, 63A890]
     - [0x63CF20, asm, 63CF20]
     - [0x640E90, asm, 640E90]
@@ -712,8 +795,36 @@ segments:
     - [0x652110, asm, 652110]
     - [0x657260, asm, 657260]
     - [0x6576E0, data, file_14]
+    - [0x6576F0, data, 63A890]
+    - [0x657760, data, 63CF20]
+    - [0x6578D0, data, 640FB0]
+    - [0x6578F0, data, 641A90]
+    - [0x657910, data, 6426C0]
+    - [0x657920, data, 642C70]
+    - [0x657950, data, 643820]
+    - [0x657960, data, 643C20]
+    - [0x657970, data, 644380]
+    - [0x657980, data, 644880]
+    - [0x6579D0, data, 645C40]
+    - [0x6579E0, data, 6460C0]
+    - [0x657A10, data, 657A10]
+    - [0x658CF0, data, 647360]
+    - [0x658D00, data, 647790]
+    - [0x65C6A0, data, 64AA50]
+    - [0x65C6B0, data, 64CBC0]
+    - [0x65C6C0, data, 64D420]
+    - [0x65C6D0, data, 65C6D0]
+    - [0x65CCF0, data, 64E450]
+    - [0x65CD40, data, 64ECE0]
+    - [0x65CD90, data, 64F5B0]
+    - [0x65CDB0, data, 650030]
+    - [0x65CDD0, data, 650B20]
+    - [0x65CDE0, data, 65CDE0]
+    - [0x65D040, data, 651560]
+    - [0x65D050, data, 651D20]
+    - [0x65D070, data, 652110]
+    - [0x65D130, data, 657260]
     - [0x65DBC0, rodata, file_14]
-    - [0x65DBF0, rodata, 63A3F0]
     - [0x65DC00, rodata, 63A890]
     - [0x65DC80, rodata, 63CF20]
     - [0x65DE40, rodata, 640FB0]
@@ -749,6 +860,7 @@ segments:
 
   # Adventure Diary (File Select and Options)
   - name: file_15
+    dir: diary
     type: code
     start: 0x65E310
     vram: 0x801CB460
@@ -772,12 +884,14 @@ segments:
     - [0x6663C0, data, 664880]
     - [0x666DA0, rodata, file_15]
     - [0x6671B0, rodata, 65FB30]
-    - [0x667690, rodata, 664430]
+    - [0x667690, rodata, 662AE0]
+    - [0x6677C0, rodata, 664430]
     - [0x6679A0, rodata, 664880]
     - { start: 0x667B90, name: file_15, type: bss, vram: 0x801D4CE0 }
 
   # Game Over Sequence
   - name: file_16
+    dir: gameover
     type: code
     start: 0x667B90
     vram: 0x801CB460
@@ -793,6 +907,7 @@ segments:
 
   # Pause and Atlas (Map of Japan or Map of Castle)
   - name: file_17
+    dir: pause
     type: code
     start: 0x66C250
     vram: 0x8020D2A0
@@ -802,26 +917,29 @@ segments:
     exclusive_ram_id: ram_8020D2A0
     subsegments:
     - [0x66C250, asm, file_17]
-    - [0x66CBE0, asm, 66CBE0]
+    - [0x66C580, asm, 66C580]
     - [0x66E5A0, asm, 66E5A0]
     - [0x66EA40, asm, 66EA40]
+    - [0x670820, asm, 670820]
     - [0x673490, asm, 673490]
     - [0x6755A0, asm, 6755A0]
     - [0x6759D0, data, file_17]
+    - [0x6759F0, data, 66C580]
     - [0x675BA0, data, 66E5A0]
-    - [0x675E70, data, 66EA40]
+    - [0x675E70, data, 670820]
     - [0x675EA0, data, 673490]
     - [0x675FD0, data, 6755A0]
     - [0x676180, rodata, file_17]
-    - [0x6761F0, rodata, 66CBE0]
+    - [0x6761F0, rodata, 66C580]
     - [0x676380, rodata, 66E5A0]
-    - [0x6766C0, rodata, 66EA40]
-    - [0x676A10, rodata, 673490]
-    - [0x676B80, rodata, 6755A0]
+    - [0x676660, rodata, 66EA40]
+    - [0x676770, rodata, 670820]
+    - [0x676900, rodata, 673490]
     - { start: 0x676C80, name: file_17, type: bss, vram: 0x80217CD0 }
 
   # Cutscenes (Opening, Call Goemon Impact, Ending)
   - name: file_18
+    dir: opening
     type: code
     start: 0x676C80
     vram: 0x8020D2A0
@@ -835,21 +953,30 @@ segments:
     - [0x67D810, asm, 67D810]
     - [0x680F40, asm, 680F40]
     - [0x681C80, asm, 681C80]
+    - [0x683EF0, asm, 683EF0]
     - [0x689280, asm, 689280]
     - [0x68D6F0, asm, 68D6F0]
     - [0x690820, asm, 690820]
     - [0x693770, data, file_18]
+    - [0x693860, data, 67D810]
+    - [0x693B50, data, 681C80]
+    - [0x693BB0, data, 683EF0]
+    - [0x693DD0, data, 689280]
+    - [0x693E50, data, 68D6F0]
     - [0x693F60, rodata, file_18]
-    - [0x694340, rodata, 67D810]
-    - [0x6943A0, rodata, 680F40]
-    - [0x6944A0, rodata, 681C80]
-    - [0x694850, rodata, 689280]
+    - [0x694200, rodata, 67B940]
+    - [0x6942D0, rodata, 67D810]
+    - [0x6943F0, rodata, 680F40]
+    - [0x694440, rodata, 681C80]
+    - [0x694540, rodata, 683EF0]
+    - [0x694840, rodata, 689280]
     - [0x6949A0, rodata, 68D6F0]
     - [0x694B10, rodata, 690820]
     - { start: 0x694CA0, name: file_18, type: bss, vram: 0x8022B2C0 }
 
   # Title Screen and Theme of Ganbare Goemon Sequence
   - name: file_19
+    dir: title
     type: code
     start: 0x694CA0
     vram: 0x8020D2A0
@@ -865,6 +992,7 @@ segments:
 
   # Goemon Team Logo
   - name: file_20
+    dir: glogo
     type: code
     start: 0x69CBD0
     vram: 0x801CB460
@@ -879,6 +1007,7 @@ segments:
 
   # Unused Title Screen
   - name: file_21
+    dir: showtitle
     type: code
     start: 0x69D4E0
     vram: 0x8020D2A0
@@ -889,6 +1018,8 @@ segments:
     - [0x69D4E0, asm, file_21]
     - [0x69DA20, asm, 69DA20]
     - [0x69DA50, data, file_21]
+    - [0x69DB70, data, 69DA20]
+    - [0x69E050, rodata, file_21]
 
   # Konami Logo
   - name: file_22
@@ -908,6 +1039,7 @@ segments:
 
   # Controller Pak Manager
   - name: file_23
+    dir: pakfiler
     type: code
     start: 0x6A9920
     vram: 0x801CB460

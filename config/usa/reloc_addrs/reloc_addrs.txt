@@ -217,7 +217,7 @@ rom:0x6AE5FC reloc:MIPS_NONE symbol:D_A00C980
 rom:0x71FEB8 reloc:MIPS_NONE symbol:func_08000000_71D7D0
 rom:0x71FEBC reloc:MIPS_NONE symbol:func_08000000_71D7D0
 
-// Function: func_8001198C_1258C
+// Function: connect_magicfix
 // Fake: D_80026B8 -> func_080026B8_71FE88
 rom:0x0125B0 reloc:MIPS_HI16 symbol:func_080026B8_71FE88
 rom:0x0125B4 reloc:MIPS_LO16 symbol:func_080026B8_71FE88

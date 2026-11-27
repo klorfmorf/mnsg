@@ -20,19 +20,23 @@ void func_80005A64(void)
         slot = &g_sys->file_requests_table[i];
         if (*slot != NULL) {
             req = *slot;
+
             while (1) {
-                if (req->wave_no & 0x20000000) {
-                    while (g_sys->current_graphics_pool == g_sys->file_loader_working_graphics_pool) {
-                    }
+                if (req->wave_no & WAVE_REQ_WAIT_SWAP) {
+                    while (g_sys->current_graphics_pool == g_sys->file_loader_working_graphics_pool) {}
                 }
-                func_80001C00(req->wave_no & 0x0FFFFFFF, req->data);
-                if (req->wave_no & 0x40000000) {
+                
+                func_80001C00(req->wave_no & WAVE_REQ_ID_MASK, req->data);
+
+                if (req->wave_no & WAVE_REQ_LAST) {
                     break;
                 }
+
                 req++;
             }
             *slot = NULL;
         }
     }
+    
     g_sys->file_requests_count = 0;
 }

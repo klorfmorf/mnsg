@@ -36,53 +36,39 @@ int D_8006D158 = 0;
 
 int D_8006D15C = 0;
 
-int D_8006D160 = 0x00000140;
+int D_8006D160 = SCREEN_WIDTH;
 
-int D_8006D164 = 0x000000F0;
-
-int D_8006D168 = 0x000000F0;
-
-// <<<<< rodata >>>>>
-const char D_8007BC80[] =
-    "gbgDraw: undecoded wave %d\n\0"
-    "\0\0\0";
+int D_8006D164 = SCREEN_HEIGHT;
 
 // clang-format on
 
-#ifdef NON_MATCHING
 void func_800215D0(void)
 {
-    unsigned short pressed = g_sys->controller[1].button_pressed;
-    int            y;
+    static int D_8006D168 = SCREEN_HEIGHT;
 
-    if (pressed & U_JPAD) {
-        D_8006D168 = D_8006D168 - 1;
+    if (g_sys->controller[1].button_pressed & U_JPAD) {
+        D_8006D168--;
     }
-    y = D_8006D168;
-    if (pressed & D_JPAD) {
-        y++;
+    if (g_sys->controller[1].button_pressed & D_JPAD) {
+        D_8006D168++;
     }
-    D_8006D164 = y;
-    gDPSetColorImage(D_8015C5CC++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 320, OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
-    gSPDisplayList(D_8015C5CC++, D_8006D0F0);
-    D_8006D168 = y;
+    D_8006D164 = D_8006D168;
+    gDPSetColorImage(g_sys_glistp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, OS_K0_TO_PHYSICAL(g_frame_buffers[g_sys->current_frame_buffer]));
+    gSPDisplayList(g_sys_glistp++, D_8006D0F0);
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/gbg/func_800215D0.s")
-#endif
 
 int func_800216B0(int x0, int y0, int x1, int y1)
 {
     if (x0 < 0) {
         return 0;
     }
-    if (x1 > 320) {
+    if (x1 > SCREEN_WIDTH) {
         return 0;
     }
     if (y0 < 0) {
         return 0;
     }
-    if (y1 > 240) {
+    if (y1 > SCREEN_HEIGHT) {
         return 0;
     }
     if (x1 < x0) {
@@ -100,30 +86,31 @@ int func_800216B0(int x0, int y0, int x1, int y1)
 
 void func_80021740(ObjGbg *gbg)
 {
-    if (!(gbg->flags & 0x2000)) {
-        gSPSegment(D_8015C5CC++, 0x08, func_800141C4(gbg->wave_no));
-        gbg->texture_data = (unsigned char *) 0x08000000;
+    if (!(gbg->flags & GBG_RAW_DATA)) {
+        gSPSegment(g_sys_glistp++, WAVE_SEGMENT, func_800141C4(gbg->wave_no));
+        gbg->texture_data = (unsigned char *) WAVE_SEGMENT_ADDR;
     }
 
     if (gbg->texture_data == (unsigned char *) -1) {
+        PRINTF(("gbgDraw: undecoded wave %d\n", gbg->wave_no));
         // Crash on purpose.
         *(volatile int *) -1 = 0;
     }
 
     gbg->bits_per_pixel = 8;
-    if (gbg->flags & 0x4) {
+    if (gbg->flags & GBG_4B) {
         gbg->bits_per_pixel = 4;
-    } else if (!(gbg->flags & 0x8)) {
+    } else if (!(gbg->flags & GBG_8B)) {
         gbg->bits_per_pixel = 16;
     }
 
-    if (!(gbg->flags & 0x2000)) {
+    if (!(gbg->flags & GBG_RAW_DATA)) {
         gbg->palette_data = gbg->texture_data + gbg->texture_width * gbg->texture_height * gbg->bits_per_pixel / 8;
     }
 
-    if (gbg->flags & 0x8000) {
+    if (gbg->flags & GBG_PANORAMA) {
         func_80021894(gbg->texture_data, gbg->palette_data, gbg->u, gbg->v);
-    } else if (gbg->flags & 0x4000) {
+    } else if (gbg->flags & GBG_CLIP) {
         func_80022214(gbg);
     } else {
         func_80022A74(gbg);
@@ -155,7 +142,7 @@ void func_80021894(unsigned char *texture_data, unsigned char *palette_data, flo
         v = 0.0f;
     }
 
-    gDPLoadTLUT_pal256(D_8015C5CC++, palette_data);
+    gDPLoadTLUT_pal256(g_sys_glistp++, palette_data);
 
     tex_v = v / 2;
     for (y = D_8006D15C; y < D_8006D164; y += 20, tex_v += 10.0f) {
@@ -178,46 +165,30 @@ void func_80021894(unsigned char *texture_data, unsigned char *palette_data, flo
     }
 }
 
-#ifdef NON_MATCHING
 void func_80021B98(unsigned char *texture_data, float u, float v, int width, int height, int x, int y)
 {
-    int pad1;
-    int line;
+    int uls;
+    int ult;
 
-    if (640.0f < width + u - 2.0f - 1.0f) {
-        // From (int) u to the right edge.
-        line = (648 - (int) u) >> 3;
-        gDPSetTextureImage(D_8015C5CC++, G_IM_FMT_CI, G_IM_SIZ_8b, 640, texture_data);
-        gDPSetTile(D_8015C5CC++, G_IM_FMT_CI, G_IM_SIZ_8b, line, 0, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
-        gDPLoadSync(D_8015C5CC++);
-        gDPLoadTile(D_8015C5CC++, G_TX_LOADTILE, (int) u << 2, (int) v << 2, 640 << 2, ((int) v + height - 1) << 2);
-        gDPPipeSync(D_8015C5CC++);
-        gDPSetTile(D_8015C5CC++, G_IM_FMT_CI, G_IM_SIZ_8b, line, 0, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD);
-        gDPSetTileSize(D_8015C5CC++, G_TX_RENDERTILE, (int) u << 2, (int) v << 2, 640 << 2, ((int) v + height - 1) << 2);
-        gSPTextureRectangle(D_8015C5CC++, x << 2, y << 2, (x - (int) u * 2 + 1279) << 2, (y + height * 2 - 1) << 2, G_TX_RENDERTILE,
-            (int) (u * 32.0f), (int) (v * 32.0f), 0x0200, 0x0200);
-
-        // The rest, from the left edge.
-        line = ((int) u + width - 633) >> 3;
-        gDPSetTextureImage(D_8015C5CC++, G_IM_FMT_CI, G_IM_SIZ_8b, 640, texture_data);
-        gDPSetTile(D_8015C5CC++, G_IM_FMT_CI, G_IM_SIZ_8b, line, 0, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-        gDPLoadSync(D_8015C5CC++);
-        gDPLoadTile(D_8015C5CC++, G_TX_LOADTILE, 0, (int) v << 2, ((int) u + width - 641) << 2, ((int) v + height - 1) << 2);
-        gDPPipeSync(D_8015C5CC++);
-        gDPSetTile(D_8015C5CC++, G_IM_FMT_CI, G_IM_SIZ_8b, line, 0, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-        gDPSetTileSize(D_8015C5CC++, G_TX_RENDERTILE, 0, (int) v << 2, ((int) u + width - 641) << 2, ((int) v + height - 1) << 2);
-        gSPTextureRectangle(D_8015C5CC++, (x + 1278 - (int) u * 2) << 2, y << 2, (width * 2 + x - 1) << 2, (y + height * 2 - 1) << 2, G_TX_RENDERTILE,
-            (int) (u * 32.0f) - ((int) u << 5), (int) (v * 32.0f), 0x0200, 0x0200);
+    uls = u;
+    ult = v;
+    if (width + u - 2 - 1 > 640.0f) {
+        gDPLoadTextureTile(g_sys_glistp++, texture_data, G_IM_FMT_CI, G_IM_SIZ_8b, 640, 0, uls, ult, 640, ult + height - 1, 0,
+            G_TX_CLAMP, G_TX_CLAMP, 0, 0, 0, 0);
+        gSPTextureRectangle(g_sys_glistp++, x << 2, y << 2, (x + (640 - uls) * 2 - 1) << 2,
+            (y + height * 2 - 1) << 2, G_TX_RENDERTILE, (int) (u * 32), (int) (v * 32), 0x200, 0x200);
+        gDPLoadTextureTile(g_sys_glistp++, texture_data, G_IM_FMT_CI, G_IM_SIZ_8b, 640, 0, 0, ult, uls + width - 641,
+            ult + height - 1, 0, G_TX_WRAP, G_TX_CLAMP, 0, 0, 0, 0);
+        gSPTextureRectangle(g_sys_glistp++, (x + (640 - uls) * 2 - 2) << 2, y << 2, (x + width * 2 - 1) << 2,
+            (y + height * 2 - 1) << 2, G_TX_RENDERTILE, (int) (u * 32) - (uls << 5), (int) (v * 32),
+            0x200, 0x200);
     } else {
-        gDPLoadTextureTile(D_8015C5CC++, texture_data, G_IM_FMT_CI, G_IM_SIZ_8b, 640, 0, (int) u, (int) v, (int) u + width - 1, (int) v + height - 1, 0,
-            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(D_8015C5CC++, x << 2, y << 2, (width * 2 + x - 1) << 2, (y + height * 2 - 1) << 2, G_TX_RENDERTILE,
-            (int) (u * 32.0f), (int) (v * 32.0f), 0x0200, 0x0200);
+        gDPLoadTextureTile(g_sys_glistp++, texture_data, G_IM_FMT_CI, G_IM_SIZ_8b, 640, 0, uls, ult, uls + width - 1,
+            ult + height - 1, 0, G_TX_CLAMP, G_TX_CLAMP, 0, 0, 0, 0);
+        gSPTextureRectangle(g_sys_glistp++, x << 2, y << 2, (x + width * 2 - 1) << 2, (y + height * 2 - 1) << 2,
+            G_TX_RENDERTILE, (int) (u * 32), (int) (v * 32), 0x200, 0x200);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/gbg/func_80021B98.s")
-#endif
 
 void func_80022214(ObjGbg *gbg)
 {
@@ -288,29 +259,29 @@ void func_80022500(int x, int y, int u, int v, int width, int height, ObjGbg *gb
 {
     int fmt;
 
-    if (gbg->flags & 0x1) {
+    if (gbg->flags & GBG_CI) {
         fmt = G_IM_FMT_CI;
-    } else if (gbg->flags & 0x2) {
+    } else if (gbg->flags & GBG_IA) {
         fmt = G_IM_FMT_IA;
     } else {
         fmt = G_IM_FMT_RGBA;
     }
 
-    if (gbg->flags & 0x4) {
-        gDPLoadTextureTile_4b(D_8015C5CC++, gbg->texture_data, G_IM_FMT_CI, gbg->texture_width, gbg->texture_height, u, v,
+    if (gbg->flags & GBG_4B) {
+        gDPLoadTextureTile_4b(g_sys_glistp++, gbg->texture_data, G_IM_FMT_CI, gbg->texture_width, gbg->texture_height, u, v,
             u + width - 1, v + height - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    } else if (gbg->flags & 0x8) {
-        gDPLoadTextureTile(D_8015C5CC++, gbg->texture_data, fmt, G_IM_SIZ_8b, gbg->texture_width, gbg->texture_height, u, v,
+    } else if (gbg->flags & GBG_8B) {
+        gDPLoadTextureTile(g_sys_glistp++, gbg->texture_data, fmt, G_IM_SIZ_8b, gbg->texture_width, gbg->texture_height, u, v,
             u + width - 1, v + height - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
-        gDPLoadTextureTile(D_8015C5CC++, gbg->texture_data, G_IM_FMT_RGBA, G_IM_SIZ_16b, gbg->texture_width, gbg->texture_height, u, v,
+        gDPLoadTextureTile(g_sys_glistp++, gbg->texture_data, G_IM_FMT_RGBA, G_IM_SIZ_16b, gbg->texture_width, gbg->texture_height, u, v,
             u + width - 1, v + height - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     }
 
-    gSPTextureRectangle(D_8015C5CC++, x << 2, y << 2, (x + width) << 2, (y + height) << 2, G_TX_RENDERTILE,
+    gSPTextureRectangle(g_sys_glistp++, x << 2, y << 2, (x + width) << 2, (y + height) << 2, G_TX_RENDERTILE,
         u << 5, v << 5, 0x0400, 0x0400);
 }
 
@@ -371,33 +342,33 @@ void func_80022DF4(int x, int y, int u, int v, int width, int height, ObjGbg *gb
 
 void func_80022EC0(ObjGbg *gbg)
 {
-    gSPDisplayList(D_8015C5CC++, D_8006D0F0);
+    gSPDisplayList(g_sys_glistp++, D_8006D0F0);
 
-    if (gbg->flags & 0x10) {
-        gDPSetPrimColor(D_8015C5CC++, 0, 0, 255, 255, 255, gbg->alpha);
-        gDPSetRenderMode(D_8015C5CC++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-        if (gbg->flags & 0x20) {
-            gDPSetCombineLERP(D_8015C5CC++, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0);
-            gDPSetAlphaCompare(D_8015C5CC++, G_AC_THRESHOLD);
-            gDPSetBlendColor(D_8015C5CC++, 0, 0, 0, 1);
+    if (gbg->flags & GBG_XLU) {
+        gDPSetPrimColor(g_sys_glistp++, 0, 0, 255, 255, 255, gbg->alpha);
+        gDPSetRenderMode(g_sys_glistp++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+        if (gbg->flags & GBG_CUTOUT) {
+            gDPSetCombineLERP(g_sys_glistp++, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0);
+            gDPSetAlphaCompare(g_sys_glistp++, G_AC_THRESHOLD);
+            gDPSetBlendColor(g_sys_glistp++, 0, 0, 0, 1);
         } else {
-            gDPSetCombineLERP(D_8015C5CC++, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE);
+            gDPSetCombineLERP(g_sys_glistp++, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE);
         }
-    } else if (gbg->flags & 0x20) {
-        gDPSetRenderMode(D_8015C5CC++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
-        gDPSetAlphaCompare(D_8015C5CC++, G_AC_THRESHOLD);
-        gDPSetBlendColor(D_8015C5CC++, 0, 0, 0, 1);
+    } else if (gbg->flags & GBG_CUTOUT) {
+        gDPSetRenderMode(g_sys_glistp++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
+        gDPSetAlphaCompare(g_sys_glistp++, G_AC_THRESHOLD);
+        gDPSetBlendColor(g_sys_glistp++, 0, 0, 0, 1);
     }
 
-    gDPSetTextureFilter(D_8015C5CC++, G_TF_POINT);
+    gDPSetTextureFilter(g_sys_glistp++, G_TF_POINT);
 
-    if (gbg->flags & 0x1) {
-        if (gbg->flags & 0x8) {
-            gDPLoadTLUT_pal256(D_8015C5CC++, gbg->palette_data);
+    if (gbg->flags & GBG_CI) {
+        if (gbg->flags & GBG_8B) {
+            gDPLoadTLUT_pal256(g_sys_glistp++, gbg->palette_data);
         } else {
-            gDPLoadTLUT_pal16(D_8015C5CC++, 0, gbg->palette_data);
+            gDPLoadTLUT_pal16(g_sys_glistp++, 0, gbg->palette_data);
         }
     } else {
-        gDPSetTextureLUT(D_8015C5CC++, G_TT_NONE);
+        gDPSetTextureLUT(g_sys_glistp++, G_TT_NONE);
     }
 }

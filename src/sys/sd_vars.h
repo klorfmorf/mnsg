@@ -1,6 +1,11 @@
 #ifndef SD_VARS_H
 #define SD_VARS_H
 
+/*
+ * This does not get included in sd_main.c because the order of declarations changes.
+ * On IDO -g3, this causes the layout of variables in .bss to change.
+*/
+
 #include "common.h"
 #include "structs.h"
 
@@ -25,11 +30,11 @@ extern unsigned char  D_801C09DA;
 extern signed char    D_801C09DB;
 extern unsigned char  D_801C09DC[4];
 extern unsigned char  D_801C09E0[8];
-extern unsigned short D_801C09E8;
+extern unsigned short D_801C09E8[4];
 extern ALVoice        D_801C0A68[16];
 extern SoundWork      D_801C0C28[16];
-extern int            D_801C7730[4];
 extern SoundWork     *sptr;
 extern unsigned char *mptr;
+extern void          *D_801C7730[4];
 
 #endif // SD_VARS_H

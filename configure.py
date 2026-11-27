@@ -57,11 +57,18 @@ CFLAGS = [
     "649,838,712",
     *DEFINES,
 ]
+VERSION_DEFINES = {
+    "japan_0": "JAPAN_0",
+    "japan_1": "JAPAN_1",
+    "usa": "USA_0",
+    "europe_0": "EUROPE_0",
+}
 OPTFLAGS = ["-O2"]
 MIPSISA = ["-mips2"]
 OPTFLAGS_OVERRIDES = {
     "src/sys/audiomgr.c": ["-O2", "-g3"],
     "src/sys/bit.c": ["-O2", "-g3"],
+    "src/sys/spline.c": ["-O2", "-g3"],
     "src/sys/is_debug.c": ["-O2", "-g3"],
     "src/sys/sd_main.c": ["-O2", "-g3"],
     "src/sys/sd_sub1.c": ["-O2", "-g3"],
@@ -373,12 +380,16 @@ def emit_build(
     ld_cmd = shlex.join([f"{cross}ld", *ld_flags])
     objcopy_cmd = shlex.quote(f"{cross}objcopy")
 
+    if paths.version not in VERSION_DEFINES:
+        sys.exit(f"configure: Unknown version {paths.version!r}.")
+    version_define = f"-D{VERSION_DEFINES[paths.version]}"
+
     check_arg = ""
     if not no_check:
         host_cc_parts = shlex.split(host_cc)
         if not host_cc_parts:
             sys.exit("configure: --host-cc must not be empty.")
-        check_cmd = shlex.join([*host_cc_parts, *CHECK_FLAGS])
+        check_cmd = shlex.join([*host_cc_parts, *CHECK_FLAGS, version_define])
         check_arg = f" --check {shlex.quote(check_cmd)}"
 
     ninja.rule(
@@ -389,7 +400,7 @@ def emit_build(
         f" --as {shlex.quote(as_cmd)}"
         f"{check_arg}"
         f" --encoding $encoding"
-        f" -- {shlex.join(CFLAGS)} $optflags $isaflags",
+        f" -- {shlex.join([*CFLAGS, version_define])} $optflags $isaflags",
         description="CC $in",
         depfile="$out.d",
         deps="gcc",

@@ -1,11 +1,11 @@
-#include "common.h"
 #include "sys/window.h"
+#include "common.h"
 #include "sys/sys.h"
-#include "sys/wave_uty.h"
+#include "sys/amem.h"
+#include "sys/window_effect.h"
 
 void func_8000B8F0(int arg0);
 void func_8000D33C(int arg0, int arg1);
-void func_8000D2C0(int arg0);
 
 // clang-format off
 
@@ -2077,9 +2077,156 @@ void func_8000B8B0(void)
     }
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B8F0.s")
+#ifdef NON_MATCHING
+void func_8000C904(Window *w);
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C260.s")
+void func_8000B8F0(int id)
+{
+    Window            *w = D_80167C48[id];
+    WindowEntry       *ch;
+    int                i;
+    int                bit;
+    unsigned long long mask;
+    int                ticks;
+    float              half_w;
+    float              half_h;
+    int                hw;
+    int                hh;
+    int                x0;
+    int                y0;
+    float              rx;
+    float              ry;
+
+    if (w != NULL) {
+        w->frames++;
+        gSPDisplayList(g_sys_glistp++, D_80063480);
+        guOrtho(&w->projection[g_sys->current_graphics_pool], 0.0f, 320.0f, 240.0f, 0.0f, 0.0f, -1000.0f, 1.0f);
+        gSPMatrix(g_sys_glistp++, OS_K0_TO_PHYSICAL(&w->projection[g_sys->current_graphics_pool]),
+            G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
+        switch (w->state) {
+            case 1:
+                func_8000D400(w);
+                break;
+            case 2:
+                func_8000D4E0(w);
+                break;
+            case 3:
+                func_8000D66C(w);
+                break;
+            case 4:
+                func_8000DA94(w);
+                break;
+            case 5:
+                func_8000D6D0(w);
+                break;
+            case 6:
+                func_8000D79C(w);
+                break;
+            default:
+                D_80167C48[id] = NULL;
+                break;
+        }
+        if (D_80167C48[id] == NULL) {
+            func_8000C878(id);
+            return;
+        }
+        if (w->texture != 0) {
+            gSPDisplayList(g_sys_glistp++, D_80063528);
+            gDPSetPrimColor(g_sys_glistp++, 0, 0, D_80167C54[w->style].r, D_80167C54[w->style].g,
+                D_80167C54[w->style].b, D_80167C54[w->style].a);
+            func_8000C904(w);
+        }
+        gSPDisplayList(g_sys_glistp++, D_80063588);
+        if (w->flags & 1) {
+            gDPSetScissor(g_sys_glistp++, G_SC_NON_INTERLACE, w->clip_x0 + w->x, w->clip_y0 + w->y,
+                w->clip_x1 + w->x, w->clip_y1 + w->y);
+        }
+        for (i = 0; i < 120; i++) {
+            if (w->entries[i].kind != 0) {
+                ch   = &w->entries[i];
+                mask = 1;
+                for (bit = 0; bit < 64; bit++) {
+                    if (ch->flags & mask) {
+                        switch (bit) {
+                            case 0:
+                                func_8000DBC0(ch, 1.0f);
+                                break;
+                            case 1:
+                                ticks = w->frames;
+                                if (!(ticks & 1)) {
+                                    if (ticks & 2) {
+                                        ch->palette &= ~0x80;
+                                    } else {
+                                        ch->palette |= 0x80;
+                                    }
+                                }
+                                break;
+                            case 2:
+                                ticks = w->frames;
+                                if (ticks & 1) {
+                                    if (ticks & 2) {
+                                        ch->palette &= ~1;
+                                    } else {
+                                        ch->palette |= 1;
+                                    }
+                                }
+                                break;
+                            case 4:
+                                ch->scale_x = w->char_scale;
+                                ch->scale_y = w->char_scale;
+                                break;
+                            case 3:
+                            case 5:
+                            case 6:
+                                break;
+                        }
+                    }
+                    mask <<= 1;
+                }
+                if (!(ch->palette & 0x80)) {
+                    gDPLoadTextureBlock_4b(g_sys_glistp++, ch->glyph, G_IM_FMT_CI, 8, 12, ch->palette,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                        G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    half_w = ch->scale_x * 8.0f / 2.0f;
+                    half_h = ch->scale_y * 12.0f / 2.0f;
+                    hw     = (int) half_w;
+                    hh     = (int) half_h;
+                    x0     = w->x + ch->x;
+                    y0     = w->y + ch->y;
+                    rx     = ((float) x0 + ch->scale_x * 8.0f) - (float) hw;
+                    ry     = ((float) y0 + ch->scale_y * 12.0f) - (float) hh;
+                    gSPTextureRectangle(g_sys_glistp++, (x0 - hw) * 4, (y0 - hh) * 4, (unsigned int) (rx * 4.0f),
+                        (unsigned int) (ry * 4.0f), G_TX_RENDERTILE, 0, 0, (unsigned int) (1024.0f / ch->scale_x),
+                        (unsigned int) (1024.0f / ch->scale_y));
+                    gDPPipeSync(g_sys_glistp++);
+                }
+            }
+        }
+        osWritebackDCache(w, sizeof(Window));
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000B8F0.s")
+#endif
+
+void func_8000C6A8(int, unsigned char *, unsigned int *, long long, int, int, int, int, int, int, int, int, int);
+
+void func_8000C6A8(int, unsigned char *, unsigned int *, long long, int, int, int, int, int, int, int, int, int);
+
+void func_8000C260(int id, int x, int y, int from_x, int from_y, int style, int effect)
+{
+    int width;
+    int strip_height;
+    int strip_count;
+
+    if (D_80167C48[id] == NULL) {
+        width        = D_80167C54[style].width;
+        strip_height = D_80167C54[style].strip_height;
+        strip_count  = D_80167C54[style].strip_count;
+        func_8000C6A8(id, D_80167C54[style].texture, D_80167C54[style].palette, 0x1, x, y, from_x, from_y,
+            width, strip_height, strip_count, style, effect);
+    }
+}
 
 int func_8000C314(int arg0)
 {
@@ -2113,7 +2260,7 @@ void func_8000C3A0(int arg0)
 
     if (w != NULL && w->state == 4) {
         w->state = 5;
-        w->unk_010 |= 1;
+        w->flags |= 1;
     }
 }
 
@@ -2122,10 +2269,10 @@ void func_8000C3EC(int arg0)
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_06e = 0;
-        w->unk_074 += w->unk_076;
-        w->unk_06c = 0;
-        w->unk_072++;
+        w->cursor_x = 0;
+        w->cursor_y += w->line_height;
+        w->column = 0;
+        w->line++;
     }
 }
 
@@ -2134,7 +2281,7 @@ void func_8000C430(int arg0, int arg1)
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_070 = arg1;
+        w->char_advance = arg1;
     }
 }
 
@@ -2143,7 +2290,7 @@ void func_8000C454(int arg0)
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_018 |= 2;
+        w->char_flags |= 2;
     }
 }
 
@@ -2152,20 +2299,34 @@ void func_8000C488(int arg0)
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_018 &= ~2ULL;
+        w->char_flags &= ~2ULL;
     }
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C4C8.s")
+void func_8000C4C8(int id)
+{
+    Window *w = D_80167C48[id];
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C4FC.s")
+    if (w != NULL) {
+        w->char_flags |= 0x4;
+    }
+}
+
+void func_8000C4FC(int id)
+{
+    Window *w = D_80167C48[id];
+
+    if (w != NULL) {
+        w->char_flags &= ~0x4;
+    }
+}
 
 void func_8000C53C(int arg0, int arg1)
 {
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_024 = arg1;
+        w->text_palette = arg1;
     }
 }
 
@@ -2179,147 +2340,335 @@ void func_8000C560(float arg0, int arg1)
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C568.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C570.s")
+void func_8000C570(int id)
+{
+    Window *w = D_80167C48[id];
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C5A4.s")
+    if (w != NULL) {
+        w->char_flags |= 0x8;
+    }
+}
+
+void func_8000C5A4(int id)
+{
+    Window *w = D_80167C48[id];
+
+    if (w != NULL) {
+        w->char_flags &= ~0x8;
+    }
+}
 
 void func_8000C5E4(int arg0, float arg1)
 {
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_088 = arg1;
+        w->char_scale = arg1;
     }
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C60C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C640.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C680.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/D_8007AB80.s")
-
-#ifdef NON_MATCHING
-void func_8000C6A8(int idx, int arg1, int arg2, long long arg4, int s1, int s2, int s3, int s4, int s5, int s6, int s7, int s8, int s9)
+void func_8000C60C(int id)
 {
-    Window *win = amemAlloc(g_sys->memory_blocks, 0x1818);
+    Window *w = D_80167C48[id];
 
+    if (w != NULL) {
+        w->char_flags |= 0x10;
+    }
+}
+
+void func_8000C640(int id)
+{
+    Window *w = D_80167C48[id];
+
+    if (w != NULL) {
+        w->char_flags &= ~0x10;
+    }
+}
+
+void func_8000C680(int id, float value)
+{
+    Window *w = D_80167C48[id];
+
+    if (w != NULL) {
+        w->scale = value;
+    }
+}
+
+void func_8000C6A8(int idx, unsigned char *texture, unsigned int *palette, long long flags, int x, int y, int from_x, int from_y, int width, int strip_height, int strip_count, int style, int effect)
+{
+    Window *win = amemAlloc(g_sys->memory_blocks, sizeof(Window));
+
+    PRINTF(("window_display: malloc: %08x (%dbytes)\n", win, sizeof(Window)));
     if (win == NULL) {
         rmonPrintf("MOJI WINDOW MALLOC Booooooo!\n");
         return;
     }
-    win->unk_000    = 1;
-    win->unk_004    = arg1;
-    win->unk_008    = arg2;
-    win->unk_010    = arg4;
-    win->unk_018    = 0;
-    win->unk_020    = idx;
-    win->unk_024    = 0;
-    win->state      = 1;
-    win->unk_028    = s8;
-    win->unk_032    = s1;
-    win->unk_034    = s2;
-    win->unk_02c    = s9;
-    win->unk_036    = s1;
-    win->unk_038    = s2;
-    win->unk_03a    = s3;
-    win->unk_050    = 10;
-    win->unk_054    = 7;
-    win->unk_058    = 0;
-    win->unk_05c    = 0;
-    win->unk_060    = 0;
-    win->unk_064    = 0;
-    win->unk_066    = 0;
-    win->unk_06a    = s6 * s7;
-    win->unk_06c    = 0;
-    win->unk_06e    = 0;
-    win->unk_070    = 8;
-    win->unk_072    = 0;
-    win->unk_074    = 0;
-    win->unk_076    = 16;
-    win->unk_078    = 0;
-    win->unk_07c    = 0;
-    win->unk_08c    = 0;
-    win->unk_090    = 0;
-    win->unk_044    = 1.0f;
-    win->unk_048    = 1.0f;
-    win->unk_088    = 1.0f;
-    win->unk_04c    = 0.0f;
-    win->unk_042    = s7;
-    win->unk_040    = s6;
-    win->unk_03e    = s5;
-    win->unk_068    = s5;
-    win->unk_03c    = s4;
-    D_80167C48[idx] = win;
+    win->active       = 1;
+    win->texture      = texture;
+    win->palette      = palette;
+    win->flags        = flags;
+    win->char_flags   = 0;
+    win->id           = idx;
+    win->text_palette = 0;
+    win->state        = 1;
+    win->style        = style;
+    win->effect       = effect;
+    win->x            = x;
+    win->y            = y;
+    win->target_x     = x;
+    win->target_y     = y;
+    win->from_x       = from_x;
+    win->from_y       = from_y;
+    win->width        = width;
+    win->strip_height = strip_height;
+    win->strip_count  = strip_count;
+    win->scale        = 1.0f;
+    win->rest_scale   = 1.0f;
+    win->scale_speed  = 0.0f;
+    win->text_left    = 10;
+    win->text_top     = 7;
+    win->unk_058      = 0;
+    win->unk_05c      = 0;
+    win->unk_060      = 0;
+    win->clip_x0      = 0;
+    win->clip_y0      = 0;
+    win->clip_x1      = width;
+    win->clip_y1      = strip_height * strip_count;
+    win->column       = 0;
+    win->cursor_x     = 0;
+#ifdef JAPAN_0
+    win->char_advance = 13;
+#else
+    win->char_advance = 8;
+#endif
+    win->line        = 0;
+    win->cursor_y    = 0;
+    win->line_height = 16;
+    win->frames      = 0;
+    win->unk_07c     = 0;
+    win->char_scale  = 1.0f;
+    win->unk_08c     = 0;
+    win->unk_090     = 0;
+    D_80167C48[idx]  = win;
     func_8000D2C0(idx);
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C6A8.s")
-#endif
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C838.s")
-
-#ifdef NON_MATCHING
-void func_8000C878(int arg0)
+void func_8000C838(void)
 {
-    if (D_80167C48[arg0] != 0) {
-        PRINTF(("window_clear: free: %08x\n", D_80167C48[arg0]));
-        amemFree(g_sys->memory_blocks, D_80167C48[arg0]);
-        D_80167C48[arg0] = 0;
+    int i;
+
+    for (i = 0; i < 3; i++) {
+        func_8000C878(i);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C878.s")
-#endif
+
+void func_8000C878(int id)
+{
+    Window *w;
+
+    if (D_80167C48[id] != NULL) {
+        w = D_80167C48[id];
+        PRINTF(("window_clear: free: %08x\n", w));
+        amemFree(g_sys->memory_blocks, w);
+        D_80167C48[id] = NULL;
+    }
+}
 
 void func_8000C8D0(int arg0, int arg1, int arg2, int arg3, int arg4)
 {
     Window *w = D_80167C48[arg0];
 
     if (w != NULL) {
-        w->unk_064 = arg1;
-        w->unk_066 = arg2;
-        w->unk_068 = arg3;
-        w->unk_06a = arg4;
+        w->clip_x0 = arg1;
+        w->clip_y0 = arg2;
+        w->clip_x1 = arg3;
+        w->clip_y1 = arg4;
     }
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000C904.s")
+void func_8000C904(Window *w)
+{
+    int          i;
+    int          x;
+    int          y;
+    int          left;
+    int          top;
+    unsigned int step;
+    float        scale;
+    float        max_x;
+    float        max_y;
+    float        x_end;
+    float        strip_top;
+    float        strip_bottom;
+    float        clip_right;
+    float        clip_bottom;
+    int          right;
+    int          bottom;
+    int          s;
+    int          t;
+    float        ulx;
+    float        uly;
+    float        lrx;
+    float        lry;
+    float        pos_x;
+    float        pos_y;
+    float        line_bottom;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D060.s")
+    x      = w->x;
+    y      = w->y;
+    scale  = w->scale;
+    left   = w->clip_x0 + x;
+    top    = w->clip_y0 + y;
+    right  = w->clip_x1 + x;
+    bottom = w->clip_y1 + y;
+    x_end  = w->width + x;
+    if (left < 0) {
+        left = 0;
+    }
+    if (top < 0) {
+        top = 0;
+    }
+    if (right < 0) {
+        right = 0;
+    }
+    if (bottom < 0) {
+        bottom = 0;
+    }
+    max_x = 320 / scale;
+    max_y = 240 / scale;
+    if (max_x < left) {
+        left = max_x;
+    }
+    if (max_y < top) {
+        top = max_y;
+    }
+    if (max_x < right) {
+        right = max_x;
+    }
+    if (max_y < bottom) {
+        bottom = max_y;
+    }
+    pos_x = x;
+    pos_y = y;
+    for (i = 0; i < w->strip_count; i++) {
+        strip_top   = w->strip_height * i + y;
+        line_bottom = w->strip_height * (i + 1) + y;
+        if (right < x) {
+            continue;
+        }
+        if (x_end < left) {
+            continue;
+        }
+        if (line_bottom < top) {
+            continue;
+        }
+        if (bottom < strip_top) {
+            continue;
+        }
+        gDPLoadTLUT_pal16(g_sys_glistp++, 15, w->palette);
+        gDPLoadTextureBlock_4b(g_sys_glistp++, w->texture + w->width * w->strip_height * i / 2, G_IM_FMT_CI, w->width,
+            w->strip_height, 15, G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK,
+            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        clip_right  = (right - left) * scale + left;
+        clip_bottom = (bottom - top) * scale + top;
+        step        = 1024.0f / scale;
+        s           = (x < left) ? left - x : 0;
+        t           = (strip_top < top) ? (int) (top - strip_top) : 0;
+        x_end       = pos_x;
+        x_end += w->width * scale;
+        strip_top = pos_y;
+        strip_top += w->strip_height * scale * i;
+        strip_bottom = pos_y;
+        strip_bottom += w->strip_height * scale * (i + 1);
+        ulx = (left < x) ? pos_x : left;
+        uly = (top < strip_top) ? strip_top : top;
+        lrx = (x_end < clip_right) ? x_end : clip_right;
+        lry = (strip_bottom < clip_bottom) ? strip_bottom : clip_bottom;
+        gSPTextureRectangle(g_sys_glistp++, (int) (ulx * 4.0f), (int) (uly * 4.0f), (int) (lrx * 4.0f), (int) (lry * 4.0f),
+            G_TX_RENDERTILE, s << 5, t << 5, step, step);
+    }
+}
+
+void func_8000D180(int id, int index, unsigned char *glyph, unsigned long long flags, int palette, int x, int y, float scale);
+
+int func_8000D060(int id, int code)
+{
+    Window *w;
+    int     x;
+    int     i;
+    int     y;
+
+    if (D_80167C48[id] != NULL) {
+        w = D_80167C48[id];
+        for (i = 0; i < 120; i++) {
+            if (w->entries[i].kind == 0) {
+                x = w->text_left + w->cursor_x;
+                y = w->text_top + w->cursor_y;
+                func_8000D180(id, i, D_800629A0 + (code / 2) * 48, w->char_flags, w->text_palette + (code & 1), x, y, 1.0f);
+                w->cursor_x += D_8005BB10[code] + 1;
+                w->column++;
+                return i;
+            }
+        }
+        return -1;
+    }
+}
 
 #ifdef NON_MATCHING
-void func_8000D180(int arg0, int arg1, void *arg2, long long arg4, int arg5, int arg6, int arg7, float arg8)
+void func_8000D180(int id, int index, unsigned char *glyph, unsigned long long flags, int palette, int x, int y, float scale)
 {
-    Window      *win = D_80167C48[arg0];
-    WindowEntry *e;
+    Window      *win = D_80167C48[id];
+    WindowEntry *e   = &win->entries[index];
 
     if (win != NULL) {
-        e = win->entries;
-        e += arg1;
-        e->unk_04 = 1;
-        e->unk_00 = arg2;
-        e->unk_28 = arg4;
-        e->unk_06 = arg5;
-        e->unk_08 = arg6 + 4;
-        e->unk_0c = 10;
-        e->unk_0e = 0;
-        e->unk_0a = arg7 + 6;
-        e->unk_10 = 0;
-        e->unk_12 = 0;
-        e->unk_14 = arg8;
-        e->unk_18 = arg8;
-        e->unk_20 = 0;
-        e->unk_22 = 0;
-        e->unk_1c = 1.0f;
+        e->kind    = 1;
+        e->glyph   = glyph;
+        e->flags   = flags;
+        e->palette = palette;
+        e->x       = x + 4;
+        e->y       = y + 6;
+        e->scale_x = scale;
+        e->scale_y = scale;
+        e->unk_0c  = 10;
+        e->unk_0e  = 0;
+        e->unk_10  = 0;
+        e->unk_12  = 0;
+        e->unk_20  = 0;
+        e->unk_22  = 0;
+        e->unk_1c  = 1.0f;
     }
 }
 #else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D180.s")
 #endif
 
+#ifdef NON_MATCHING
+void func_8000D220(int id, int index, unsigned char *glyph, unsigned long long flags, int palette, int x, int y, float scale)
+{
+    Window      *win = D_80167C48[id];
+    WindowEntry *e   = &win->entries[index];
+
+    if (win != NULL) {
+        e->kind    = 2;
+        e->glyph   = glyph;
+        e->flags   = flags;
+        e->palette = palette;
+        e->x       = x + 8;
+        e->y       = y + 12;
+        e->scale_x = scale;
+        e->scale_y = scale;
+        e->unk_0c  = 10;
+        e->unk_0e  = 0;
+        e->unk_10  = 0;
+        e->unk_12  = 0;
+        e->unk_20  = 0;
+        e->unk_22  = 0;
+        e->unk_1c  = 1.0f;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/window/func_8000D220.s")
+#endif
 
 void func_8000D2C0(int arg0)
 {
@@ -2330,10 +2679,10 @@ void func_8000D2C0(int arg0)
         w = D_80167C48[arg0];
         for (i = 0; i < 0x78; i++) {
             func_8000D33C(arg0, i);
-            w->unk_06e = 0;
-            w->unk_074 = 0;
-            w->unk_06c = 0;
-            w->unk_072 = 0;
+            w->cursor_x = 0;
+            w->cursor_y = 0;
+            w->column   = 0;
+            w->line     = 0;
         }
     }
 }
@@ -2346,21 +2695,21 @@ void func_8000D33C(int arg0, int arg1)
     if (win != NULL) {
         e = win->entries;
         e += arg1;
-        e->unk_04 = 0;
-        e->unk_00 = NULL;
-        e->unk_28 = 0;
-        e->unk_06 = 0;
-        e->unk_08 = 0;
-        e->unk_0a = 0;
-        e->unk_0c = 0;
-        e->unk_0e = 0;
-        e->unk_10 = 0;
-        e->unk_12 = 0;
-        e->unk_20 = 0;
-        e->unk_22 = 0;
-        e->unk_14 = 0.0f;
-        e->unk_18 = 0.0f;
-        e->unk_1c = 0.0f;
+        e->kind    = 0;
+        e->glyph   = NULL;
+        e->flags   = 0;
+        e->palette = 0;
+        e->x       = 0;
+        e->y       = 0;
+        e->unk_0c  = 0;
+        e->unk_0e  = 0;
+        e->unk_10  = 0;
+        e->unk_12  = 0;
+        e->unk_20  = 0;
+        e->unk_22  = 0;
+        e->scale_x = 0.0f;
+        e->scale_y = 0.0f;
+        e->unk_1c  = 0.0f;
     }
 }
 

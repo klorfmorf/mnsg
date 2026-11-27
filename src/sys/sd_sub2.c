@@ -5,10 +5,7 @@
 #include "sys/sd_sub1.h"
 #include "unk.h"
 
-void func_8003B564(void);
-void func_8003B634(void *param);
-void func_8003B83C(void);
-void func_8003BCAC(void);
+void func_8003B634(signed char *params);
 void func_8003BCFC(void);
 void func_8003C498(void);
 void func_8003C860(void);
@@ -334,107 +331,105 @@ DrumInstParam D_8006EF88[53] = {
 
 void func_8003B410(void)
 {
-    sptr->unk_18 = *mptr++ << 8;
-    sptr->unk_1d = 0;
+    sptr->tmp  = *mptr++ << 8;
+    sptr->tmpc = 0;
 }
 
 void func_8003B450(void)
 {
     int diff;
 
-    sptr->unk_1d = *mptr;
+    sptr->tmpc = *mptr;
     mptr++;
-    sptr->unk_1c = *mptr;
+    sptr->tmpm = *mptr;
     mptr++;
-    diff         = (unsigned short) (sptr->unk_1c << 8) - sptr->unk_18;
-    sptr->unk_1e = diff / sptr->unk_1d;
+    diff        = (unsigned short) (sptr->tmpm << 8) - sptr->tmp;
+    sptr->tmpad = diff / sptr->tmpc;
 }
 
 void func_8003B4EC(void)
 {
     int v;
 
-    sptr->unk_1d--;
-    if (sptr->unk_1d != 0) {
-        v = sptr->unk_18;
-        v += sptr->unk_1e;
+    sptr->tmpc--;
+    if (sptr->tmpc != 0) {
+        v = sptr->tmp;
+        v += sptr->tmpad;
         if (v < 0x100) {
             v = 0x100;
         } else if (v > 0xFF00) {
             v = 0xFF00;
         }
-        sptr->unk_18 = v;
+        sptr->tmp = v;
         return;
     }
-    sptr->unk_18 = sptr->unk_1c << 8;
+    sptr->tmp = sptr->tmpm << 8;
 }
 
-#ifdef NON_MATCHING
 void func_8003B564(void)
 {
-    unsigned int v;
+    unsigned int pan;
+    InstParam   *params;
 
-    v = sptr->unk_00 & 0x7F0000;
-    if (v != 0) {
-        v >>= 8;
-        if (v > 0x7F00) {
-            v = 0x7F00;
+    pan = sptr->code & 0x7F0000;
+    if (pan != 0) {
+        pan >>= 8;
+        if (pan > 0x7F00) {
+            pan = 0x7F00;
         }
-        sptr->unk_5b = 0;
-        sptr->unk_58 = v | 0x8000;
+        sptr->panc = 0;
+        sptr->pand = pan | 0x8000;
         func_8003BCFC();
     }
-    sptr->unk_0d = *mptr;
+    sptr->snos = *mptr;
     mptr++;
-    func_8003B634(sptr->unk_0c < 2 ? D_8006E9A0[sptr->unk_0c] + sptr->unk_0d : &D_8006EF80);
+    if (sptr->bank < 2) {
+        params = D_8006E9A0[sptr->bank];
+        params += sptr->snos;
+    } else {
+        params = &D_8006EF80;
+    }
+    func_8003B634((signed char *) params);
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sd_sub2/func_8003B564.s")
-#endif
 
-#ifdef NON_MATCHING
-void func_8003B634(void *param)
+void func_8003B634(signed char *params)
 {
-    signed char  *inst = param;
-    int           decay;
-    int           sustain;
     ALBank       *bank;
     ALInstrument *in;
     ALSound      *snd;
+    unsigned char byte;
 
-    bank         = D_801729A8[sptr->unk_0c]->bankArray[0];
-    in           = bank->instArray[sptr->unk_0d];
-    snd          = in->soundArray[0];
-    sptr->unk_14 = snd->wavetable;
-    sptr->unk_2c = *inst++ << 8;
-    sptr->unk_2c += *inst++ * 4;
-    sptr->unk_4e = D_8006E800[0x7F - *inst++];
-    decay        = *(unsigned char *) inst++;
-    sptr->unk_50 = D_8006E800[0x3D - ((decay & 0xF0) >> 2)];
-    sptr->unk_54 = (decay & 0xF) * 4;
-    sustain      = *(unsigned char *) inst++;
-    if (sustain == 0) {
-        sptr->unk_52 = 0;
+    bank            = D_801729A8[sptr->bank]->bankArray[0];
+    in              = bank->instArray[sptr->snos];
+    snd             = in->soundArray[0];
+    sptr->wavetable = snd->wavetable;
+    sptr->tone_tune = *params++ << 8;
+    sptr->tone_tune += *params++ << 2;
+    sptr->ar = D_8006E800[127 - *params++];
+    byte     = *params++;
+    sptr->dr = D_8006E800[61 - ((byte & 0xF0) >> 2)];
+    sptr->sl = (byte & 0xF) << 2;
+    byte     = *params++;
+    if (byte == 0) {
+        sptr->sr = 0;
     } else {
-        sptr->unk_52 = D_8006E800[0x7F - sustain] + 1;
+        sptr->sr = D_8006E800[127 - byte] + 1;
     }
-    sptr->unk_56 = D_8006E800[0x7D - *inst++ * 4];
-    if (sptr->unk_58 < 0x8000) {
-        sptr->unk_58 = *inst << 8;
-        sptr->unk_5b = 0;
+    sptr->rr = D_8006E800[125 - *params * 4];
+    params++;
+    if (sptr->pand < 0x8000) {
+        sptr->pand = *params << 8;
+        sptr->panc = 0;
     }
     func_8003BCFC();
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sd_sub2/func_8003B634.s")
-#endif
 
 void func_8003B79C(void)
 {
     signed char *d;
 
-    d            = (signed char *) &D_8006EF88[sptr->unk_25 - 72];
-    sptr->unk_0d = *d++;
+    d          = (signed char *) &D_8006EF88[sptr->note - 72];
+    sptr->snos = *d++;
     func_8003B634(d);
 }
 
@@ -456,56 +451,56 @@ void func_8003B83C(void)
     unsigned char v;
 
     v = *mptr++;
-    if (sptr->unk_00 >> 24) {
-        sptr->unk_3a = v * (sptr->unk_00 / 0x1000000);
+    if (sptr->code >> 24) {
+        sptr->pvod = v * (sptr->code / 0x1000000);
     } else {
-        sptr->unk_3a = v << 8;
+        sptr->pvod = v << 8;
     }
-    sptr->unk_47 = 0;
+    sptr->pvoc = 0;
 }
 
 void func_8003B89C(void)
 {
     int diff;
 
-    sptr->unk_47 = *mptr;
+    sptr->pvoc = *mptr;
     mptr++;
-    sptr->unk_46 = *mptr;
+    sptr->pvom = *mptr;
     mptr++;
-    diff         = (unsigned short) (sptr->unk_46 << 8) - sptr->unk_3a;
-    sptr->unk_44 = diff / sptr->unk_47;
+    diff        = (unsigned short) (sptr->pvom << 8) - sptr->pvod;
+    sptr->pvoad = diff / sptr->pvoc;
 }
 
 void func_8003B938(void)
 {
     int v;
 
-    sptr->unk_06 |= 1;
-    sptr->unk_47--;
-    if (sptr->unk_47 != 0) {
-        v = sptr->unk_3a;
-        v += sptr->unk_44;
+    sptr->flags |= 1;
+    sptr->pvoc--;
+    if (sptr->pvoc != 0) {
+        v = sptr->pvod;
+        v += sptr->pvoad;
         if (v < 0) {
             v = 0;
         } else if (v > 0xFF00) {
             v = 0xFF00;
         }
-        sptr->unk_3a = v;
+        sptr->pvod = v;
         return;
     }
-    sptr->unk_3a = sptr->unk_46 << 8;
+    sptr->pvod = sptr->pvom << 8;
 }
 
 void func_8003B9B8(void)
 {
     unsigned char v;
 
-    sptr->unk_4e = D_8006E800[0x7F - *mptr];
+    sptr->ar = D_8006E800[0x7F - *mptr];
     mptr++;
     v = *mptr;
     mptr++;
-    sptr->unk_50 = D_8006E800[0x3D - ((v & 0xF0) >> 2)];
-    sptr->unk_54 = (v & 0xF) * 4;
+    sptr->dr = D_8006E800[0x3D - ((v & 0xF0) >> 2)];
+    sptr->sl = (v & 0xF) * 4;
 }
 
 void func_8003BA40(void)
@@ -515,17 +510,17 @@ void func_8003BA40(void)
 
     sustain = *mptr++;
     if (sustain == 0) {
-        sptr->unk_52 = 0;
-        if (sptr->unk_22 == 0 && sptr->unk_49 == 2) {
-            sptr->unk_4c = 0x7FFF;
+        sptr->sr = 0;
+        if (sptr->ngg == 0 && sptr->env_step == 2) {
+            sptr->env_time = 0x7FFF;
         }
     } else {
-        old          = sptr->unk_52;
-        sptr->unk_52 = D_8006E800[0x7F - sustain] + 1;
-        if (sptr->unk_22 == 0 && sptr->unk_49 == 2) {
-            sptr->unk_4c = sptr->unk_52;
+        old      = sptr->sr;
+        sptr->sr = D_8006E800[0x7F - sustain] + 1;
+        if (sptr->ngg == 0 && sptr->env_step == 2) {
+            sptr->env_time = sptr->sr;
             if (old == 0) {
-                sptr->unk_4a = 0;
+                sptr->env_vol = 0;
             }
         }
     }
@@ -533,10 +528,10 @@ void func_8003BA40(void)
 
 void func_8003BB00(void)
 {
-    sptr->unk_56 = D_8006E800[125 - *mptr * 4];
+    sptr->rr = D_8006E800[125 - *mptr * 4];
     mptr++;
-    if (sptr->unk_22 == 0 && sptr->unk_49 == 3) {
-        sptr->unk_4c = sptr->unk_56;
+    if (sptr->ngg == 0 && sptr->env_step == 3) {
+        sptr->env_time = sptr->rr;
     }
 }
 
@@ -545,7 +540,7 @@ void func_8003BB70(void)
     int v;
     int sp20;
 
-    if (sptr->unk_10 != 0) {
+    if (sptr->fx_mix != 0) {
         alSynSetFXMix(D_8007A230, &D_801C0A68[D_801C09CC], 0);
     }
     v    = *mptr++;
@@ -560,8 +555,8 @@ void func_8003BB70(void)
         sp20 = D_8006E2B0[4];
     }
     alSynSetFXParam(D_8007A230, D_801C7730[0], 4, &sp20);
-    if (sptr->unk_10 != 0) {
-        alSynSetFXMix(D_8007A230, &D_801C0A68[D_801C09CC], sptr->unk_10);
+    if (sptr->fx_mix != 0) {
+        alSynSetFXMix(D_8007A230, &D_801C0A68[D_801C09CC], sptr->fx_mix);
     }
 }
 
@@ -569,9 +564,9 @@ void func_8003BCAC(void)
 {
     int v;
 
-    sptr->unk_5b = 0;
-    v            = *mptr++;
-    sptr->unk_58 = v << 8;
+    sptr->panc = 0;
+    v          = *mptr++;
+    sptr->pand = v << 8;
     func_8003BCFC();
 }
 
@@ -582,7 +577,7 @@ void func_8003BCFC(void)
     if (D_801C09D0 != 0) {
         pan = 0x40;
     } else {
-        pan = (sptr->unk_58 >> 8) & 0x7F;
+        pan = (sptr->pand >> 8) & 0x7F;
     }
     alSynSetPan(D_8007A230, &D_801C0A68[D_801C09CC], pan);
 }
@@ -591,13 +586,13 @@ void func_8003BD68(void)
 {
     int diff;
 
-    sptr->unk_5b = *mptr;
+    sptr->panc = *mptr;
     mptr++;
-    sptr->unk_5a = *mptr;
+    sptr->panm = *mptr;
     mptr++;
-    if (sptr->unk_58 >= 0x8000 || !(sptr->unk_06 & 4)) {
-        diff         = (unsigned short) (sptr->unk_5a << 8) - (sptr->unk_58 & 0x7FFF);
-        sptr->unk_5c = diff / sptr->unk_5b;
+    if (sptr->pand >= 0x8000 || !(sptr->flags & 4)) {
+        diff        = (unsigned short) (sptr->panm << 8) - (sptr->pand & 0x7FFF);
+        sptr->panad = diff / sptr->panc;
     }
 }
 
@@ -606,33 +601,33 @@ void func_8003BE24(void)
     unsigned short flag;
     int            v;
 
-    sptr->unk_06 |= 1;
-    flag = sptr->unk_58 & 0x8000;
-    sptr->unk_5b--;
-    if (sptr->unk_5b != 0) {
-        v = sptr->unk_58;
-        v = (v & 0x7FFF) + sptr->unk_5c;
+    sptr->flags |= 1;
+    flag = sptr->pand & 0x8000;
+    sptr->panc--;
+    if (sptr->panc != 0) {
+        v = sptr->pand;
+        v = (v & 0x7FFF) + sptr->panad;
         if (v < 0) {
             v = 0;
         } else if (v >= 0x8000) {
             v = 0x7F00;
         }
-        sptr->unk_58 = v;
+        sptr->pand = v;
     } else {
-        sptr->unk_58 = sptr->unk_5a << 8;
+        sptr->pand = sptr->panm << 8;
     }
-    sptr->unk_58 |= flag;
+    sptr->pand |= flag;
     func_8003BCFC();
 }
 
 void func_8003BED4(void)
 {
-    sptr->unk_2e = *mptr++ << 8;
+    sptr->ptps = *mptr++ << 8;
 }
 
 void func_8003BF08(void)
 {
-    sptr->unk_30 = *(signed char *) mptr++ * 4;
+    sptr->tund = *(signed char *) mptr++ * 4;
 }
 
 void func_8003BF3C(void)
@@ -641,61 +636,61 @@ void func_8003BF3C(void)
 
     v = *mptr++;
     if (v < 0x64) {
-        sptr->unk_93 = v;
+        sptr->vibhs = v;
     } else {
-        sptr->unk_93 = 0;
-        sptr->unk_9e = v - 0x64;
+        sptr->vibhs = 0;
+        sptr->vibcs = v - 0x64;
     }
     v = *mptr++;
     if (v < 0x40) {
         if (v < 0x20) {
-            sptr->unk_99 = 1;
-            v            = v * 8;
+            sptr->vib_tc_ofst = 1;
+            v                 = v * 8;
         } else {
-            sptr->unk_99 = 2;
-            v            = v * 4;
+            sptr->vib_tc_ofst = 2;
+            v                 = v * 4;
         }
     } else if (v < 0x80) {
-        sptr->unk_99 = 4;
-        v            = v * 2;
+        sptr->vib_tc_ofst = 4;
+        v                 = v * 2;
     } else if (v == 0xFF) {
-        sptr->unk_99 = 0x10;
+        sptr->vib_tc_ofst = 0x10;
     } else {
-        sptr->unk_99 = 8;
+        sptr->vib_tc_ofst = 8;
     }
-    sptr->unk_95 = v;
-    sptr->unk_9a = *mptr << 8;
+    sptr->vibcad = v;
+    sptr->vibdm  = *mptr << 8;
     mptr++;
-    if (sptr->unk_9e != 0) {
-        sptr->unk_a0 = sptr->unk_9a / sptr->unk_9e;
+    if (sptr->vibcs != 0) {
+        sptr->vibad = sptr->vibdm / sptr->vibcs;
     }
 }
 
 void func_8003C0AC(void)
 {
-    sptr->unk_94 = sptr->unk_93;
-    sptr->unk_9f = sptr->unk_9e;
-    if (sptr->unk_9e == 0) {
-        sptr->unk_9c = sptr->unk_9a;
+    sptr->vibhc = sptr->vibhs;
+    sptr->vibcc = sptr->vibcs;
+    if (sptr->vibcs == 0) {
+        sptr->vibd = sptr->vibdm;
     } else {
-        sptr->unk_9c = 0;
+        sptr->vibd = 0;
     }
-    sptr->unk_96 = 0;
-    sptr->unk_98 = sptr->unk_96;
+    sptr->vib_tmp_cnt = 0;
+    sptr->vib_tbl_cnt = sptr->vib_tmp_cnt;
 }
 
 void func_8003C108(void)
 {
-    if (sptr->unk_94 != 0) {
-        sptr->unk_94--;
+    if (sptr->vibhc != 0) {
+        sptr->vibhc--;
         return;
     }
-    if (sptr->unk_9f != 0) {
-        sptr->unk_9f--;
-        if (sptr->unk_9f != 0) {
-            sptr->unk_9c += sptr->unk_a0;
+    if (sptr->vibcc != 0) {
+        sptr->vibcc--;
+        if (sptr->vibcc != 0) {
+            sptr->vibd += sptr->vibad;
         } else {
-            sptr->unk_9c = sptr->unk_9a;
+            sptr->vibd = sptr->vibdm;
         }
     }
     func_8003C184();
@@ -703,23 +698,23 @@ void func_8003C108(void)
 
 void func_8003C184(void)
 {
-    if (sptr->unk_94 == 0) {
-        sptr->unk_96 += sptr->unk_95;
-        if (sptr->unk_96 >= 0x100) {
-            sptr->unk_96 &= 0xFF;
-            sptr->unk_06 |= 2;
-            sptr->unk_98 += sptr->unk_99;
-            sptr->unk_98 &= 0x3F;
-            if (sptr->unk_9c < 0x8000) {
-                sptr->unk_36 = sptr->unk_9c >> 7;
-                sptr->unk_36 = (D_8006E900[sptr->unk_98 & 0x1F] * sptr->unk_36) >> 8;
+    if (sptr->vibhc == 0) {
+        sptr->vib_tmp_cnt += sptr->vibcad;
+        if (sptr->vib_tmp_cnt >= 0x100) {
+            sptr->vib_tmp_cnt &= 0xFF;
+            sptr->flags |= 2;
+            sptr->vib_tbl_cnt += sptr->vib_tc_ofst;
+            sptr->vib_tbl_cnt &= 0x3F;
+            if (sptr->vibd < 0x8000) {
+                sptr->vib_data = sptr->vibd >> 7;
+                sptr->vib_data = (D_8006E900[sptr->vib_tbl_cnt & 0x1F] * sptr->vib_data) >> 8;
             } else {
-                sptr->unk_36 = (sptr->unk_9c >> 8) & 0x7F;
-                sptr->unk_36 += 2;
-                sptr->unk_36 = (D_8006E900[sptr->unk_98 & 0x1F] * sptr->unk_36) >> 1;
+                sptr->vib_data = (sptr->vibd >> 8) & 0x7F;
+                sptr->vib_data += 2;
+                sptr->vib_data = (D_8006E900[sptr->vib_tbl_cnt & 0x1F] * sptr->vib_data) >> 1;
             }
-            if (sptr->unk_98 >= 0x20) {
-                sptr->unk_36 = -sptr->unk_36;
+            if (sptr->vib_tbl_cnt >= 0x20) {
+                sptr->vib_data = -sptr->vib_data;
             }
         }
     }
@@ -729,38 +724,38 @@ void func_8003C2B4(void)
 {
     unsigned char v;
 
-    v            = *mptr;
-    sptr->unk_9e = v;
+    v           = *mptr;
+    sptr->vibcs = v;
     mptr++;
     if (v != 0) {
-        sptr->unk_a0 = sptr->unk_9a / sptr->unk_9e;
+        sptr->vibad = sptr->vibdm / sptr->vibcs;
     }
 }
 
 void func_8003C328(void)
 {
-    sptr->unk_92 = *mptr;
-    sptr->unk_8e = *++mptr << 8;
-    sptr->unk_8e += *++mptr;
+    sptr->rdms = *mptr;
+    sptr->rdmd = *++mptr << 8;
+    sptr->rdmd += *++mptr;
     mptr++;
-    sptr->unk_8d = 0;
-    sptr->unk_90 = sptr->unk_8d;
-    if (sptr->unk_92 == 0) {
-        sptr->unk_38 = 0;
+    sptr->rdmo = 0;
+    sptr->rdmc = sptr->rdmo;
+    if (sptr->rdms == 0) {
+        sptr->rdm_data = 0;
     }
 }
 
 void func_8003C3C0(void)
 {
-    sptr->unk_90 += sptr->unk_92;
-    if (sptr->unk_90 >= 0x100) {
-        sptr->unk_90 &= 0xFF;
-        sptr->unk_06 |= 2;
-        sptr->unk_38 = D_8006E920[sptr->unk_8d];
-        sptr->unk_8d++;
-        sptr->unk_8d &= 0x7F;
-        sptr->unk_38 += D_8006E920[sptr->unk_8d] << 8;
-        sptr->unk_38 &= sptr->unk_8e;
+    sptr->rdmc += sptr->rdms;
+    if (sptr->rdmc >= 0x100) {
+        sptr->rdmc &= 0xFF;
+        sptr->flags |= 2;
+        sptr->rdm_data = D_8006E920[sptr->rdmo];
+        sptr->rdmo++;
+        sptr->rdmo &= 0x7F;
+        sptr->rdm_data += D_8006E920[sptr->rdmo] << 8;
+        sptr->rdm_data &= sptr->rdmd;
     }
 }
 
@@ -774,16 +769,16 @@ void func_8003C498(void)
     unsigned short ticks;
     int            diff;
 
-    ticks = (unsigned int) (sptr->unk_7d << 16) / sptr->unk_18;
+    ticks = (unsigned int) (sptr->swpc << 16) / sptr->tmp;
     ticks++;
-    diff         = sptr->unk_80 - sptr->unk_28;
-    sptr->unk_84 = diff / ticks;
-    if (sptr->unk_84 == 0) {
+    diff        = sptr->swpm - sptr->swpd;
+    sptr->swpad = diff / ticks;
+    if (sptr->swpad == 0) {
         if (diff < 0) {
-            sptr->unk_84--;
+            sptr->swpad--;
             return;
         }
-        sptr->unk_84++;
+        sptr->swpad++;
     }
 }
 
@@ -792,33 +787,33 @@ void func_8003C540(void)
     int key;
 
     if (*mptr++ == 0xE4) {
-        if (sptr->unk_8a == 0) {
-            sptr->unk_8c = 0;
-            sptr->unk_7c = *mptr++;
-            sptr->unk_7d = *mptr++;
-            key          = *mptr++;
-            key          = (key - sptr->unk_25) << 8;
-            sptr->unk_80 = sptr->unk_28 + key;
+        if (sptr->swss == 0) {
+            sptr->swsk  = 0;
+            sptr->swphc = *mptr++;
+            sptr->swpc  = *mptr++;
+            key         = *mptr++;
+            key         = (key - sptr->note) << 8;
+            sptr->swpm  = sptr->swpd + key;
             func_8003C498();
         } else {
             mptr += 3;
         }
-        sptr->unk_08 = mptr;
+        sptr->mpointer = mptr;
     }
 }
 
 void func_8003C620(void)
 {
-    if (sptr->unk_8c == 0) {
-        if (sptr->unk_7c != 0) {
-            sptr->unk_7c--;
+    if (sptr->swsk == 0) {
+        if (sptr->swphc != 0) {
+            sptr->swphc--;
         } else {
-            sptr->unk_06 |= 2;
-            sptr->unk_7d--;
-            if (sptr->unk_7d != 0) {
-                sptr->unk_28 += sptr->unk_84;
+            sptr->flags |= 2;
+            sptr->swpc--;
+            if (sptr->swpc != 0) {
+                sptr->swpd += sptr->swpad;
             } else {
-                sptr->unk_28 = sptr->unk_80;
+                sptr->swpd = sptr->swpm;
             }
         }
     } else {
@@ -828,10 +823,10 @@ void func_8003C620(void)
 
 void func_8003C6B8(void)
 {
-    if (sptr->unk_8c == 0) {
-        if (sptr->unk_7c == 0) {
-            sptr->unk_06 |= 2;
-            sptr->unk_28 += sptr->unk_84;
+    if (sptr->swsk == 0) {
+        if (sptr->swphc == 0) {
+            sptr->flags |= 2;
+            sptr->swpd += sptr->swpad;
         }
     } else {
         func_8003C860();
@@ -840,34 +835,34 @@ void func_8003C6B8(void)
 
 void func_8003C720(void)
 {
-    sptr->unk_8c = 0;
-    sptr->unk_88 = *mptr;
+    sptr->swsk  = 0;
+    sptr->swshc = *mptr;
     mptr++;
-    sptr->unk_89 = *mptr;
+    sptr->swsc = *mptr;
     mptr++;
-    sptr->unk_8a = *(signed char *) mptr << 8;
+    sptr->swss = *(signed char *) mptr << 8;
     mptr++;
 }
 
 void func_8003C790(void)
 {
-    if (sptr->unk_8c == 0) {
-        sptr->unk_7c = sptr->unk_88;
-        sptr->unk_7d = sptr->unk_89;
-        sptr->unk_80 = sptr->unk_28;
-        sptr->unk_28 -= sptr->unk_8a;
+    if (sptr->swsk == 0) {
+        sptr->swphc = sptr->swshc;
+        sptr->swpc  = sptr->swsc;
+        sptr->swpm  = sptr->swpd;
+        sptr->swpd -= sptr->swss;
         func_8003C498();
         return;
     }
-    sptr->unk_80 = sptr->unk_28;
-    sptr->unk_28 = sptr->unk_84;
-    sptr->unk_7d = 1;
+    sptr->swpm = sptr->swpd;
+    sptr->swpd = sptr->swpad;
+    sptr->swpc = 1;
 }
 
 void func_8003C820(void)
 {
-    sptr->unk_8c = 1;
-    sptr->unk_8a = *mptr++;
+    sptr->swsk = 1;
+    sptr->swss = *mptr++;
 }
 
 void func_8003C860(void)
@@ -875,83 +870,77 @@ void func_8003C860(void)
     int diff;
     int step;
 
-    sptr->unk_06 |= 2;
-    diff = sptr->unk_80 - sptr->unk_28;
+    sptr->flags |= 2;
+    diff = sptr->swpm - sptr->swpd;
     step = diff;
     if (diff < 0) {
         step = -diff;
     }
-    step = (sptr->unk_8a * step) >> 8;
+    step = (sptr->swss * step) >> 8;
     if (step == 0) {
         step = 1;
     }
     if (diff < 0) {
-        sptr->unk_28 = sptr->unk_28 - step;
-        if (sptr->unk_28 < sptr->unk_80) {
-            sptr->unk_28 = sptr->unk_80;
+        sptr->swpd = sptr->swpd - step;
+        if (sptr->swpd < sptr->swpm) {
+            sptr->swpd = sptr->swpm;
         }
     } else {
-        sptr->unk_28 = sptr->unk_28 + step;
-        if (sptr->unk_80 < sptr->unk_28) {
-            sptr->unk_28 = sptr->unk_80;
+        sptr->swpd = sptr->swpd + step;
+        if (sptr->swpm < sptr->swpd) {
+            sptr->swpd = sptr->swpm;
         }
     }
-    if (sptr->unk_28 == sptr->unk_80) {
-        sptr->unk_7d = 0;
+    if (sptr->swpd == sptr->swpm) {
+        sptr->swpc = 0;
     }
 }
 
 void func_8003C934(void)
 {
-    sptr->unk_5e = 0;
-    sptr->unk_60 = mptr;
-    sptr->unk_40 = 0;
-    sptr->unk_32 = sptr->unk_40;
+    sptr->lp1_cnt  = 0;
+    sptr->lp1_addr = mptr;
+    sptr->lp1_vol  = 0;
+    sptr->lp1_freq = sptr->lp1_vol;
 }
 
 void func_8003C970(void)
 {
-    unsigned int count;
+    unsigned char count = *mptr++;
 
-    count = *mptr++;
-    sptr->unk_5e++;
-    // fake
-    if (count == 0 || (count ^ 0) != sptr->unk_5e) {
-        sptr->unk_40 += (signed char) *mptr++;
-        sptr->unk_32 += (signed char) *mptr++ * 8;
-        mptr = sptr->unk_60;
-        return;
+    sptr->lp1_cnt++;
+    if (!count || count != sptr->lp1_cnt) {
+        sptr->lp1_vol += (signed char) *mptr++;
+        sptr->lp1_freq += (signed char) *mptr++ * 8;
+        mptr = sptr->lp1_addr;
+    } else {
+        sptr->lp1_freq = sptr->lp1_vol = 0;
+        mptr += 2;
     }
-    sptr->unk_32 = sptr->unk_40 = 0;
-    mptr += 2;
 }
 
 void func_8003CA30(void)
 {
-    sptr->unk_64 = 0;
-    sptr->unk_68 = mptr;
-    sptr->unk_42 = 0;
-    sptr->unk_34 = sptr->unk_42;
+    sptr->lp2_cnt  = 0;
+    sptr->lp2_addr = mptr;
+    sptr->lp2_vol  = 0;
+    sptr->lp2_freq = sptr->lp2_vol;
 }
 
 void func_8003CA6C(void)
 {
-    unsigned int temp_v0;
+    unsigned char count = *mptr++;
 
-    temp_v0 = *mptr++;
-    sptr->unk_64 += 1;
+    sptr->lp2_cnt += 1;
     // fake
-    if (temp_v0 == 0 || (temp_v0 ^ 0) != sptr->unk_64) {
-        sptr->unk_42 += (signed char) *mptr;
-        mptr += 1;
-        sptr->unk_34 += (signed char) *mptr * 8;
-        mptr += 1;
-        mptr = sptr->unk_68;
-        return;
+    if (!count || count != sptr->lp2_cnt) {
+        sptr->lp2_vol += (signed char) *mptr++;
+        sptr->lp2_freq += (signed char) *mptr++ * 8;
+        mptr = sptr->lp2_addr;
+    } else {
+        sptr->lp2_freq = sptr->lp2_vol = 0;
+        mptr += 2;
     }
-    sptr->unk_42 = 0;
-    sptr->unk_34 = sptr->unk_42;
-    mptr += 2;
 }
 
 void func_8003CB2C(void)
@@ -966,24 +955,24 @@ void func_8003CB48(void)
 
 void func_8003CB64(void)
 {
-    sptr->unk_70 = 0;
-    sptr->unk_74 = mptr;
+    sptr->kakfg   = 0;
+    sptr->kak1ptr = mptr;
 }
 
 void func_8003CB8C(void)
 {
-    switch (sptr->unk_70) {
+    switch (sptr->kakfg) {
         case 0:
-            sptr->unk_70++;
+            sptr->kakfg++;
             return;
         case 1:
-            sptr->unk_70++;
-            sptr->unk_78 = mptr;
-            mptr         = sptr->unk_74;
+            sptr->kakfg++;
+            sptr->kak2ptr = mptr;
+            mptr          = sptr->kak1ptr;
             return;
         case 2:
-            sptr->unk_70--;
-            mptr = sptr->unk_78;
+            sptr->kakfg--;
+            mptr = sptr->kak2ptr;
             return;
     }
 }
@@ -994,71 +983,66 @@ void func_8003CC18(void)
 
     v = *mptr;
     mptr++;
-    if (D_80172972[0] != 0 && (sptr->unk_00 & 0x7FFF) >= 0x100) {
+    if (D_80172972[0] != 0 && (sptr->code & 0x7FFF) >= 0x100) {
         v += 10;
         if (v >= 0x80) {
             v = 0x7F;
         }
     }
-    if (v != sptr->unk_10) {
-        sptr->unk_10 = v;
+    if (v != sptr->fx_mix) {
+        sptr->fx_mix = v;
         alSynSetFXMix(D_8007A230, &D_801C0A68[D_801C09CC], v);
     }
 }
 
 void func_8003CCCC(void)
 {
-    sptr->unk_0c = *mptr++;
+    sptr->bank = *mptr++;
 }
 
-#ifdef NON_MATCHING
 void func_8003CCFC(void)
 {
-    unsigned char b = *mptr++;
+    unsigned char flag;
 
-    if (b & 1) {
-        if (sptr->unk_00_b[3] < D_80172970) {
-            sptr->unk_ac = 0;
-            return;
+    flag = *mptr++ & 1;
+    if (flag) {
+        if ((unsigned char) sptr->code < D_80172970) {
+            sptr->mute = 0;
+        } else {
+            sptr->mute = 1;
         }
-        sptr->unk_ac = 1;
-        return;
-    }
-    if (sptr->unk_00_b[3] != D_80172970) {
+    } else if (D_80172970 != (unsigned char) sptr->code) {
         D_80172971 = 1;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/sd_sub2/func_8003CCFC.s")
-#endif
 
 void func_8003CD84(void)
 {
-    if (sptr->unk_0e != 0) {
-        sptr->unk_0f = 1;
+    if (sptr->voice_on != 0) {
+        sptr->stop_cnt = 1;
         alSynSetVol(D_8007A230, &D_801C0A68[D_801C09CC], 0, 0x1388);
     }
-    sptr->unk_21 = *mptr++;
-    sptr->unk_22 = 1;
-    sptr->unk_08 = mptr;
+    sptr->ngc      = *mptr++;
+    sptr->ngg      = 1;
+    sptr->mpointer = mptr;
 }
 
 void func_8003CE2C(void)
 {
-    sptr->unk_21 = *mptr++;
-    sptr->unk_22 = *mptr++;
-    if (sptr->unk_22 == 0) {
-        sptr->unk_24 = 0;
+    sptr->ngc = *mptr++;
+    sptr->ngg = *mptr++;
+    if (sptr->ngg == 0) {
+        sptr->ngo = 0;
     } else {
-        sptr->unk_24 = (sptr->unk_21 * sptr->unk_22) >> 7;
-        if (sptr->unk_24 == 0) {
-            sptr->unk_24 = 1;
+        sptr->ngo = (sptr->ngc * sptr->ngg) >> 7;
+        if (sptr->ngo == 0) {
+            sptr->ngo = 1;
         }
     }
-    sptr->unk_08 = mptr;
-    if (sptr->unk_4c != 0) {
+    sptr->mpointer = mptr;
+    if (sptr->env_time != 0) {
         func_8003B394();
-        if (sptr->unk_4c != 0) {
+        if (sptr->env_time != 0) {
             func_8003AFB0();
         }
     } else {
@@ -1068,10 +1052,10 @@ void func_8003CE2C(void)
 
 void func_8003CF24(void)
 {
-    if (sptr->unk_0e != 0) {
-        sptr->unk_0f = 1;
+    if (sptr->voice_on != 0) {
+        sptr->stop_cnt = 1;
         alSynSetVol(D_8007A230, &D_801C0A68[D_801C09CC], 0, 0x1388);
     }
-    sptr->unk_00 = 0;
-    sptr->unk_04 = sptr->unk_00;
+    sptr->code = 0;
+    sptr->pri  = sptr->code;
 }

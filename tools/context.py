@@ -26,7 +26,7 @@ def get_c_file(directory):
 def import_c_file(in_file):
     in_file = os.path.relpath(in_file, root_dir)
     # -dD keeps the #define lines in the output (-E alone drops them), so macros such as the PR/gbi.h ones are visible.
-    cpp_command = ["gcc", "-m32", "-fsigned-char", "-std=gnu90", "-E", "-dD", "-P", "-Iinclude", "-Ilib/ultralib/include", "-Ilib/ultralib/include/PR", "-Ilib/ultralib/include/compiler/ido", "-Isrc", "-I.", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", "-DBUILD_VERSION=VERSION_I", '-DBUILD_VERSION_STRING="2.0I"', in_file]
+    cpp_command = ["gcc", "-m32", "-fsigned-char", "-std=gnu90", "-E", "-dD", "-P", "-Iinclude", "-Ilib/ultralib/include", "-Ilib/ultralib/include/PR", "-Ilib/ultralib/include/compiler/ido", "-Isrc", "-I.", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", "-DUSA_0", "-DBUILD_VERSION=VERSION_I", '-DBUILD_VERSION_STRING="2.0I"', in_file]
     try:
         print(root_dir)
         return subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")

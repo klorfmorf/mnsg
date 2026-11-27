@@ -1,106 +1,53 @@
 #include "sys/scenario.h"
+#include "douchu/587B50.h"
+#include "enemy/5D1B10.h"
+#include "sys/gfx_data.h"
+#include "sys/rom_trans.h"
+#include "sys/save_flags.h"
+#include "sys/sd_main.h"
+#include "sys/sys.h"
+#include "sys/task.h"
+#include "sys/vibration_pak.h"
+#include "sys/wave_uty.h"
+#include "sys/window.h"
 
-extern char          D_8007CE4C[];
-extern char          D_8007CE54[];
-extern char          D_8007CE5C[];
-extern char          D_8007CE64[];
-extern char          D_8007CE6C[];
-extern char          D_8007CE74[];
-extern char          D_8007CE7C[];
-extern char          D_8007CE84[];
-extern char          D_8007CE8C[];
-extern char          D_8007CE94[];
-extern char          D_8007CE9C[];
-extern char          D_8007CEA4[];
-extern char          D_8007CEAC[];
-extern char          D_8007CEB8[];
-extern char          D_8007CEC0[];
-extern unsigned char D_8007C8C0[];
-extern unsigned char D_8007C8CC[];
-extern unsigned char D_8007C8D8[];
-extern unsigned char D_8007C8E4[];
-extern unsigned char D_8007C8F0[];
-extern unsigned char D_8007C8FC[];
-extern unsigned char D_8007C908[];
-extern unsigned char D_8007C914[];
-extern unsigned char D_8007C920[];
-extern unsigned char D_8007C92C[];
-extern unsigned char D_8007C938[];
-extern unsigned char D_8007C948[];
-extern unsigned char D_8007C954[];
-extern unsigned char D_8007C960[];
-extern unsigned char D_8007C96C[];
-extern unsigned char D_8007C978[];
-extern unsigned char D_8007C984[];
-extern unsigned char D_8007C990[];
-extern unsigned char D_8007C99C[];
-extern unsigned char D_8007C9A8[];
-extern unsigned char D_8007C9B4[];
-extern unsigned char D_8007C9C0[];
-extern unsigned char D_8007C9CC[];
-extern unsigned char D_8007C9D8[];
-extern unsigned char D_8007C9E4[];
-extern unsigned char D_8007C9F0[];
-extern unsigned char D_8007C9FC[];
-extern unsigned char D_8007CA08[];
-extern unsigned char D_8007CA18[];
-extern unsigned char D_8007CA28[];
-extern unsigned char D_8007CA34[];
-extern unsigned char D_8007CA40[];
-extern unsigned char D_8007CA50[];
-extern unsigned char D_8007CA5C[];
-extern unsigned char D_8007CA6C[];
-extern unsigned char D_8007CA78[];
-extern unsigned char D_8007CA84[];
-extern unsigned char D_8007CA90[];
-extern unsigned char D_8007CAA0[];
-extern unsigned char D_8007CAB0[];
-extern unsigned char D_8007CABC[];
-extern unsigned char D_8007CAC8[];
-extern unsigned char D_8007CADC[];
-extern unsigned char D_8007CAE4[];
-extern unsigned char D_8007CAF0[];
-extern unsigned char D_8007CAF8[];
-extern unsigned char D_8007CB04[];
-extern unsigned char D_8007CB10[];
-extern unsigned char D_8007CB1C[];
-extern unsigned char D_8007CB28[];
-extern unsigned char D_8007CB34[];
-extern unsigned char D_8007CB3C[];
-extern unsigned char D_8007CB44[];
-extern unsigned char D_8007CB4C[];
-extern unsigned char D_8007CB54[];
-extern unsigned char D_8007CB60[];
-extern unsigned char D_8007CB68[];
-extern unsigned char D_8007CB74[];
-extern unsigned char D_8007CB7C[];
-extern unsigned char D_8007CB84[];
-extern unsigned char D_8007CB90[];
-extern unsigned char D_8007CB98[];
-extern unsigned char D_8007CBA4[];
-extern unsigned char D_8007CBB0[];
-extern unsigned char D_8007CBBC[];
-extern unsigned char D_8007CBC8[];
-extern unsigned char D_8007CBD4[];
-extern unsigned char D_8007CBDC[];
-extern unsigned char D_8007CBE4[];
-extern unsigned char D_8007CBF0[];
-extern unsigned char D_8007CBFC[];
-extern unsigned char D_8007CC08[];
-extern unsigned char D_8007CC14[];
-extern unsigned char D_8007CC20[];
-extern unsigned char D_8007CC2C[];
-extern unsigned char D_8007CC38[];
-extern unsigned char D_8007CC40[];
-extern unsigned char D_8007CC48[];
-extern unsigned char D_8007CC50[];
-extern unsigned char D_8007CC58[];
-extern unsigned char D_8007CC64[];
-extern unsigned char D_8007CC70[];
-extern unsigned char D_8007CC7C[];
-extern unsigned char D_8007CC84[];
-extern unsigned char D_8007CC8C[];
-extern unsigned char D_8007CC98[];
+int          func_8003D9B8(int op, int a, int b);
+int          func_8003DF68(void);
+int          func_8003EACC(ChoiceEntry *item);
+int          func_8003D468(int, int);
+int         *func_8003DE48(int);
+char        *func_8003CFA0(int);
+short       *func_8003DF98(int, short *);
+unsigned int func_8003F038(int, int);
+void         func_8003CFD0(Task *task, Obj *obj);
+void         func_8003F18C(Task *task, Obj *obj);
+void         func_8003D0B0(void);
+void         func_8003E5EC(void);
+void         func_8003E620(void);
+void         func_8003E680(void);
+void         func_8003E9E8(ChoiceEntry *item);
+void         func_8003EB34(int window, short *text);
+int          func_8003D68C(void);
+int          func_8003EA14(void);
+int          func_8003E888(ChoiceEntry *item);
+void         func_8003EBAC(int, int);
+void         func_8003E234(void);
+void         func_8003E1A8(void);
+void         func_8003E548(void);
+void         func_8003E5B8(void);
+short       *func_8003DE80(int, short *);
+void         func_8003D17C(void);
+void         func_8003DBEC(void);
+int         *func_8003DB0C(int *);
+int         *func_8003E6C0(int *);
+void         func_8003E3EC(void);
+void         func_8003E4C0(void);
+void         func_8003E654(void);
+void         func_8003E81C(void);
+int          func_8003DDC4(int, int);
+
+extern void *D_800779A0[794];
+extern short D_80078608[794];
 
 // clang-format off
 
@@ -303,32 +250,33 @@ void *D_80077550[123] = {
     NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL,
-    NULL, NULL, D_8007C8C0, D_8007C8CC,
-    D_8007C8D8, D_8007C8E4, D_8007C8F0, D_8007C8FC,
-    D_8007C908, D_8007C914, D_8007C920, D_8007C92C,
-    D_8007C938, D_8007C948, D_8007C954, D_8007C960,
-    D_8007C96C, D_8007C978, D_8007C984, D_8007C990,
-    D_8007C99C, D_8007C9A8, D_8007C9B4, D_8007C9C0,
-    D_8007C9CC, D_8007C9D8, D_8007C9E4, D_8007C9F0,
-    D_8007C9FC, D_8007CA08, D_8007CA18, D_8007CA28,
-    D_8007CA34, D_8007CA40, D_8007CA50, D_8007CA5C,
-    D_8007CA6C, D_8007CA78, D_8007CA84, D_8007CA90,
-    D_8007CAA0, D_8007CAB0, D_8007CABC,
+    NULL, NULL, "Stage300", "Stage301",
+    "Stage304", "Stage315", "Stage322", "Stage324",
+    "Stage326", "Stage330", "Stage331", "Stage333",
+    "StageKurashiki", "StageUni", "StageAgito", "StageAgito2",
+    "StageHagure", "StageZazen", "StageShugyo", "StageOmatsu",
+    "StageEraya", "StageIga", "StageDouchu", "StageImpact",
+    "StageDragon", "StageSogen", "ShopChamise", "ShopHagure",
+    "ShopZazen", "ShopErayatcha", "ShopOmatsuri", "ShopSogen",
+    "ShopUranai", "StageOpening", "StageBoss", "StageKunimei",
+    "StageKanmon", "StageEnding", "StageMizuki", "StageKageyama",
+    "StageDanshin", "StageGojou", "Stage313",
 };
 
+// Looks like message names but there isn't a clue as to how these would have been indexed.
 void *D_8007773C[45] = {
-    D_8007CAC8, D_8007CADC, D_8007CAE4, D_8007CAF0,
-    D_8007CAF8, D_8007CB04, D_8007CB10, D_8007CB1C,
-    D_8007CB28, D_8007CB34, D_8007CB3C, D_8007CB44,
-    D_8007CB4C, D_8007CB54, D_8007CB60, D_8007CB68,
-    D_8007CB74, D_8007CB7C, D_8007CB84, D_8007CB90,
-    D_8007CB98, D_8007CBA4, D_8007CBB0, D_8007CBBC,
-    D_8007CBC8, D_8007CBD4, D_8007CBDC, D_8007CBE4,
-    D_8007CBF0, D_8007CBFC, D_8007CC08, D_8007CC14,
-    D_8007CC20, D_8007CC2C, D_8007CC38, D_8007CC40,
-    D_8007CC48, D_8007CC50, D_8007CC58, D_8007CC64,
-    D_8007CC70, D_8007CC7C, D_8007CC84, D_8007CC8C,
-    D_8007CC98,
+    "ShopDigestSelect", "m_agito", "m_ajito2", "m_aki",
+    "m_akiyoshi", "m_bossname", "m_danshin", "m_doutyu",
+    "m_dragon", "m_eding", "m_eraya", "m_fuji",
+    "m_gojyo", "m_hagure", "m_iga", "m_impact",
+    "m_inaba", "m_iyo2", "m_kageyama", "m_kai",
+    "m_kaigan", "m_kanmon", "m_kazura", "m_kunimei",
+    "m_kurashiki", "m_kyotu", "m_meoto", "m_mise00",
+    "m_mise01", "m_mise02", "m_mise03", "m_mise04",
+    "m_mizuki", "m_musashi", "m_omatu", "m_oping",
+    "m_osore", "m_sogen", "m_syugyo", "m_tyamise",
+    "m_uranai", "m_zazen", "sc_temp", "sc_test_101",
+    "sc_test_102",
 };
 
 Gfx D_800777F0[] = {
@@ -347,11 +295,11 @@ Gfx D_800777F0[] = {
     gsSPEndDisplayList(),
 };
 
-unsigned int D_80077858 = 0;
+int *D_80077858 = NULL;
 
 unsigned int D_8007785C = 0x00000100;
 
-void *D_80077860 = NULL;
+Task *D_80077860 = NULL;
 
 char D_80077864[] = "**********************************************\n";
 
@@ -359,22 +307,565 @@ unsigned short D_80077894[16] = {
     697, 697, 697, 697, 804, 805, 806, 807, 808, 809, 810, 811, 812, 813, 814, 0,
 };
 
+
+// <<<<< bss >>>>>
+unsigned int D_801C7740;
+unsigned int D_801C7744;
+int            D_801C7748;
+int            D_801C774C;
+int            D_801C7750;
+int            D_801C7754;
+int            D_801C7758;
+int            D_801C775C;
+int            D_801C7760;
+int            D_801C7764;
+int            D_801C7768;
+int            D_801C776C;
+int            D_801C7770;
+unsigned int   D_801C7774;
+int            D_801C7778[2];
+unsigned char  D_801C7780[24];
+int            D_801C7798;
+int            D_801C779C;
+int            D_801C77A0[2];
+unsigned char  D_801C77A8[48];
+int            D_801C77D8;
+int            D_801C77DC;
+int            D_801C77E0[2];
+ScriptWaitState D_801C77E8;
+ChoiceEntry   *D_801C7800;
+ChoiceEntry    D_801C7808[10];
+void         (*D_801C78D0)(Task *, Obj *);
+int            D_801C78D4;
+ScriptPageMark D_801C78D8;
+int            D_801C78E8;
+int            D_801C78EC;
+int            D_801C78F0;
+int            D_801C78F4;
+int            D_801C78F8;
+unsigned char  D_801C78FC[4];
+int            D_801C7900;
+int            D_801C7904;
+Controller     D_801C7908;
+int            D_801C7920;
+int            D_801C7924;
+int            D_801C7928;
+int            D_801C792C;
+unsigned char  D_801C7930[16];
+
+// clang-format on
+
+char *func_8003CFA0(int id)
+{
+    return (D_80077550[id] != NULL) ? D_80077550[id] : "?";
+}
+
+void func_8003CFD0(Task *task, Obj *obj)
+{
+    if (D_801C7930[0] != 0) {
+        D_801C7930[0]--;
+    } else {
+        func_8003D68C();
+        func_8003D0B0();
+    }
+}
+
+void func_8003D01C(Task *task, Obj *obj)
+{
+    D_80077860 = task;
+    func_8003D428();
+    func_8003521C((void (*)(Task *, Obj *)) func_8003CFD0);
+    D_801C7930[0] = 5;
+}
+
+void func_8003D058(void)
+{
+    func_80034B24((void (*)(Task *, Obj *)) func_8003D01C, 0);
+}
+
+void func_8003D080(void)
+{
+    func_8000C838();
+    func_80035044(D_80077860);
+    D_80077860 = NULL;
+}
+
+void func_8003D0B0(void)
+{
+    D_801C792C = func_8003F0FC();
+    if (D_801C792C == -1) {
+        if (D_801C7924 == 1) {
+            D_801C7928 = 1;
+        } else {
+            D_801C7928 = 0;
+        }
+        D_801C7924 = D_801C7920;
+        D_801C7920 = 0;
+    } else {
+        D_801C7928 = 0;
+        D_801C7924 = D_801C7920;
+        D_801C7920 = 1;
+    }
+    if (D_801C7920 == 0 && D_801C7924 == 1) {
+        D_801C7928 = 1;
+    } else {
+        D_801C7928 = 0;
+    }
+}
+
+void func_8003D17C(void)
+{
+    if (D_801C7900 == 1) {
+        D_801C7908 = g_sys->controller[0];
+    } else if (D_801C7900 == 2) {
+        D_801C7908 = g_sys->controller[1];
+    } else if (D_801C7900 == 3) {
+        D_801C7908.status           = g_sys->controller[0].status | g_sys->controller[1].status;
+        D_801C7908.button_held_down = g_sys->controller[0].button_held_down | g_sys->controller[1].button_held_down;
+        D_801C7908.button_pressed   = g_sys->controller[0].button_pressed | g_sys->controller[1].button_pressed;
+        D_801C7908.stick_raw_x      = g_sys->controller[0].stick_raw_x + g_sys->controller[1].stick_raw_x;
+        D_801C7908.stick_raw_y      = g_sys->controller[0].stick_raw_y + g_sys->controller[1].stick_raw_y;
+        if (D_801C7908.stick_raw_x >= 128) {
+            D_801C7908.stick_raw_x = 128;
+        }
+        if (D_801C7908.stick_raw_x < -128) {
+            D_801C7908.stick_raw_x = -128;
+        }
+        if (D_801C7908.stick_raw_y >= 128) {
+            D_801C7908.stick_raw_y = 128;
+        }
+        if (D_801C7908.stick_raw_y < -128) {
+            D_801C7908.stick_raw_y = -128;
+        }
+    }
+}
+
+int func_8003D310(int index)
+{
+    if (func_8003F1D8()) {
+        func_8003D428();
+        func_8000C838();
+    }
+    D_801C7900 = 3;
+    D_801C7904 = -1;
+    PRINTF(("scTalkStart started. MESSAGE:%d, Wave:%d, Addr:%08x\n", index, D_80078608[index], D_800779A0[index]));
+    return func_8003D468((int) D_800779A0[index], D_80078608[index]);
+}
+
+int func_8003D388(int index, int controller)
+{
+    if (func_8003F1D8()) {
+        func_8003D428();
+        func_8000C838();
+    }
+    D_801C7900 = controller;
+    if (D_801FC600_5B8510[controller] != NULL) {
+        D_801C7904 = PLAYER_WORK(D_801FC600_5B8510[controller])->character;
+    } else {
+        D_801C7904 = -1;
+    }
+    return func_8003D468((int) D_800779A0[index], D_80078608[index]);
+}
+
+void func_8003D428(void)
+{
+    func_8003D468(0, -1);
+}
+
+void func_8003D44C(void)
+{
+    D_801C78FC[0] = 1;
+}
+
+void func_8003D45C(void)
+{
+    D_801C78FC[0] = 0;
+}
+
+int func_8003D468(int script, int id)
+{
+    if (D_80077860 == NULL) {
+        PRINTF(("scrun: no scenario task?\n"));
+        return 0;
+    }
+    PRINTF(("scrunprepare: %08x\n", script));
+    D_801C78E8 = id;
+    if (id != -1) {
+        D_801C77E8.file_addr = func_800141C4(D_801C78E8);
+        if (D_801C77E8.file_addr == -1) {
+            PRINTF(("scrunPrepare: fatal: undecoded wave: %d.\n", D_801C78E8));
+            func_80013B14(D_801C78E8);
+            // "Enter the command on the next line."
+            PRINTF(("次の行のコマンドを入力してください\n"));
+            PRINTF(("echo \"%d %%ene_vwave %s_sc\" | mail usr01630\n", D_801C78E8, func_8003CFA0(D_801C78E8)));
+            D_801C77E8.file_addr = func_800141C4(D_801C78E8);
+        }
+        D_801C77E8.file_addr &= ~WAVE_DATA_TLB;
+        D_801C78EC = func_80001E50(D_801C78E8);
+        D_801C78F0 = func_8003DDC4(script, id) - script;
+        D_80077858 = func_8003DE48(script);
+    } else {
+        D_801C77E8.file_addr = 0;
+        D_801C78EC           = 0;
+        D_801C78F0           = 0;
+        D_80077858           = NULL;
+        D_801C7900           = 3;
+        D_801C7904           = -1;
+    }
+    D_801C7740              = 0;
+    D_801C7744              = 0;
+    D_801C7748              = 0;
+    D_801C774C              = 0;
+    D_801C7750              = 0;
+    D_801C7754              = 0;
+    D_801C7758              = 24;
+    D_801C775C              = 24;
+    D_801C7760              = 24;
+    D_801C7764              = 24;
+    D_801C7768              = 0;
+    D_801C776C              = 0;
+    D_801C7770              = 0;
+    D_801C7774              = 0;
+    D_801C7798              = 1;
+    D_801C77A0[0]           = 0;
+    D_801C77D8              = 1;
+    D_801C77E0[0]           = 0;
+    D_801C77E8.text         = NULL;
+    D_801C77E8.last_char    = -1;
+    D_801C78D0              = NULL;
+    D_801C77E8.choice_state = 0;
+    D_801C78FC[0]           = 0;
+    D_801C77E8.hurry        = 0;
+    D_801C7920              = 0;
+    D_801C7924              = 0;
+    D_801C7928              = 0;
+    D_801C792C              = 0;
+    func_80024088(0x82);
+    D_8007785C                               = SCRIPT_FACE_NONE;
+    SCRIPT_WORK(D_80077860)->cursor_blink    = 0;
+    SCRIPT_WORK(D_80077860)->page_mark_blink = 0;
+    return 1;
+}
+
+int func_8003D68C(void)
+{
+    int  cmd;
+    int *var;
+    int  op;
+    int  word;
+
+    if (D_80077858 == NULL) {
+        return 0;
+    }
+    if (D_801C78FC[0] != 0) {
+        return 2;
+    }
+    func_8003D17C();
+    while (D_80077858 != NULL) {
+        switch (D_801C77E0[0]) {
+            case 1:
+                func_8003DBEC();
+                return 1;
+            case 2:
+                func_8003E81C();
+                return 1;
+            case 3:
+                func_8003E3EC();
+                return 1;
+            case 4:
+                func_8003E4C0();
+                return 1;
+            case 5:
+                func_8003E5EC();
+                if (D_801C77E0[0] == 0) {
+                    break;
+                }
+                return 1;
+            case 6:
+                func_8003E620();
+                if (D_801C77E0[0] == 0) {
+                    break;
+                }
+                return 1;
+            case 7:
+                func_8003E654();
+                return 1;
+        }
+        cmd = *D_80077858++;
+        switch (cmd) {
+            case SCRIPT_OP_LET:
+                D_80077858 = func_8003DE48((int) func_8003DB0C(D_80077858));
+                break;
+            case SCRIPT_OP_IF:
+                var  = (int *) *D_80077858++;
+                op   = *D_80077858++;
+                word = *D_80077858++;
+                if (!func_8003D9B8(op, *var, word)) {
+                    D_80077858++;
+                    D_80077858++;
+                }
+                break;
+            case SCRIPT_OP_END:
+                PRINTF(("scrun: scenario end\n"));
+                func_8003D428();
+                D_801C7930[0] = 3;
+                return 1;
+            case SCRIPT_OP_JUMP:
+                D_80077858 = func_8003DE48(*D_80077858);
+                break;
+            case SCRIPT_OP_CALL:
+                word = *D_80077858++;
+                ((void (*)(void)) word)();
+                break;
+            case SCRIPT_OP_TEXT:
+                D_801C77E8.text = (short *) func_8003DE48(*D_80077858);
+                func_8003DBEC();
+                if (D_80077858 == NULL) {
+                    continue;
+                }
+                D_80077858++;
+                if (D_801C77E0[0] == 5) {
+                    continue;
+                }
+                break;
+            case SCRIPT_OP_MENU:
+                D_80077858 = func_8003DE48((int) func_8003E6C0(D_80077858));
+                break;
+            case SCRIPT_OP_FLAG_SET:
+                func_80024038(*D_80077858++);
+                break;
+            case SCRIPT_OP_FLAG_CLEAR:
+                func_80024088(*D_80077858++);
+                break;
+            case SCRIPT_OP_FLAG_JUMP:
+                if (func_800240DC(*D_80077858++)) {
+                    D_80077858 = func_8003DE48(*D_80077858);
+                } else {
+                    D_80077858++;
+                }
+                break;
+            default:
+                func_8003D428();
+                break;
+        }
+    }
+    return 0;
+}
+
+int func_8003D9B8(int op, int a, int b)
+{
+    int result = 0;
+
+    if (op == SCRIPT_OP_EQ) {
+        if (a == b) {
+            result = 1;
+        }
+    } else if (op == SCRIPT_OP_NE) {
+        if (a != b) {
+            result = 1;
+        }
+    } else if (op == SCRIPT_OP_LT) {
+        if (a < b) {
+            result = 1;
+        }
+    } else if (op == SCRIPT_OP_GT) {
+        if (a > b) {
+            result = 1;
+        }
+    } else if (op == SCRIPT_OP_LE) {
+        if (a <= b) {
+            result = 1;
+        }
+    } else if (op == SCRIPT_OP_GE) {
+        if (a >= b) {
+            result = 1;
+        }
+    } else {
+        b = *(int *) b;
+        if (op == SCRIPT_OP_EQ_VAR) {
+            if (a == b) {
+                result = 1;
+            }
+        } else if (op == SCRIPT_OP_NE_VAR) {
+            if (a != b) {
+                result = 1;
+            }
+        } else if (op == SCRIPT_OP_LT_VAR) {
+            if (a < b) {
+                result = 1;
+            }
+        } else if (op == SCRIPT_OP_GT_VAR) {
+            if (a > b) {
+                result = 1;
+            }
+        } else if (op == SCRIPT_OP_LE_VAR) {
+            if (a <= b) {
+                result = 1;
+            }
+        } else if (op == SCRIPT_OP_GE_VAR) {
+            if (a >= b) {
+                result = 1;
+            }
+        }
+    }
+    return result;
+}
+
+int *func_8003DB0C(int *pos)
+{
+    int *var = func_8003DE48(*pos++);
+
+    switch (*pos++) {
+        case SCRIPT_OP_SET:
+            *var = *pos++;
+            break;
+        case SCRIPT_OP_ADD:
+            *var += *pos++;
+            break;
+        case SCRIPT_OP_SUB:
+            *var -= *pos++;
+            break;
+        case SCRIPT_OP_COPY:
+            *var = *func_8003DE48(*pos);
+            pos++;
+            break;
+        case SCRIPT_OP_SET_PRINT:
+        case SCRIPT_OP_SET_PRINT2:
+            PRINTF(("%=: 0x%08x\n", *pos));
+            *var = *pos++;
+            break;
+    }
+    return pos;
+}
+
+void func_8003DBEC(void)
+{
+    int count;
+    int extra = 0;
+
+    for (count = 0; count < D_801C77D8 && extra < 3; count++) {
+    next:
+        D_801C77E8.text = func_8003DE80(D_801C7754, D_801C77E8.text);
+        if (D_801C77E0[0] == 3 || D_801C77E0[0] == 4 || D_801C77E0[0] == 5 || D_801C77E0[0] == 6) {
+            D_801C77E8.hurry = 0;
+            return;
+        }
+        D_801C77E0[0] = 1;
+        if (D_801C77E8.text == NULL) {
+            D_801C77E8.text = NULL;
+            D_801C77E0[0]   = 0;
+            return;
+        }
+        if (D_801C7770 == 0) {
+            if (D_801C7908.button_pressed & B_BUTTON) {
+                D_801C77E8.hurry = 0;
+                if (D_801C7774 == 0) {
+                    func_8003E680();
+                    return;
+                }
+                D_801C77E0[0] = 0;
+                D_80077858    = func_8003DE48(D_801C7774);
+            }
+            if (D_801C77E8.hurry != 0) {
+                if (D_801C7908.button_held_down & A_BUTTON) {
+                    if (extra++ < 3) {
+                        goto next;
+                    }
+                } else {
+                    D_801C77E8.hurry = 0;
+                }
+            } else if (D_801C7908.button_pressed & A_BUTTON) {
+                D_801C77E8.hurry = 1;
+                if (extra++ < 3) {
+                    goto next;
+                }
+            }
+        }
+    }
+}
+
+int func_8003DDC4(int offset, int id)
+{
+    unsigned int addr = func_800141C4(id);
+    int          slot;
+
+    if (addr == -1) {
+        PRINTF(("scGetAddress: fatal: undecoded wave: %d.\n", D_801C78E8));
+        func_80013B14(D_801C78E8);
+        PRINTF(("次の行のコマンドを入力してください\n")); // "Enter the command on the next line."
+        PRINTF(("echo \"%d %%ene_vwave %s_sc\" | mail usr01630\n", D_801C78E8, func_8003CFA0(D_801C78E8)));
+        addr = func_800141C4(D_801C78E8);
+    }
+    slot = func_80001E50(id);
+    addr &= ~WAVE_DATA_TLB;
+    return offset - (slot << 24) + addr;
+}
+
+int *func_8003DE48(int word)
+{
+    if (word < 0) {
+        return (int *) word;
+    }
+    if (D_801C78EC != -1) {
+        return (int *) (word + D_801C78F0);
+    }
+    return (int *) word;
+}
+
+short *func_8003DE80(int window, short *text)
+{
+    // Written with goto: a for or while loop gives the exits other blocks and registers.
+next:
+    if (*text >= 0) {
+        if (func_8003DF68()) {
+            int *length = &D_801C7798;
+
+            D_801C77E8.last_char = -1;
+            PRINTF_DEAD(("sc: B button cancel\n"));
+            D_801C77A0[0] = *length;
+            goto end;
+        }
+        func_8000D060(window, *text);
+        D_801C77E8.last_char = *text++;
+        if (D_801C7798 == 0) {
+            goto next;
+        }
+        D_801C77A0[0] = D_801C7798;
+        goto end;
+    }
+    if (*text == -1) {
+        D_801C77E8.last_char = -1;
+        return NULL;
+    }
+    {
+        int *length = &D_801C7798;
+
+        D_801C77E8.last_char = -1;
+        text                 = func_8003DF98(window, text);
+        D_801C77A0[0]        = *length;
+    }
+end:
+    return text;
+}
+
+// Defined here, not with the other data: the face names follow func_8003DE80's debug print in .rodata.
+// clang-format off
 char *D_800778B4[15] = {
-    D_8007CE4C,
-    D_8007CE54,
-    D_8007CE5C,
-    D_8007CE64,
-    D_8007CE6C,
-    D_8007CE74,
-    D_8007CE7C,
-    D_8007CE84,
-    D_8007CE8C,
-    D_8007CE94,
-    D_8007CE9C,
-    D_8007CEA4,
-    D_8007CEAC,
-    D_8007CEB8,
-    D_8007CEC0,
+    "player",
+    "player",
+    "player",
+    "player",
+    "shalon",
+    "baron",
+    "colon",
+    "danshin",
+    "polon",
+    "impact",
+    "korezou",
+    "koryuta",
+    "monoshiri",
+    "omitsu",
+    "ranko",
 };
 
 // Scenario wave ids.
@@ -590,7 +1081,7 @@ void *D_800779A0[794] = {
     (void *) 0x09000100, (void *) 0x0900011C,
 };
 
-unsigned short D_80078608[794] = {
+short D_80078608[794] = {
     0x0052, 0x0000, 0x0000, 0x0000, 0x0000, 0x0053, 0x0000, 0x0000, 0x0000, 0x0000, 0x0054, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0055, 0x0055, 0x0000, 0x0000, 0x0000, 0x0056, 0x0056, 0x0056, 0x0056,
     0x0000, 0x0057, 0x0000, 0x0000, 0x0000, 0x0000, 0x0058, 0x0058, 0x0000, 0x0000, 0x0000, 0x0059,
@@ -747,392 +1238,610 @@ unsigned short D_80078C3C[1018] = {
     0x030E, 0x0000, 0x0311, 0x0000, 0x0312, 0x0000, 0x0313, 0x0000, 0x0314, 0x0000, 0x0315, 0x0000,
     0x0316, 0x0000, 0x0317, 0x0000, 0x0318, 0x0000, 0x0319, 0x0000, 0x0000, 0x0000,
 };
-
-// <<<<< bss >>>>>
-int            D_801C7740;
-int            D_801C7744;
-int            D_801C7748;
-int            D_801C774C;
-int            D_801C7750;
-int            D_801C7754;
-int            D_801C7758;
-int            D_801C775C;
-int            D_801C7760;
-int            D_801C7764;
-int            D_801C7768;
-int            D_801C776C;
-int            D_801C7770[4];
-unsigned char  D_801C7780[24];
-int            D_801C7798;
-int            D_801C779C;
-int            D_801C77A0[2];
-unsigned char  D_801C77A8[48];
-int            D_801C77D8;
-int            D_801C77DC;
-int            D_801C77E0[2];
-int            D_801C77E8[2];
-short          D_801C77F0;
-int            D_801C77F4;
-int            D_801C77F8;
-int            D_801C77FC;
-int            D_801C7800[2];
-unsigned char  D_801C7808[0xC8];
-int            D_801C78D0[6];
-int            D_801C78E8;
-int            D_801C78EC;
-int            D_801C78F0;
-int            D_801C78F4;
-int            D_801C78F8;
-unsigned char  D_801C78FC[4];
-int            D_801C7900[8];
-int            D_801C7920;
-int            D_801C7924;
-int            D_801C7928;
-int            D_801C792C;
-unsigned char  D_801C7930[16];
-
 // clang-format on
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8C0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8CC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8D8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8E4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8F0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C8FC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C908.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C914.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C920.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C92C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C938.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C948.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C954.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C960.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C96C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C978.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C984.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C990.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C99C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9A8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9B4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9C0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9CC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9D8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9E4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9F0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007C9FC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA08.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA18.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA28.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA34.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA40.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA50.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA5C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA6C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA78.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA84.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CA90.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CAA0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CAB0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CABC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CAC8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CADC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CAE4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CAF0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CAF8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB04.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB10.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB1C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB28.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB34.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB3C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB44.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB4C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB54.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB60.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB68.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB74.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB7C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB84.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB90.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CB98.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBA4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBB0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBBC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBC8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBD4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBDC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBE4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBF0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CBFC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC08.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC14.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC20.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC2C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC38.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC40.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC48.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC50.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC58.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC64.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC70.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC7C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC84.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC8C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CC98.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003CFA0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003CFD0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D01C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D058.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D080.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D0B0.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D17C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D310.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D388.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D428.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D44C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D45C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D468.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D68C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003D9B8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DB0C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DBEC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DDC4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DE48.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DE80.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DF68.s")
-
+int func_8003DF68(void)
+{
+    if (D_801C77A0[0] >= 2) {
+        D_801C77A0[0]--;
+        return 1;
+    }
+    return 0;
+}
+
+#ifdef NON_MATCHING
+short *func_8003DF98(int window, short *text)
+{
+    switch (*text) {
+        case (-0x3C):
+            func_8000C3EC(window);
+            text++;
+            break;
+        case (-0x3D):
+            func_8003E1A8();
+            text++;
+            break;
+        case (-0x3E):
+            D_801C77E0[0] = 4;
+            text++;
+            break;
+        case (-0x3F):
+            func_8000D2C0(D_801C7754);
+            text++;
+            break;
+        case (-0x46):
+            func_8003E548();
+            text++;
+            break;
+        case (-0x47):
+            func_8003E5B8();
+            text++;
+            break;
+        case (-0x20):
+            func_8000C53C(D_801C7754, 0);
+            text++;
+            break;
+        case (-0x21):
+            func_8000C53C(D_801C7754, 2);
+            text++;
+            break;
+        case (-0x22):
+            func_8000C53C(D_801C7754, 4);
+            text++;
+            break;
+        case (-0x23):
+            func_8000C53C(D_801C7754, 6);
+            text++;
+            break;
+        case (-0x24):
+            func_8000C53C(D_801C7754, 8);
+            text++;
+            break;
+        case (-0x25):
+            func_8000C53C(D_801C7754, 0);
+            text++;
+            break;
+        case (-0x32):
+            func_8000C454(D_801C7754);
+            text++;
+            break;
+        case (-0x33):
+            func_8000C488(D_801C7754);
+            text++;
+            break;
+        case (-0x34):
+            func_8000C430(D_801C7754, 7);
+            text++;
+            break;
+        case (-0x35):
+            func_8000C430(D_801C7754, 13);
+            text++;
+            break;
+        case (-0x36):
+            func_8000C570(D_801C7754);
+            func_8000C568(D_801C7754, 3.0f);
+            text++;
+            break;
+        case (-0x37):
+            func_8000C5A4(D_801C7754);
+            text++;
+            break;
+        case (-0x38):
+            func_8000C5E4(D_801C7754, 2.0f);
+            func_8000C60C(D_801C7754);
+            text++;
+            break;
+        case (-0x39):
+            func_8000C640(D_801C7754);
+            text++;
+            break;
+        default:
+            text++;
+            break;
+    }
+    return text;
+}
+#else
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003DF98.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E1A8.s")
+void func_8003E1A8(void)
+{
+    Window         *window = D_80167C48[D_801C7754];
+    ScriptPageMark *mark   = &D_801C78D8;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E234.s")
+    mark->x             = window->x + window->width - window->text_left - 14;
+    mark->y             = window->y + window->strip_height * window->strip_count - window->text_top - 12;
+    mark->texture       = D_80077150;
+    mark->blink_pattern = 0xFF00FF;
+    D_801C77E0[0]       = 3;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E3EC.s")
+void func_8003E234(void)
+{
+    gSPDisplayList(g_sys_glistp++, D_800777F0);
+    gDPLoadTextureBlock(g_sys_glistp++, D_80077150, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(g_sys_glistp++, D_801C78D8.x << 2, D_801C78D8.y << 2, (D_801C78D8.x + 15) << 2,
+        (D_801C78D8.y + 15) << 2, G_TX_RENDERTILE, (SCRIPT_WORK(D_80077860)->page_mark_blink & 1) * 16 << 5, 0, 4 << 10,
+        1 << 10);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E4C0.s")
+void func_8003E3EC(void)
+{
+    D_801C78D8.blink_pattern = (D_801C78D8.blink_pattern >> 1) | (D_801C78D8.blink_pattern << 31);
+    if ((g_sys->game_loops_count & 0xF) == 0) {
+        SCRIPT_WORK(D_80077860)->page_mark_blink++;
+    }
+    if (D_801C7908.button_pressed & A_BUTTON) {
+        D_801C77E0[0] = 1;
+    } else if (D_801C7908.button_pressed & B_BUTTON) {
+        if (D_801C7770 == 0) {
+            D_801C77E0[0] = 0;
+            if (D_801C7774 == 0) {
+                func_8003E680();
+            } else {
+                D_80077858 = func_8003DE48(D_801C7774);
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E548.s")
+void func_8003E4C0(void)
+{
+    if (D_801C7908.button_pressed & A_BUTTON) {
+        D_801C77E0[0] = 1;
+    } else if (D_801C7908.button_pressed & B_BUTTON) {
+        if (D_801C7770 == 0) {
+            D_801C77E0[0] = 0;
+            if (D_801C7774 == 0) {
+                func_8003E680();
+            } else {
+                D_80077858 = func_8003DE48(D_801C7774);
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E5B8.s")
+void func_8003E548(void)
+{
+    func_8000C260(D_801C7754, D_801C7758, D_801C775C, D_801C7760, D_801C7764, D_801C7768, D_801C776C);
+    D_801C77E0[0] = 5;
+    func_8003E5EC();
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E5EC.s")
+void func_8003E5B8(void)
+{
+    func_8000C3A0(D_801C7754);
+    D_801C77E0[0] = 6;
+    func_8003E620();
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E620.s")
+void func_8003E5EC(void)
+{
+    if (func_8000C314(D_801C7754) == 0) {
+        D_801C77E0[0] = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E654.s")
+void func_8003E620(void)
+{
+    if (func_8000C314(D_801C7754) == 0) {
+        D_801C77E0[0] = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E680.s")
+void func_8003E654(void)
+{
+    D_801C77E8.wait_frames--;
+    if (D_801C77E8.wait_frames <= 0) {
+        D_801C77E0[0]          = 0;
+        D_801C77E8.wait_frames = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E6C0.s")
+void func_8003E680(void)
+{
+    D_801C77E8.last_char = -1;
+    func_8000C838();
+    D_8007785C = SCRIPT_FACE_NONE;
+    func_8003D428();
+    D_801C7930[0] = 3;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E81C.s")
+int *func_8003E6C0(int *pos)
+{
+    int     count;
+    Window *window;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E888.s")
+    if (D_801C78D0 != NULL) {
+        func_80034B24(D_801C78D0, 0);
+    }
+    window = D_80167C48[D_801C7754];
+    for (count = 0; *pos != SCRIPT_OP_MENU_END; count++) {
+        pos++;
+        D_801C7808[count].x    = window->x + window->cursor_x + window->text_left;
+        D_801C7808[count].y    = window->y + window->cursor_y + window->text_top;
+        D_801C7808[count].prev = &D_801C7808[count - 1];
+        D_801C7808[count].next = &D_801C7808[count + 1];
+        func_8003EB34(D_801C7754, (short *) func_8003DE48(*pos));
+        pos++;
+        D_801C7808[count].script = pos;
+        pos += 2;
+    }
+    D_801C7808[0].prev         = NULL;
+    D_801C7808[count - 1].next = NULL;
+    func_8003E9E8(D_801C7808);
+    D_801C77E0[0] = 2;
+    return pos;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003E9E8.s")
+void func_8003E81C(void)
+{
+    int result = func_8003E888(D_801C7808);
+
+    if (result == 1) {
+        D_80077858    = D_801C7800->script;
+        D_801C77E0[0] = 0;
+        D_801C78D0    = NULL;
+    } else if (result == -1) {
+        D_801C77E0[0] = 0;
+        D_801C78D0    = NULL;
+    }
+}
+
+int func_8003E888(ChoiceEntry *item)
+{
+    if (!(g_sys->game_loops_count & 1)) {
+        SCRIPT_WORK(D_80077860)->cursor_blink += 2;
+    }
+    if (D_801C77E8.choice_state == 0) {
+        func_8003E9E8(item);
+        return 0;
+    }
+    if (D_801C77E8.choice_state == 1) {
+        switch (func_8003EACC(D_801C7800)) {
+            case -1:
+                D_801C7800 = D_801C7800->prev;
+                func_80038B98(0x2B1);
+                break;
+            case 1:
+                D_801C7800 = D_801C7800->next;
+                func_80038B98(0x2B1);
+                break;
+        }
+        if (D_801C7908.button_pressed & A_BUTTON) {
+            D_801C77E8.choice_state = 0;
+            if ((*func_800240DC)(0x82) == 0) {
+                func_80038B98(0x2B0);
+            }
+            return 1;
+        }
+        if ((D_801C7908.button_pressed & B_BUTTON) && D_801C7770 == 0) {
+            D_80077858++;
+            D_801C77E8.choice_state = 0;
+            D_801C78D0              = NULL;
+            return -1;
+        }
+    }
+    return 0;
+}
+
+void func_8003E9E8(ChoiceEntry *item)
+{
+    D_801C7800              = item;
+    D_801C77E8.choice_state = 1;
+    D_801C77E8.held_frames  = 0;
+    D_801C77E8.held_dir     = 0;
+}
 
 void func_8003EA0C(void)
 {
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003EA14.s")
+int func_8003EA14(void)
+{
+    int dir = 0;
+    int ret;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003EACC.s")
+    if (D_801C7908.stick_raw_y > 40 || D_801C7908.stick_raw_x < -40 || (D_801C7908.button_pressed & (U_JPAD | L_JPAD))) {
+        dir = U_JPAD;
+    } else if (D_801C7908.stick_raw_y < -40 || D_801C7908.stick_raw_x > 40 || (D_801C7908.button_pressed & (D_JPAD | R_JPAD))) {
+        dir = D_JPAD;
+    }
+    ret = dir;
+    if (dir == D_801C77E8.held_dir) {
+        D_801C77E8.held_dir = dir;
+        if (D_801C77E8.held_frames >= 10) {
+            D_801C77E8.held_frames = 0;
+        } else {
+            D_801C77E8.held_frames++;
+            ret = 0;
+        }
+    } else {
+        D_801C77E8.held_dir    = dir;
+        D_801C77E8.held_frames = 0;
+    }
+    return ret;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003EB34.s")
+int func_8003EACC(ChoiceEntry *item)
+{
+    unsigned short dir = func_8003EA14();
+
+    if (dir & U_JPAD) {
+        if (item->prev != NULL) {
+            return -1;
+        }
+    } else if (dir & D_JPAD) {
+        if (item->next != NULL) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void func_8003EB34(int window, short *text)
+{
+    for (;;) {
+        if (*text >= 0) {
+            func_8000D060(window, *text);
+            text++;
+        } else {
+            if (*text == -1) {
+                break;
+            }
+            text = func_8003DF98(window, text);
+        }
+    }
+}
 
 void func_8003EBA4(void)
 {
 }
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003EBAC.s")
+void func_8003EBAC(int x, int y)
+{
+    gSPDisplayList(g_sys_glistp++, D_800777F0);
+    gDPLoadTextureBlock(g_sys_glistp++, D_80076148, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 64, 0, G_TX_NOMIRROR | G_TX_WRAP,
+        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    y -= 2;
+    {
+        // Written out: gSPTextureRectangle combines s before t, which does not match.
+        Gfx *rect = g_sys_glistp++;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003ED60.s")
+        rect->words.w0 = _SHIFTL(G_TEXRECT, 24, 8) | _SHIFTL((x + 15) << 2, 12, 12) | _SHIFTL((y + 15) << 2, 0, 12);
+        rect->words.w1 = _SHIFTL(G_TX_RENDERTILE, 24, 3) | _SHIFTL(x << 2, 12, 12) | _SHIFTL(y << 2, 0, 12);
+        gImmp1(g_sys_glistp++, G_RDPHALF_1, _SHIFTL((SCRIPT_WORK(D_80077860)->cursor_blink & 3) * 16 << 5, 0, 16) | _SHIFTL((SCRIPT_WORK(D_80077860)->cursor_blink & 4) * 4 << 5, 16, 16));
+        gImmp1(g_sys_glistp++, G_RDPHALF_2, _SHIFTL(4 << 10, 16, 16) | _SHIFTL(1 << 10, 0, 16));
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003EFB0.s")
+void func_8003ED60(void)
+{
+    Window *window;
+    int     x;
+    int     y;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F038.s")
+    if (func_8003F038(D_8007785C, 0) == 0) {
+        return;
+    }
+    window = D_80167C48[0];
+    if (window != NULL && window->active != 0 && window->state == 4) {
+        gSPDisplayList(g_sys_glistp++, D_800777F0);
+        gDPSetTextureLUT(g_sys_glistp++, G_TT_NONE);
+        gDPLoadTextureBlock(g_sys_glistp++, func_8003F038(D_8007785C, 0), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+            G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+        x = D_801C7758 + 15;
+        y = D_801C775C + 30;
+        gSPTextureRectangle(g_sys_glistp++, x << 2, y << 2, (x + 31) << 2, (y + 31) << 2, G_TX_RENDERTILE,
+            (D_8007785C & 1) ? 32 << 5 : 0, 32 << 5, 4 << 10, 1 << 10);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F0FC.s")
+void func_8003EFB0(void)
+{
+    if (D_801C77E0[0] == 2 && D_801C77E8.choice_state == 1) {
+        func_8003EBAC(D_801C7800->x, D_801C7800->y);
+    }
+    if (D_801C77E0[0] == 3) {
+        func_8003E234();
+    }
+    if (D_8007785C != SCRIPT_FACE_NONE) {
+        func_8003ED60();
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F14C.s")
+unsigned int func_8003F038(int face, int unused)
+{
+    short        file;
+    unsigned int addr;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F18C.s")
+    if (face == SCRIPT_FACE_NONE) {
+        return 0;
+    }
+    file = D_80077894[face / 2];
+    if (func_800141C4(file) == -1) {
+        // "The face wave is not loaded (%d). Register it to be loaded."
+        PRINTF(("****顔ウェーブ未展開 (%d)。展開登録せよ*******\n", file));
+        // "Enter the command on the next line."
+        PRINTF(("次の行のコマンドを入力してください\n"));
+        PRINTF(("echo \"%d %%ene_wave sc_face_%s\" | mail usr01630\n", file, D_800778B4[face / 2]));
+        func_80013B14(file);
+    }
+    addr = func_800141C4(file);
+    if (addr == -1) {
+        return 0;
+    }
+    if (face / 2 < 4) {
+        addr += face * 0x800 / 2;
+    }
+    return addr;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F1D8.s")
+int func_8003F0FC(void)
+{
+    int          i;
+    ChoiceEntry *choice;
+    ChoiceEntry *selected;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F1FC.s")
+    if (D_801C77E0[0] != 2) {
+        return -1;
+    }
+    for (i = 0, choice = D_801C7808; i < 10; i++, choice++) {
+        selected = D_801C7800;
+        if (selected == choice) {
+            break;
+        }
+    }
+    return i;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F23C.s")
+void func_8003F14C(Task *task, Obj *obj)
+{
+    ENEMY_MGR->flags |= 1;
+    func_8003521C((void (*)(Task *, Obj *)) func_8003F18C);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F2D4.s")
+void func_8003F18C(Task *task, Obj *obj)
+{
+    if (D_80077858 == NULL) {
+        ENEMY_MGR->flags &= ~1;
+        func_8003521C(SCRIPT_HELD_WORK(task)->resume_exec);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F350.s")
+int func_8003F1D8(void)
+{
+    return (D_80077858 == NULL) ? 0 : 1;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F37C.s")
+short func_8003F1FC(int value)
+{
+    return (value == (D_801C7768 & ~1)) ? D_801C77E8.last_char : -1;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F43C.s")
+void func_8003F23C(void)
+{
+    D_801C78F4 = (int) D_80077858;
+    D_801C78F8 = D_801C78E8;
+    D_801C78E8 = D_801C7744;
+    PRINTF(("wavecall: %d\n", D_801C78E8));
+    D_801C77E8.file_addr = func_800141C4(D_801C78E8);
+    D_801C78EC           = func_80001E50(D_801C78E8);
+    D_801C78F0           = func_8003DDC4(D_801C7740, D_801C78E8) - D_801C7740;
+    D_80077858           = func_8003DE48(D_801C7740);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F460.s")
+void func_8003F2D4(void)
+{
+    D_801C78E8           = D_801C78F8;
+    D_801C77E8.file_addr = func_800141C4(D_801C78E8);
+    D_801C78EC           = func_80001E50(D_801C78E8);
+    D_801C78F0           = func_8003DDC4(D_801C78F4, D_801C78E8) - D_801C78F4;
+    D_80077858           = func_8003DE48(D_801C78F4);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE4C.s")
+void func_8003F350(void)
+{
+    D_801C7750 = (int) func_80034B24((void (*)(Task *, Obj *)) D_801C7740, 0);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE54.s")
+void func_8003F37C(void)
+{
+    Task *task;
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE5C.s")
+    task = func_80035690(ENEMY_MGR->parents[0], (void (*)(Task *, Obj *)) D_801C7740, 0, (unsigned int) D_8006D920, 0.0f, 0.0f, 0.0f, 0, 0,
+        0, 0.1f, 0.1f, 0.1f, 0, 0, 0);
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE64.s")
+    ENEMY_WORK(task)->id = ENEMY_MGR->next_id;
+    ENEMY_MGR->next_id++;
+    D_801C7750 = (int) task;
+    func_80035244(task, (void (*)(Task *, Obj *)) func_80218F30_5D4400);
+    func_80035214(task, (void (*)(Task *, Obj *)) func_8021925C_5D472C);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE6C.s")
+void func_8003F43C(void)
+{
+    func_80034EF8((Task *) D_801C7740);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE74.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE7C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE84.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE8C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE94.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CE9C.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CEA4.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CEAC.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CEB8.s")
-
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/D_8007CEC0.s")
+void func_8003F460(void)
+{
+    D_801C77E8.wait_frames = D_801C7740;
+    D_801C77E0[0]          = 7;
+}
 
 #pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F480.s")
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F524.s")
+void func_8003F524(void)
+{
+    D_801C7750 = D_801C7740 + D_801C7744;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F544.s")
+void func_8003F544(void)
+{
+    D_801C7750 = D_801C7740 - D_801C7744;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F564.s")
+void func_8003F564(void)
+{
+    func_8003D468(*D_80077858, D_801C78E8);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F594.s")
+void func_8003F594(void)
+{
+    if (D_801FC600_5B8510[1] != NULL) {
+        D_801C7750 = PLAYER_WORK(D_801FC600_5B8510[1])->character;
+    } else {
+        D_801C7750 = -1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F5C8.s")
+void func_8003F5C8(void)
+{
+    if (D_801FC600_5B8510[2] != NULL) {
+        D_801C7750 = PLAYER_WORK(D_801FC600_5B8510[2])->character;
+    } else {
+        D_801C7750 = -1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F5FC.s")
+void func_8003F5FC(int frames)
+{
+    D_801C77E8.wait_frames = frames;
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F608.s")
+void func_8003F608(void)
+{
+    func_80038BC8(D_801C7740);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F62C.s")
+void func_8003F62C(void)
+{
+    func_80038C30(D_801C7740, D_801C7744, D_801C7748);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F660.s")
+void func_8003F660(void)
+{
+    func_80038B98(D_801C7740 + 0x8000);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F694.s")
+void func_8003F694(void)
+{
+    func_80037C9C(0, D_801C7740);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F6BC.s")
+void func_8003F6BC(void)
+{
+    func_80037C20(0, 1, D_801C7740);
+}
 
-#pragma GLOBAL_ASM("asm/usa/nonmatchings/sys/scenario/func_8003F6E8.s")
+void func_8003F6E8(void)
+{
+    func_80037C20(0, 2, 0);
+}
+
+void func_8003F710(void)
+{
+}
