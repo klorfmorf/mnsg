@@ -158,7 +158,7 @@ void func_80037548(void)
 {
     func_80003728(GAME_STEP_WARP_NEXT);
     if (g_sys->intended_stage_group == 4) {
-        D_8015C608.group4_reached[g_sys->intended_stage_group_index] = 1;
+        D_8015C608.bomber_reached[g_sys->intended_stage_group_index] = 1;
         g_sys->next_stage_id                                         = g_sys->intended_stage_group_index + 0x221;
     } else {
         D_8015C608.stage_reached[g_sys->intended_stage_group_index] = 1;

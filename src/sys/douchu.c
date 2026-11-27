@@ -117,7 +117,7 @@ void func_8001FA80(void)
             if (g_sys_real.pause_show_map == 0 ||
                 (g_sys_real.intended_stage_group == 0 && D_8015C608.has_area_map[g_sys_real.map_area] == 0) ||
                 ((g_sys_real.intended_stage_group == 1 || g_sys_real.intended_stage_group == 2) &&
-                    D_8015C608.has_stage_map == 0)) {
+                    D_8015C608.has_large_map == 0)) {
                 g_sys_real.pause_show_map = 0;
                 func_800101AC();
                 func_8021433C_6732EC(g_sys_real.menu_tasks[1]);
@@ -140,7 +140,7 @@ void func_8001FA80(void)
             }
             if ((g_sys_real.intended_stage_group == 0 && D_8015C608.has_area_map[g_sys_real.map_area] != 0) ||
                 ((g_sys_real.intended_stage_group == 1 || g_sys_real.intended_stage_group == 2) &&
-                    D_8015C608.has_stage_map != 0)) {
+                    D_8015C608.has_large_map != 0)) {
                 if (g_sys->controller[0].button_pressed & Z_TRIG) {
                     g_sys_real.pause_show_map    = (g_sys->pause_show_map & 1) ^ 1;
                     g_sys_real.pause_close_state = 1;
